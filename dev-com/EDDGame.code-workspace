@@ -1,0 +1,13 @@
+{
+    "folders": [
+        {
+            "name": "EDDGame",
+            "path": "../"
+        },
+
+        {
+            "name": "WebLibsDev",
+            "path": "../../"
+        }
+    ]
+}
