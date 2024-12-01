@@ -1,50 +1,82 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" class="theme-dark">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Commencer l'aventure | EDD Game</title>
     <link rel="stylesheet" type="text/css" href="externalLib/bulma.css">
 </head>
+
 <body>
-    <h1>Formulaire avec 5 Dropdowns</h1>
-    <form action="#" method="post">
-        <label for="dropdown1">Choisissez une option 1:</label>
-        <select id="dropdown1" name="dropdown1">
-            <option value="option1">Option 1</option>
-            <option value="option2">Option 2</option>
-            <option value="option3">Option 3</option>
-        </select>
+    <div class="content">
+        <h1>Bienvenue sur le compagnon EDD Game !</h1>
+        <p>Séléctionnez vos joueurs:</p>
+        <form action="#" method="post">
 
-        <label for="dropdown2">Choisissez une option 2:</label>
-        <select id="dropdown2" name="dropdown2">
-            <option value="option1">Option 1</option>
-            <option value="option2">Option 2</option>
-            <option value="option3">Option 3</option>
-        </select>
+            <div class="field select is-info">
+                <label for="player1">Joueur 1:</label>
+                <select id="player1" name="player1">
+                    <option value="none">-Vide-</option>
+                    <option value="90">Toutie</option>
+                    <option value="91">Doudou Noisette</option>
+                    <option value="92">Doudou Âne</option>
+                    <option value="93">Peupeuvre</option>
+                    <option value="94">Efélant</option>
+                </select>
+            </div>
 
-        <label for="dropdown3">Choisissez une option 3:</label>
-        <select id="dropdown3" name="dropdown3">
-            <option value="option1">Option 1</option>
-            <option value="option2">Option 2</option>
-            <option value="option3">Option 3</option>
-        </select>
+            <div class="field select is-primary">
+                <label for="player2">Joueur 2:</label>
+                <select id="player2" name="player2">
+                    <option value="none">-Vide-</option>
+                    <option value="90" disabled>Toutie</option>
+                    <option value="91" disabled>Doudou Noisette</option>
+                    <option value="92" disabled>Doudou Âne</option>
+                    <option value="93" disabled>Peupeuvre</option>
+                    <option value="94" disabled>Efélant</option>
+                </select>
+            </div>
 
-        <label for="dropdown4">Choisissez une option 4:</label>
-        <select id="dropdown4" name="dropdown4">
-            <option value="option1">Option 1</option>
-            <option value="option2">Option 2</option>
-            <option value="option3">Option 3</option>
-        </select>
+            <div class="field select is-success">
+                <label for="player3">Joueur 3:</label>
+                <select id="player3" name="player3">
+                    <option value="none">-Vide-</option>
+                    <option value="90" disabled>Toutie</option>
+                    <option value="91" disabled>Doudou Noisette</option>
+                    <option value="92" disabled>Doudou Âne</option>
+                    <option value="93" disabled>Peupeuvre</option>
+                    <option value="94" disabled>Efélant</option>
+                </select>
+            </div>
 
-        <label for="dropdown5">Choisissez une option 5:</label>
-        <select id="dropdown5" name="dropdown5">
-            <option value="option1">Option 1</option>
-            <option value="option2">Option 2</option>
-            <option value="option3">Option 3</option>
-        </select>
+            <div class="field select is-warning">
+                <label for="player4">Joueur 4:</label>
+                <select id="player4" name="player4">
+                    <option value="none">-Vide-</option>
+                    <option value="90" disabled>Toutie</option>
+                    <option value="91" disabled>Doudou Noisette</option>
+                    <option value="92" disabled>Doudou Âne</option>
+                    <option value="93" disabled>Peupeuvre</option>
+                    <option value="94" disabled>Efélant</option>
+                </select>
+            </div>
 
-        <input type="submit" value="Soumettre">
-    </form>
+            <div class="field select is-danger">
+                <label for="player5">Joueur 5:</label>
+                <select id="player5" name="player5">
+                    <option value="none">-Vide-</option>
+                    <option value="90" disabled>Toutie</option>
+                    <option value="91" disabled>Doudou Noisette</option>
+                    <option value="92" disabled>Doudou Âne</option>
+                    <option value="93" disabled>Peupeuvre</option>
+                    <option value="94" disabled>Efélant</option>
+                </select>
+            </div>
+
+            <input type="submit" value="Jouer !">
+        </form>
+    </div>
 </body>
+
 </html>
