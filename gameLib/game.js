@@ -20,22 +20,21 @@ function init_select_onclick(){
 
     // Boucle à travers chaque <select> et définir l'événement change
     selects.forEach(function(select) {
+        //Récupération de l'ID select
+        let selectID = parseInt(this.id[6])
+        let prev_select = document.getElementById('player'+(selectID-1))
+            
+        select.onclick = function() {
+            let options = select.querySelectorAll('option');
+
+            options.forEach(function(option) {
+                option.disabled = (players.includes(option.value) || prev_select.value == "none");
+            });
+        }
         select.addEventListener("change", function() {
             console.log("Option selected: " + this.value);
-
-            //Récupération de l'ID select
-            let selectID = parseInt(this.id[6])
-
             //Save value
             players[selectID-1] = this.value
-
-            //Modification des options du select suivant
-            let next_select = document.getElementById('player'+selectID + 1)
-            next_select.querySelectorAll('option').forEach(function(option) {
-                if (!players.includes(option.value)) {
-                    option.disabled = false;
-                }
-            });
         });
     });
 }
