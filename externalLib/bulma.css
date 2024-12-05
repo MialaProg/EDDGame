@@ -234,9 +234,11 @@
   --bulma-primary: hsla(var(--bulma-primary-h), var(--bulma-primary-s), var(--bulma-primary-l), 1);
   --bulma-primary-base: hsla(var(--bulma-primary-h), var(--bulma-primary-s), var(--bulma-primary-l), 1);
   --bulma-primary-rgb: 0, 209, 178;
-  --bulma-primary-h: 171deg;
+  /* --bulma-primary-h: 171deg; */
+  --bulma-primary-h: 27deg;
+  --bulma-primary-l: 56%;
   --bulma-primary-s: 100%;
-  --bulma-primary-l: 41%;
+  /* --bulma-primary-l: 41%; */
   --bulma-primary-00-l: 1%;
   --bulma-primary-05-l: 6%;
   --bulma-primary-10-l: 11%;

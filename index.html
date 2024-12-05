@@ -10,10 +10,27 @@
 </head>
 
 <body>
-    <div class="content">
+    <style>
+        .error-msg-stop {
+            position: fixed; top: 0;left: 0;
+            width: 100vw;height: 100vh;
+            background-color: rgba(128, 48, 1, 0.527);
+            font-size: 4em;
+            text-align: center; display: flex;
+            justify-content: center; align-items: center;
+        }
+    </style>
+    <div class="is-hidden error-msg-stop"> 
+        <p>
+            Bulma CSS (et autres) n'est pas supporté...
+            Vérifiez votre connexion internet.
+        </p>
+    </div>
+
+    <div class="content" id="pregame-interface">
         <h1>Bienvenue sur le compagnon EDD Game !</h1>
         <p>Séléctionnez vos joueurs:</p>
-        <form action="#" method="post">
+        <form action="#" method="post" id="player-form">
 
             <div class="field is-info">
                 <label class="label" for="player1">Joueur 1:</label>
@@ -91,6 +108,29 @@
                 </div>
             </div>
         </form>
+    </div>
+    
+    <div class="content is-hidden" id="ingame-interface">
+        <div class="field is-grouped">
+            <div class="control">
+                <select id="current-room" name="current-room">
+                    <option value="0">Salle du trône</option>
+                    <option value="1">Chambre de Doudou Noisette</option>
+                    <option value="2">Chambre de Doudou Âne</option>
+                    <option value="3">Chambre de Peupeuvre</option>
+                    <option value="4">Chambre de Efélant</option>
+                </select>
+            </div>
+        </div>
+        <canvas id="room-canvas" width="0" height="0"></canvas>
+        <div class="field is-grouped">
+            <div class="control">
+                <button class="button is-info">Utiliser</button>
+            </div>
+            <div class="control">
+                <button class="button is-primary">Parler</button>
+            </div>
+        </div>
     </div>
 </body>
 
