@@ -6,21 +6,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Commencer l'aventure | EDD Game</title>
     <link rel="stylesheet" type="text/css" href="externalLib/bulma.css">
+    <link rel="stylesheet" type="text/css" href="gameLib/style.css">
     <script src="gameLib/game.js"></script>
 </head>
 
 <body>
     <style>
         .error-msg-stop {
-            position: fixed; top: 0;left: 0;
-            width: 100vw;height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
             background-color: rgba(128, 48, 1, 0.527);
             font-size: 4em;
-            text-align: center; display: flex;
-            justify-content: center; align-items: center;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
     </style>
-    <div class="is-hidden error-msg-stop"> 
+    <div class="is-hidden error-msg-stop">
         <p>
             Bulma CSS (et autres) n'est pas supporté...
             Vérifiez votre connexion internet.
@@ -104,25 +110,27 @@
 
             <div class="field is-grouped">
                 <div class="control">
-                  <button class="button is-primary">Jouer !</button>
+                    <button class="button is-primary">Jouer !</button>
                 </div>
             </div>
         </form>
     </div>
-    
+
     <div class="content is-hidden" id="ingame-interface">
         <div class="field is-grouped">
             <div class="control">
-                <select id="current-room" name="current-room">
-                    <option value="0">Salle du trône</option>
-                    <option value="1">Chambre de Doudou Noisette</option>
-                    <option value="2">Chambre de Doudou Âne</option>
-                    <option value="3">Chambre de Peupeuvre</option>
-                    <option value="4">Chambre de Efélant</option>
-                </select>
+                <div class="control select">
+                    <select id="current-room" name="current-room">
+                        <option value="0">Salle du trône</option>
+                        <option value="1">Chambre de Doudou Noisette</option>
+                        <option value="2">Chambre de Doudou Âne</option>
+                        <option value="3">Chambre de Peupeuvre</option>
+                        <option value="4">Chambre de Efélant</option>
+                    </select>
+                </div>
             </div>
         </div>
-        <canvas id="room-canvas" width="0" height="0"></canvas>
+        <canvas id="room-canvas"></canvas>
         <div class="field is-grouped">
             <div class="control">
                 <button class="button is-info">Utiliser</button>
