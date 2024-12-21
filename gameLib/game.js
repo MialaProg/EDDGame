@@ -12,6 +12,23 @@ function hasDuplicates(arr) {
     return arr.some((item, index) => arr.indexOf(item) !== index);
   }
 
+/**
+ * Chooses a random element from an array without repeating previous choices
+ * @param {array} arr - The array to choose from
+ * @param {array} previousChoices - The array of previously chosen elements
+ * @returns {any} - The chosen element
+ */
+function chooseRandomUnique(arr, previousChoices) {
+    let filteredArr = arr.filter(item => !previousChoices.includes(item));
+    if (filteredArr.length === 0) {
+        throw new Error("No unique elements left to choose from.");
+    }
+    let randomIndex = Math.floor(Math.random() * filteredArr.length);
+    let chosenElement = filteredArr[randomIndex];
+    previousChoices.push(chosenElement);
+    return chosenElement;
+}
+
 // IN-GAME CODE
 
 

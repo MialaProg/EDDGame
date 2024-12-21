@@ -1,24 +1,38 @@
-R;1;Piège de Doudou Noisette;O19
-R;2;Polisson
-R;3
-R;4
-R;5
-R;6
-R;7
-R;8
-R;9
-R;10
-R;11
-R;12
-R;13
-R;14
-R;15
-R;16
-R;17
-R;18
-L;1
-L;2
-L;3
+#Type;Num;Nom;n°O ness(1,2,3...);Don (ça,et ça|ou juste ça);n°Lieu possibles
+R;1;Piège de Doudou Noisette;19;open;3,6,7,13,18
+R;2;Polisson;21,22;open;2,3,4,6,7,9,10,12,17
+R;3;Porte bloquée;23;open;2,3,5,8,14,17
+R;4;Rex;16,7;open;1,3,4,6,7,8,9,13,14,15,16,17,18
+R;5;Serrure;4;open;1,2,3,4,5,8,14,17
+R;6;Porte sous-marine;10;open;4,15,16
+R;7;Runes fourchelangues;3;open;2
+R;8;Doudou Monstre;16;open;1,3,4,6,7,8,9,13,14,15,16,17,18
+R;9;Quinou;14,31;open;4,6,15,16,
+R;10;Plouf-Anouk;5,8;open;
+R;11;Chris;9;open
+R;12;Chenille;11;open;3
+#R;13
+#R;14
+#R;15
+R;16;Tagada et Storish;20;open
+#R;17
+#R;18
+L;85;C1: Classe
+L;86;C2: Classe
+L;87;C3: Classe
+L;88;D1: Dortoir
+L;89;D2: Dortoir
+L;90;R1: Réfectoire
+L;91;R2: Aire de pique-nique
+L;92;R3: Magasin
+L;93;A1: Aire de Récréation
+L;94;A2: Aire de Récréation
+L;95;TR: Garre de Transports
+L;96;WC: Toilettes
+L;97;HALL
+L;1;Pharmacie
+L;2;Ruines
+L;3;Jardin
 L;4
 L;5
 L;6
