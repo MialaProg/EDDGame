@@ -33,6 +33,8 @@ var doors = {
 var actualGame = {}
 var db = undefined;
 var boardGenerated = false;
+// For trace edit when generate
+var editGen = [];
 
 
 /**
@@ -118,6 +120,28 @@ async function getDb() {
         });
 }
 getDb();
+
+/**
+ * Set and save change
+ * @param {string} idx 
+ * @param {string} val 
+ */
+function setDb(idx, val){
+    eval(`
+        editGen.push(['${idx}', db${idx}]);
+        db${idx} = '${val}';
+        `);
+}
+
+function restoreDb(toLen){
+    for (let i = editGen.length; i > toLen; i--) {
+        const e = editGen[i-1];
+        eval(`
+            db${e[0]} = '${e[1]}';
+            `)
+        editGen.pop();
+    }
+}
 
 /**
  * Wait until the condition is true, then execute the callback
@@ -220,6 +244,8 @@ function resolveObjects(objectsRequired) {
             if (!object) {
                 return;
             }
+
+            // Save and return
             return true;
         });
     });
@@ -264,6 +290,7 @@ function ranDoor(roomITM) {
         }
         return true;
     });
+    return door;
 }
 
 /**
