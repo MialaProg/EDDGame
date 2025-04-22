@@ -2,6 +2,38 @@
 var InGame = false;
 
 var players = new Array(5)
+// places = [[85, 86, 87, 88, ... 97], [undef * 6] * 3]
+var places = [
+    Array.from({ length: 13 }, (_, i) => 85 + i), // Row 1: 85 to 97
+    Array(6).fill(undefined),                   // Row 2: undefined
+    Array(6).fill(undefined),                   // Row 3: undefined
+    Array(6).fill(undefined)                    // Row 4: undefined
+];
+// Priority order of places [,]
+var placesPriority = [
+    [3, 0],
+    [2, 0], [2, 1],
+    [1, 0], [3, 1], [2, 2]
+    [1, 1], [3, 2],
+    [1, 2], [3, 3],
+    [2, 4], [3, 4],
+    [3, 5], [2, 5], [1, 5],
+    [2, 3], [1, 4],
+    [1, 3]
+]
+// doors
+var doors = {
+    10: [1,10], 11: [1], 12: [1], 13: [1,10], 14: [1], 15: [10],
+    20: [10], 21: [10], 22: [10], 23: [1], 24: [], 25: [10],
+    30: [1], 31: [1], 32: [1], 33: [1], 34: [1], 35: []
+}
+
+
+// actualGame = {place: [objects]}
+var actualGame = {}
+var db = undefined;
+var boardGenerated = false;
+
 
 /**
  * Detect duplicates from an array
@@ -10,7 +42,7 @@ var players = new Array(5)
  */
 function hasDuplicates(arr) {
     return arr.some((item, index) => arr.indexOf(item) !== index);
-  }
+}
 
 /**
  * Chooses a random element from an array without repeating previous choices
@@ -29,11 +61,147 @@ function chooseRandomUnique(arr, previousChoices) {
     return chosenElement;
 }
 
+/**
+ * Set the background color of the canvas
+ * @param {HTMLCanvasElement} canvas - The canvas element to set the background color for
+ * @param {string} color - The color to set the background to (e.g., "red", "#ff0000")
+ * @returns {void}
+ */
+function setBg(canvasId, color) {
+    const canvas = document.getElementById(canvasId);
+    if (!canvas) {
+        console.error("Canvas element not found.");
+        return;
+    }
+    if (canvas.getContext) {
+        var ctx = canvas.getContext('2d');
+        ctx.fillStyle = color;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+    } else {
+        console.error("Canvas not supported in this browser.");
+    }
+}
+
+function setProgress(id, val) {
+    let progress = document.getElementById(id);
+    if (progress) {
+        progress.value = val;
+    } else {
+        console.error("Progress element not found.");
+    }
+}
+
+async function getDb() {
+    await fetch("gameLib/db.json")
+        .then(response => response.json())
+        .then(data => {
+            db = data.split("\n").map(row => row.split(";"));
+        })
+        .catch(error => {
+            console.error("Error fetching JSON:", error);
+        });
+}
+getDb();
+
+/**
+ * Wait until the condition is true, then execute the callback
+ * @param {*} condition 
+ * @param {*} callback 
+ */
+function waitUntil(condition, callback) {
+    const interval = setInterval(() => {
+        if (condition()) {
+            clearInterval(interval);
+            callback();
+        }
+    }, 100); // Check every 100 milliseconds
+}
+
+function intToRoom(num) {
+    num = num.toString();
+    return [parseInt(num[0]), parseInt(num[1])];
+}
+
+function roomToInt(arr) {
+    if (arr.length !== 2) {
+        throw new Error("Array must have exactly two elements.");
+    }
+    return parseInt(arr[0].toString() + arr[1].toString());
+}
+
+function getDoors(roomNum) {
+    let roomDoors = [... doors[roomNum]];
+    for (let i = 1; i < 11; i+=9) {
+        if (doors[roomNum-i] && doors[roomNum-i].includes(i)) {
+            roomDoors += [-i];
+        }
+    }
+    return roomDoors;
+}
+
+
+
+
+// BOARD GENERATION CODE
+
+
+function ranDoor(){
+    
+}
+
+/**
+ * Set in places the door of the room to val
+ */
+function setDoor(door, roomARR, val){
+    let room = places[roomARR[0]][roomARR[1]];
+    if (!room){ room = {}; }
+    if (!room['R']){ room['R'] = {}; }
+    room['R'][door] = val;
+    places[roomARR[0]][roomARR[1]] = room;
+}
+
+async function generate_board() {
+    places[3], [0] = { 'L': 99 };
+    waitUntil(() => db != undefined, () => {
+        for (let i = 0; i < placesPriority.length; i++) {
+            let placeARR = placesPriority[i];
+            let placeINT = roomToInt(placeARR);
+            let place = places[placeARR[0]][placeARR[1]];
+            let placeDoor = getDoors();
+            if (!placeDoor){
+                continue;
+            }
+            for (let y = 0; y < placeDoor.length; y++) {
+                const doorTo = placeDoor[y]; //INT
+                try {
+                    if (place['R'][doorTo] != undefined) {
+                        continue;
+                    }
+                } catch (error) {}
+                let randomDoor = ranDoor();
+                if (randomDoor){
+                    setDoor(doorTo, placeARR, randomDoor);
+                    setDoor(-doorTo, intToRoom(placeINT + doorTo), randomDoor);
+                }
+            }
+        }
+        boardGenerated = true;
+        console.log("Board generated !")
+    });
+}
+
+
+
+
+
 // IN-GAME CODE
 
 
-function launch_game() {
+async function launch_game() {
     document.getElementById("pregame-interface").classList.add("is-hidden");
+    document.getElementById("loadinggame-interface").classList.remove("is-hidden");
+    setBg('room-canvas', 'black');
+    document.getElementById("loadinggame-interface").classList.add("is-hidden");
     document.getElementById("ingame-interface").classList.remove("is-hidden");
 }
 
@@ -44,7 +212,7 @@ function launch_game() {
 */
 function init_players_values() {
     let selects = document.querySelectorAll("select");
-    selects.forEach(function(select) {
+    selects.forEach(function (select) {
         let selectID = select.id[select.id.length - 1];
         players[selectID - 1] = select.value
         if (hasDuplicates(players)) {
@@ -56,45 +224,48 @@ function init_players_values() {
 /**
  * Initialise les actions lors des mises à jour des select
  */
-function init_select_onclick(){
+function init_select_onclick() {
     // Sélectionne tous les éléments <select> sur la page
     var selects = document.querySelectorAll("select");
 
     // Boucle à travers chaque <select> et définir l'événement change
-    selects.forEach(function(select) {
+    selects.forEach(function (select) {
         //Récupération de l'ID select
         let selectID = parseInt(select.id[6])
-        let prev_select = document.getElementById('player'+(selectID-1))
-          
+        let prev_select = document.getElementById('player' + (selectID - 1))
 
-        select.onclick = function() {
+
+        select.onclick = function () {
             let options = select.querySelectorAll('option');
 
-            options.forEach(function(option) {
-                option.disabled = players.includes(option.value) || (prev_select && prev_select.value === "none");  
+            options.forEach(function (option) {
+                option.disabled = players.includes(option.value) || (prev_select && prev_select.value === "none");
             });
         }
-        select.addEventListener("change", function() {
+        select.addEventListener("change", function () {
             console.log("Option selected: " + this.value);
             //Save value
-            players[selectID-1] = this.value
+            players[selectID - 1] = this.value
         });
     });
 }
 
 
 function set_player_form_submit() {
-    document.getElementById("player-form").addEventListener("submit", function(e) {
+    document.getElementById("player-form").addEventListener("submit", function (e) {
         e.preventDefault();
 
         let nb_player = players.indexOf("none");
 
-        if (!nb_player){
+        if (!nb_player) {
             alert("Cela risque d'etre compliqué sans joueurs...");
             return
         }
+        if (nb_player == -1) {
+            nb_player = players.length;
+        }
 
-        if (!confirm("Démarre la partie à "+(nb_player)+" joueurs ?")) {
+        if (!confirm("Démarre la partie à " + (nb_player) + " joueurs ?")) {
             return;
         }
 
@@ -105,7 +276,7 @@ function set_player_form_submit() {
 }
 
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     init_players_values();
     init_select_onclick();
     set_player_form_submit();

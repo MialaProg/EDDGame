@@ -7,10 +7,11 @@
     <title>Commencer l'aventure | EDD Game</title>
     <link rel="stylesheet" type="text/css" href="externalLib/bulma.css">
     <link rel="stylesheet" type="text/css" href="gameLib/style.css">
+    <link rel="stylesheet" type="text/css" href="gameLib/divers.css">
     <script src="gameLib/game.js"></script>
 </head>
 
-<body>
+<body class="block">
     <style>
         .error-msg-stop {
             position: fixed;
@@ -114,6 +115,13 @@
                 </div>
             </div>
         </form>
+    </div>
+
+    <div class="content is-hidden" id="loadinggame-interface">
+        <div class="has-text-centered centered-height">
+            <h1 class="title">Chargement en cours...</h1><br>
+            <progress class="progress is-primary" max="100">50%</progress>
+        </div>
     </div>
 
     <div class="content is-hidden" id="ingame-interface">

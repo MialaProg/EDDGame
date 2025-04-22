@@ -1,0 +1,18 @@
+.block {
+    padding-top: 1rem;
+    padding-left: 3%;
+    padding-right: 3%;
+    /* font-size: 1em; */
+}
+
+.retour_ligne {
+    white-space: normal !important;
+    height: inherit !important;
+}
+
+.centered-height {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
