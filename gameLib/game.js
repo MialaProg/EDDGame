@@ -44,6 +44,10 @@ function hasDuplicates(arr) {
     return arr.some((item, index) => arr.indexOf(item) !== index);
 }
 
+function randint(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 /**
  * Chooses a random element from an array without repeating previous choices
  * @param {array} arr - The array to choose from
@@ -58,6 +62,18 @@ function chooseRandomUnique(arr, previousChoices) {
     let randomIndex = Math.floor(Math.random() * filteredArr.length);
     let chosenElement = filteredArr[randomIndex];
     previousChoices.push(chosenElement);
+    return chosenElement;
+}
+
+/**
+ * Chooses a random element from an array without repeating previous choices
+ * @param {array} arr - The copy of array to choose from
+ * @returns {any} - The chosen element
+ */
+function ranAndDel(arr) {
+    let randomIndex = randint(0, filteredArr.length);
+    let chosenElement = arr[randomIndex];
+    arr.splice(randomIndex, 1); // Change arr even outside the func
     return chosenElement;
 }
 
@@ -161,10 +177,10 @@ function findInArr(arr, min=0, max=undefined, condition) {
 }
 
 function getARandomItem(arr, conditions) {
-    let unusable = [];
+    let usable = [... arr];
     let result = undefined;
-    while (!result && unusable.length < arr.length) {
-        let item = chooseRandomUnique(arr, unusable);
+    while (!result && usable.length > 0) {
+        let item = ranAndDel(usable);
         if (conditions) {
             result = item;
         }
@@ -220,28 +236,28 @@ function ranDoor(roomITM) {
         if (cacheDoor[6]) {
             return;
         }
-        // ### Check if places avaible
-        let placesRequired = cacheDoor[5].split(",");
-        // ## Check if actual place is compatible with the door
-        if (roomITM['L']) {
-            return placesRequired.includes(roomITM['L'].toString());
-        }
-        // ## Else, check if one place required is available
-        let place = getARandomItem(placesRequired, (placeID) => {
-            let cachePlace = findInArr(db, 15, 60, item => item[0] == 'L' && item[1] == placeID);
-            if (!cachePlace) {
-                return;
-            }
-            // ### Check if place already used
-            if (cachePlace[6]) {
-                return;
-            }
-            return true;
-        });
-        if (!place) {
-            return;
-        }
-        // ## Check for objects required
+        // // ### Check if places avaible
+        // let placesRequired = cacheDoor[5].split(",");
+        // // ## Check if actual place is compatible with the door
+        // if (roomITM['L']) {
+        //     return placesRequired.includes(roomITM['L'].toString());
+        // }
+        // // ## Else, check if one place required is available
+        // let place = getARandomItem(placesRequired, (placeID) => {
+        //     let cachePlace = findInArr(db, 15, 60, item => item[0] == 'L' && item[1] == placeID);
+        //     if (!cachePlace) {
+        //         return;
+        //     }
+        //     // ### Check if place already used
+        //     if (cachePlace[6]) {
+        //         return;
+        //     }
+        //     return true;
+        // });
+        // if (!place) {
+        //     return;
+        // }
+        // ### Check for objects required
         let object = resolveObjects(cacheDoor[3].split(","));
         if (!object) {
             return;
