@@ -25,43 +25,43 @@ L;88;D1: Dortoir
 L;89;D2: Dortoir
 L;90;R1: Réfectoire
 L;91;R2: Aire de pique-nique
-L;92;R3: Magasin
+L;92;R3: Magasin;1,21,0;23,30
 L;93;A1: Aire de Récréation
 L;94;A2: Aire de Récréation
 L;95;TR: Garre de Transports
 L;96;WC: Toilettes
 L;97;HALL
 L;99;Réserve
-L;1;Pharmacie
+L;1;Pharmacie;0,21;2
 L;2;Ruines
-L;3;Jardin
-L;4;Piscine
-L;5;Laboratoire d'analyse
-L;6;Marché
-L;7;Foret
-L;8;Cybercafé
-L;9;Montagnes
+L;3;Jardin;0;8,9
+L;4;Piscine;30;32,5
+L;5;Laboratoire d'analyse;0;11
+L;6;Marché;21;13
+L;7;Foret;0;19
+L;8;Cybercafé;21;14,31
+L;9;Montagnes;0;20
 L;10;Orage
 #L;11
 L;12;Volcan
 L;13;Campignons
-L;14;Banque
-L;15;Rivière
+L;14;Banque;0,23;21
+L;15;Rivière;30;32,5
 L;16;Cascade
 L;17;Parc d'attraction
 L;18;Plage
-#Type;Num;Nom;n°O ness(1,2,3...);Don (ça,et ça|ou juste ça);n°Lieu possibles
+#Type;Num;Nom;n°O ness(1,2,3...);Don (ça,ou ça&et juste ça);n°Lieu possibles
 P;1;Efelant;2,0;1;89,90,91,92,94,97,3,6,13,17
 P;2;Athena & Neila;0;3;85,86,87,88,89,93,94,97
-P;3
-P;4
-P;5
-P;6
-P;7
-P;8
-P;9
-P;10
-P;11
+P;3;Le Gang des Pieuvres;0,5;4,7,10;*
+P;4;Riri;0;0;*
+P;5;Neige & Dragounet;0:0:*
+#P;6
+P;7;Baboum;13;16;*
+#P;8
+#P;9
+#P;10
+P;11;Musique;0;22;*
 #Type;Num;Nom(;Used)
 O;0;none
 O;1;Bon d'achat
