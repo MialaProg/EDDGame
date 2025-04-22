@@ -23,7 +23,7 @@ var placesPriority = [
 ]
 // doors
 var doors = {
-    10: [1,10], 11: [1], 12: [1], 13: [1,10], 14: [1], 15: [10],
+    10: [1, 10], 11: [1], 12: [1], 13: [1, 10], 14: [1], 15: [10],
     20: [10], 21: [10], 22: [10], 23: [1], 24: [], 25: [10],
     30: [1], 31: [1], 32: [1], 33: [1], 34: [1], 35: []
 }
@@ -130,32 +130,133 @@ function roomToInt(arr) {
 }
 
 function getDoors(roomNum) {
-    let roomDoors = [... doors[roomNum]];
-    for (let i = 1; i < 11; i+=9) {
-        if (doors[roomNum-i] && doors[roomNum-i].includes(i)) {
+    let roomDoors = [...doors[roomNum]];
+    for (let i = 1; i < 11; i += 9) {
+        if (doors[roomNum - i] && doors[roomNum - i].includes(i)) {
             roomDoors += [-i];
         }
     }
     return roomDoors;
 }
 
+/**
+ * Find something in a part of an array
+ * @param {*} arr 
+ * @param {*} min 
+ * @param {*} max 
+ * @param {*} condition 
+ * @returns 
+ */
+function findInArr(arr, min=0, max=undefined, condition) {
+    if (max === undefined) {
+        max = arr.length - 1;
+    }
+    while (i <= max) {
+        if (condition(arr[i])) {
+            return arr[i];
+        }
+        i++;
+    }
+    return undefined;
+}
+
+function getARandomItem(arr, conditions) {
+    let unusable = [];
+    let result = undefined;
+    while (!result && unusable.length < arr.length) {
+        let item = chooseRandomUnique(arr, unusable);
+        if (conditions) {
+            result = item;
+        }
+    }
+    return result;
+}
 
 
 
 // BOARD GENERATION CODE
 
+//  Resolve objects required for a system
+function resolveObjects(objectsRequired) {
+    return getARandomItem(objectsRequired, (objectID) => {
+        // Check if no object is required 
+        if (objectID == '0'){
+            return true;
+        }
 
-function ranDoor(){
-    
+        // Check if object already used        
+        let cacheObject = findInArr(db, 60, undefined, item => item[0] == 'O' && item[1] == doorID);
+        if (cacheObject[3]) {
+            return;
+        }
+
+        let perso = getARandomItem(db.slice(50, 70), (item) => {
+            // Check if it is a perso
+            if (item[0] != 'P') {
+                return;
+            }
+            // Check if he give the object
+            if (!item[4].split(',').includes(objectID)) {
+                return;
+            }
+            // Check objects required
+            let object = resolveObjects(item[3].split(","));
+            if (!object) {
+                return;
+            }
+            return true;
+        });
+    });
+}
+
+function ranDoor(roomITM) {
+    let allDoors = Array.from({ length: 18 }, (_, i) => i + 1);
+    let door = getARandomItem(allDoors, (doorID) => {
+        let cacheDoor = findInArr(db, 0, 30, item => item[0] == 'R' && item[1] == doorID);
+        if (!cacheDoor) {
+            return;
+        }
+        // ### Check if door already used
+        if (cacheDoor[6]) {
+            return;
+        }
+        // ### Check if places avaible
+        let placesRequired = cacheDoor[5].split(",");
+        // ## Check if actual place is compatible with the door
+        if (roomITM['L']) {
+            return placesRequired.includes(roomITM['L'].toString());
+        }
+        // ## Else, check if one place required is available
+        let place = getARandomItem(placesRequired, (placeID) => {
+            let cachePlace = findInArr(db, 15, 60, item => item[0] == 'L' && item[1] == placeID);
+            if (!cachePlace) {
+                return;
+            }
+            // ### Check if place already used
+            if (cachePlace[6]) {
+                return;
+            }
+            return true;
+        });
+        if (!place) {
+            return;
+        }
+        // ## Check for objects required
+        let object = resolveObjects(cacheDoor[3].split(","));
+        if (!object) {
+            return;
+        }
+        return true;
+    });
 }
 
 /**
  * Set in places the door of the room to val
  */
-function setDoor(door, roomARR, val){
+function setDoor(door, roomARR, val) {
     let room = places[roomARR[0]][roomARR[1]];
-    if (!room){ room = {}; }
-    if (!room['R']){ room['R'] = {}; }
+    if (!room) { room = {}; }
+    if (!room['R']) { room['R'] = {}; }
     room['R'][door] = val;
     places[roomARR[0]][roomARR[1]] = room;
 }
@@ -168,7 +269,7 @@ async function generate_board() {
             let placeINT = roomToInt(placeARR);
             let place = places[placeARR[0]][placeARR[1]];
             let placeDoor = getDoors();
-            if (!placeDoor){
+            if (!placeDoor) {
                 continue;
             }
             for (let y = 0; y < placeDoor.length; y++) {
@@ -177,9 +278,9 @@ async function generate_board() {
                     if (place['R'][doorTo] != undefined) {
                         continue;
                     }
-                } catch (error) {}
+                } catch (error) { }
                 let randomDoor = ranDoor();
-                if (randomDoor){
+                if (randomDoor) {
                     setDoor(doorTo, placeARR, randomDoor);
                     setDoor(-doorTo, intToRoom(placeINT + doorTo), randomDoor);
                 }

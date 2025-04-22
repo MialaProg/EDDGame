@@ -1,2 +1,7 @@
 # EDDGame
 Board game
+
+
+# Glossaire:
+System: Door or perso
+Item: R;L;P or O
