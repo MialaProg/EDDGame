@@ -76,7 +76,7 @@ function ranAndDel(arr) {
     let randomIndex = randint(0, filteredArr.length);
     let chosenElement = arr[randomIndex];
     arr.splice(randomIndex, 1); // Change arr even outside the func
-    return chosenElement;
+    return randomIndex, chosenElement;
 }
 
 /**
@@ -126,19 +126,23 @@ getDb();
  * @param {string} idx 
  * @param {string} val 
  */
-function setDb(idx, val){
+function setDb(idx, val) {
     eval(`
-        editGen.push(['${idx}', db${idx}]);
-        db${idx} = '${val}';
-        `);
+        editGen.push(['${idx}', JSON.stringify(db${idx})]);
+        if (Array.isArray(db${idx})) {
+            db${idx}.push('${val}');
+        } else {
+            db${idx} = '${val}';
+        }
+    `);
 }
 
-function restoreDb(toLen){
+function restoreDb(toLen) {
     for (let i = editGen.length; i > toLen; i--) {
-        const e = editGen[i-1];
+        const e = editGen[i - 1];
         eval(`
-            db${e[0]} = '${e[1]}';
-            `)
+            db${e[0]} = JSON.parse('${e[1]}');
+        `);
         editGen.pop();
     }
 }
@@ -187,25 +191,28 @@ function getDoors(roomNum) {
  * @param {*} condition 
  * @returns 
  */
-function findInArr(arr, min=0, max=undefined, condition) {
+function findInArr(arr, min = 0, max = undefined, condition) {
     if (max === undefined) {
         max = arr.length - 1;
     }
+    let i = min;
     while (i <= max) {
         if (condition(arr[i])) {
-            return arr[i];
+            return i, arr[i];
         }
         i++;
     }
-    return undefined;
+    return -1, undefined;
 }
 
-function getARandomItem(arr, conditions) {
-    let usable = [... arr];
+function getARandomItem(arr, conditions, restore = true) {
+    let usable = [...arr];
     let result = undefined;
+    const initLen = editGen.length;
     while (!result && usable.length > 0) {
-        let item = ranAndDel(usable);
-        if (conditions) {
+        if (restore) { restoreDb(initLen); }
+        let idx, item = ranAndDel(usable);
+        if (conditions(idx, item)) {
             result = item;
         }
     }
@@ -218,43 +225,51 @@ function getARandomItem(arr, conditions) {
 
 //  Resolve objects required for a system
 function resolveObjects(objectsRequired) {
-    return getARandomItem(objectsRequired, (objectID) => {
+    return getARandomItem(objectsRequired, (pseudoIdx, objectID) => {
         // Check if no object is required 
-        if (objectID == '0'){
+        if (objectID == '0') {
             return true;
         }
 
         // Check if object already used        
-        let cacheObject = findInArr(db, 60, undefined, item => item[0] == 'O' && item[1] == doorID);
+        let idx, cacheObject = findInArr(db, 60, undefined, item => item[0] == 'O' && item[1] == objectID);
         if (cacheObject[3]) {
             return;
         }
 
-        let perso = getARandomItem(db.slice(50, 70), (item) => {
+        let perso = getARandomItem(db.slice(50, 70), (idx, perso) => {
             // Check if it is a perso
-            if (item[0] != 'P') {
+            if (perso[0] != 'P') {
                 return;
             }
             // Check if he give the object
-            if (!item[4].split(',').includes(objectID)) {
+            if (!perso[4].split(',').includes(objectID)) {
                 return;
             }
             // Check objects required
-            let object = resolveObjects(item[3].split(","));
+            let object = resolveObjects(perso[3].split(","));
             if (!object) {
                 return;
             }
 
             // Save and return
+            setDb(idx, 1);
             return true;
         });
+        if (!perso){
+            return;
+        }
+
+        // Save and return
+        setDb(idx, 1);
+        return true;
     });
 }
 
 function ranDoor(roomITM) {
     let allDoors = Array.from({ length: 18 }, (_, i) => i + 1);
-    let door = getARandomItem(allDoors, (doorID) => {
-        let cacheDoor = findInArr(db, 0, 30, item => item[0] == 'R' && item[1] == doorID);
+    let door = getARandomItem(allDoors, (pseudoIdx, doorID) => {
+        let idx, cacheDoor = findInArr(db, 0, 30, item => item[0] == 'R' && item[1] == doorID);
         if (!cacheDoor) {
             return;
         }
@@ -288,6 +303,9 @@ function ranDoor(roomITM) {
         if (!object) {
             return;
         }
+
+        // Save and return
+        setDb(idx, 1);
         return true;
     });
     return door;
