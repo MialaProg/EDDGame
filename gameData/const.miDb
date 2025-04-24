@@ -1,0 +1,5 @@
+Pour changer le jeu, remplacer simplement les éléments ici en conservant la mise en place.
+#ROOMS (Default, 1st unblocked & Start)
+C1;C2;C3;D1;D2;R1;R2;R3;A1;A2;TR;WC;Hall
+E4:13
+0;12

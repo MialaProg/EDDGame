@@ -32,11 +32,16 @@ var doors = {
 
 // actualGame = {place: [objects]}
 var actualGame = {}
-var db = undefined;
-var boardGenerated = false;
 // For trace edit when generate
 var editGen = [];
-var toBeAdded = undefined;
+var toBeAdded, db, boardGenerated, startRoom;
+
+var GameConst = 0;
+var GameConstMax = 1;
+
+function GameConstInitied(){
+    return GameConst >= GameConstMax;
+}
 
 function log(...arguments) {
     if (ConsoleLog) {
@@ -118,17 +123,23 @@ function setProgress(id, val) {
     }
 }
 
-async function getDb() {
-    await fetch("gameData/items.miDb")
+async function getDb(path) {
+    let data;
+    await fetch(path)
         .then(response => response.text())
-        .then(data => {
-            db = data.trim().split("\n").map(row => row.split(";"));
+        .then(dt => {
+            data =dt;
+            // db = data.trim().split("\n").map(row => row.split(";"));
         })
         .catch(error => {
             console.error("Error fetching and parsing data:", error);
         });
+    return data;
 }
-getDb();
+getDb("gameData/items.miDb").then(data => {
+    db = data.trim().split("\n").map(row => row.split(";"));
+});
+
 
 /**
  * Set and save change
@@ -172,6 +183,12 @@ function waitUntil(condition, callback) {
 
 function intToRoom(num) {
     num = num.toString();
+    if (num.length < 2) {
+        num = '0' + num;
+    }
+    if (num.length > 2) {
+        throw new Error("Number must be two digits.");
+    }
     return [parseInt(num[0]), parseInt(num[1])];
 }
 
@@ -282,7 +299,7 @@ function resolveObjects(objectsRequired) {
     let toBeAddedLen = toBeAdded.length;
     return getARandomItem(objectsRequired, (objectID) => {
         if (toBeAddedLen !== toBeAdded.length) {
-            console.log(toBeAdded);
+            log(toBeAdded);
             toBeAdded = toBeAdded.slice(0, toBeAddedLen);
         }
         // Check if no object is required 
@@ -456,7 +473,7 @@ function addItemsToRoom(type) {
             asBeenAdded.push(element);
             return true;
         }, false);
-        console.log('Added to', my_room, ':[' + i + ']', element);
+        log('Added to', my_room, ':[' + i + ']', element);
     }
 }
 
@@ -465,7 +482,7 @@ async function generate_board() {
     toBeAdded = [];
     places[3][0] = { 'L': 99 }; //,  ?
     setProgressBar(10);
-    waitUntil(() => db != undefined, () => {
+    waitUntil(() => db != undefined && GameConstInitied(), () => {
         for (let i = 0; i < placesPriority.length; i++) {
             setProgressBar(10 + (i / placesPriority.length) * 50);
             toBeAdded.push(i);
@@ -479,7 +496,7 @@ async function generate_board() {
             for (let y = 0; y < placeDoor.length; y++) {
                 const doorTo = placeDoor[y]; //INT
                 if (!randint(0, 3)) {
-                    console.log(`Door ${doorTo} for ${placeINT} : ignored`);
+                    log(`Door ${doorTo} for ${placeINT} : ignored`);
                     continue;
                 }
                 try {
@@ -488,7 +505,7 @@ async function generate_board() {
                     }
                 } catch (error) { }
                 let randomDoor = ranDoor();
-                console.log(`Door ${doorTo} for ${placeINT} : ${randomDoor}`);
+                log(`Door ${doorTo} for ${placeINT} : ${randomDoor}`);
                 if (randomDoor) {
                     setDoor(doorTo, placeARR, randomDoor);
                     setDoor(-doorTo, intToRoom(placeINT + doorTo), randomDoor);
@@ -501,7 +518,7 @@ async function generate_board() {
         addItemsToRoom('P');
         setProgressBar(100);
         boardGenerated = true;
-        console.log("Board generated !")
+        log("Board generated !")
     });
 }
 
@@ -517,6 +534,7 @@ async function launch_game() {
     document.getElementById("loadinggame-interface").classList.remove("is-hidden");
     setBg('room-canvas', 'black');
     await generate_board();
+    show_room(startRoom);
     document.getElementById("loadinggame-interface").classList.add("is-hidden");
     document.getElementById("ingame-interface").classList.remove("is-hidden");
 }
@@ -542,7 +560,7 @@ function init_players_values() {
  */
 function init_select_onclick() {
     // Sélectionne tous les éléments <select> sur la page
-    var selects = document.querySelectorAll("select");
+    var selects = document.querySelectorAll("select.select-player");
 
     // Boucle à travers chaque <select> et définir l'événement change
     selects.forEach(function (select) {
@@ -559,11 +577,65 @@ function init_select_onclick() {
             });
         }
         select.addEventListener("change", function () {
-            console.log("Option selected: " + this.value);
+            log("Option selected: " + this.value);
             //Save value
             players[selectID - 1] = this.value
         });
     });
+}
+
+function drawImage(imgID, x=0, y=0, px=1, py=1){
+    const canvas = document.getElementById("room-canvas");
+        if (!canvas) {
+            console.error("Canvas element not found.");
+            return;
+        }
+        const ctx = canvas.getContext("2d");
+        if (!ctx) {
+            console.error("Canvas not supported in this browser.");
+            alert("Votre navigateur web ne supporte pas l'élément canvas.");
+            return;
+        }
+
+        // Clear the canvas
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Draw the image placeID (./Images/Items/Lx.png)
+        const img = new Image();
+        img.src = `./Images/Items/${imgID}.png`;
+        img.onload = function () {
+            const aspectRatio = img.width / img.height;
+            let width = px * canvas.width;
+            let height = py * canvas.height;
+
+            // Adjust dimensions to maintain aspect ratio
+            if (width / height > aspectRatio) {
+            width = height * aspectRatio;
+            } else {
+            height = width / aspectRatio;
+            }
+
+            ctx.drawImage(img, x, y, width, height);
+        };
+        img.onerror = function () {
+            console.error(`Failed to load image: ./Images/Items/${imgID}.png`);
+        };
+}
+
+function show_room(roomARR){
+    let room = places[roomARR[0]][roomARR[1]];
+    if (!room) {
+        console.error("Room not found.");
+        return;
+    }
+    let placeID = room['L'];
+    if (placeID) {
+        drawImage('L'+placeID);
+    }
+    let persoID = room['P'];
+    if (persoID) {
+        drawImage('P'+persoID);
+    }
 }
 
 
@@ -586,7 +658,7 @@ function set_player_form_submit() {
         }
 
         InGame = true;
-        console.log("Game start !");
+        log("Game start !");
         launch_game();
     });
 }
@@ -597,3 +669,49 @@ document.addEventListener("DOMContentLoaded", function () {
     init_select_onclick();
     set_player_form_submit();
 });
+
+// Gestion des variables global venant de const.miDb
+async function initGameConst() {
+    let data = await getDb("gameData/const.miDb");
+    if (!data) {
+        console.error("Error fetching const data.");
+        return;
+    }
+    data = data.trim().split("\n");
+    for (let i = 0; i < data.length; i++) {
+        const line = data[i];
+        if (line.includes("#ROOMS")){
+            let currentRoom_HTML = '';
+            i+=1;
+            let r = data[i].split(";");
+            for (let j = 0; j < r.length; j++) {
+                const element = r[j];
+                currentRoom_HTML += `<option value="0;${j}">${element}</option>`;
+            }
+            i+=1;
+            r = data[i].split(":");
+            currentRoom_HTML += `<option value="${r[1][0]};${r[1][1]}">${r[0]}</option>`;
+            i+=1;
+            let starting_room = data[i];
+            startRoom = starting_room.split(";").map(Number);
+            waitUntil(() => document.readyState === "complete", () => {
+                let roomSelect = document.getElementById("current-room");
+                if (roomSelect) {
+                    roomSelect.innerHTML = currentRoom_HTML;
+                    roomSelect.addEventListener("change", function () {
+                        show_room(this.value.split(";").map(Number));
+                    });
+                    roomSelect.value = starting_room[i];
+                    
+                } else {
+                    console.error("Room select element not found.");
+                }
+                GameConst += 1;
+            });
+            log("Rooms created !")
+            continue;
+        }
+    }
+    log("GameConst initied");
+}
+initGameConst();
