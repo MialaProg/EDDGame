@@ -178,10 +178,21 @@ function getDoors(roomNum) {
     let roomDoors = [...doors[roomNum]];
     for (let i = 1; i < 11; i += 9) {
         if (doors[roomNum - i] && doors[roomNum - i].includes(i)) {
-            roomDoors += [-i];
+            roomDoors.push(-i);
         }
     }
     return roomDoors;
+}
+
+/**
+ * Set in places the door of the room to val
+ */
+function setDoor(door, roomARR, val) {
+    let room = places[roomARR[0]][roomARR[1]];
+    if (!room) { room = {}; }
+    if (!room['R']) { room['R'] = {}; }
+    room['R'][door] = val;
+    places[roomARR[0]][roomARR[1]] = room;
 }
 
 /**
@@ -253,9 +264,9 @@ function resolveObjects(objectsRequired) {
                 return;
             }
             // Check if it is already used
-            if (perso[6]) {
-                return;
-            }
+            // if (perso[6]) {
+            //     return;
+            // }
             // Check if he give the object
             if (!perso[4].split(',').includes(objectID)) {
                 return;
@@ -282,11 +293,11 @@ function resolveObjects(objectsRequired) {
                     return;
                 }
                 // Check if it is already used
-                if (loc[6]) {
-                    return;
-                }
+                // if (loc[6]) {
+                //     return;
+                // }
                 // Check if he give the object
-                if (!loc[4].split(',').includes(objectID)) {
+                if (!loc[4] || !loc[4].split(',').includes(objectID)) {
                     return;
                 }
                 // Check objects required
@@ -361,16 +372,6 @@ function ranDoor(roomITM) {
     return door;
 }
 
-/**
- * Set in places the door of the room to val
- */
-function setDoor(door, roomARR, val) {
-    let room = places[roomARR[0]][roomARR[1]];
-    if (!room) { room = {}; }
-    if (!room['R']) { room['R'] = {}; }
-    room['R'][door] = val;
-    places[roomARR[0]][roomARR[1]] = room;
-}
 
 async function generate_board() {
     toBeAdded = [];
@@ -392,6 +393,7 @@ async function generate_board() {
                     }
                 } catch (error) { }
                 let randomDoor = ranDoor();
+                console.log(`Door ${doorTo} for ${placeINT} : ${randomDoor}`);
                 if (randomDoor) {
                     setDoor(doorTo, placeARR, randomDoor);
                     setDoor(-doorTo, intToRoom(placeINT + doorTo), randomDoor);
