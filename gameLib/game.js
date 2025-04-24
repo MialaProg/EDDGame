@@ -1,5 +1,6 @@
 //Initialisation des variables globales
 var InGame = false;
+var ConsoleLog = true;
 
 var players = new Array(5)
 // places = [[85, 86, 87, 88, ... 97], [undef * 6] * 3]
@@ -37,6 +38,11 @@ var boardGenerated = false;
 var editGen = [];
 var toBeAdded = undefined;
 
+function log(...arguments) {
+    if (ConsoleLog) {
+        console.log(...arguments);
+    }
+}
 
 /**
  * Detect duplicates from an array
@@ -50,6 +56,8 @@ function hasDuplicates(arr) {
 function randint(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
+
+
 
 /**
  * Chooses a random element from an array without repeating previous choices
@@ -236,6 +244,36 @@ function getARandomItem(arr, conditions, restore = true) {
 }
 
 
+// PROGRESS BAR
+var progressInterval, progress;
+function setProgressBar(val) {
+    if (!progress){
+        return;
+    }
+    if (progressInterval) {
+        clearInterval(progressInterval);
+    }
+    let currentVal = progress.value;
+    let step = (val - currentVal) / 50; // Adjust the number of steps as needed
+    progressInterval = setInterval(() => {
+        currentVal += step;
+        progress.value = currentVal;
+        progress.innerHTML = Math.round(currentVal) + "%";
+        if ((step > 0 && currentVal >= val) || (step < 0 && currentVal <= val)) {
+            clearInterval(progressInterval);
+            progress.value = val;
+            progress.innerHTML = val + "%";
+        }
+    }, 40); // Adjust the interval time as needed
+}
+document.addEventListener("DOMContentLoaded", function () {
+    progress = document.getElementById("progress-bar");
+    if (progress) {
+        setProgressBar(0);
+    } else {
+        console.error("Progress bar element not found.");
+    }
+});
 
 // BOARD GENERATION CODE
 
@@ -426,8 +464,10 @@ function addItemsToRoom(type) {
 async function generate_board() {
     toBeAdded = [];
     places[3][0] = { 'L': 99 }; //,  ?
+    setProgressBar(10);
     waitUntil(() => db != undefined, () => {
         for (let i = 0; i < placesPriority.length; i++) {
+            setProgressBar(10 + (i / placesPriority.length) * 50);
             toBeAdded.push(i);
             let placeARR = placesPriority[i];
             let placeINT = roomToInt(placeARR);
@@ -455,8 +495,11 @@ async function generate_board() {
                 }
             }
         }
+        setProgressBar(70);
         addItemsToRoom('L');
+        setProgressBar(80);
         addItemsToRoom('P');
+        setProgressBar(100);
         boardGenerated = true;
         console.log("Board generated !")
     });
@@ -473,6 +516,7 @@ async function launch_game() {
     document.getElementById("pregame-interface").classList.add("is-hidden");
     document.getElementById("loadinggame-interface").classList.remove("is-hidden");
     setBg('room-canvas', 'black');
+    await generate_board();
     document.getElementById("loadinggame-interface").classList.add("is-hidden");
     document.getElementById("ingame-interface").classList.remove("is-hidden");
 }
