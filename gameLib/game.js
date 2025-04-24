@@ -4,7 +4,7 @@ var InGame = false;
 var players = new Array(5)
 // places = [[85, 86, 87, 88, ... 97], [undef * 6] * 3]
 var places = [
-    Array.from({ length: 13 }, (_, i) => 85 + i), // Row 1: 85 to 97
+    Array.from({ length: 13 }, (_, i) => ({ 'L': 85 + i })), // Row 1: 85 to 97
     Array(6).fill(undefined),                   // Row 2: undefined
     Array(6).fill(undefined),                   // Row 3: undefined
     Array(6).fill(undefined)                    // Row 4: undefined
@@ -252,9 +252,10 @@ function resolveObjects(objectsRequired) {
             return true;
         }
 
-        // Check if object already used        
+        // Check if object already used  
         let [idx, cacheObject] = findInArr(db, 60, undefined, item => item[0] == 'O' && item[1] == objectID);
-        if (cacheObject[3]) {
+
+        if (objectID != '21' && cacheObject[3]) {
             return;
         }
 
@@ -372,12 +373,62 @@ function ranDoor(roomITM) {
     return door;
 }
 
+function addItemsToRoom(type) {
+    let minRoom = placesPriority.length - 1;
+    let minChange = true;
+    let roomSelected = undefined;
+
+    let allRooms = [...placesPriority];
+    const lenStandartPlaces = places[0].length;
+    for (let i = 0; i < lenStandartPlaces; i++) {
+        allRooms.push([0, i]);
+    }
+    let asBeenAdded = [];
+
+    for (let i = toBeAdded.length - 1; i > 0; i--) {
+        let element = toBeAdded[i];
+        if (typeof element === 'number') {
+            minRoom = element;
+            minChange = true;
+            continue;
+        }
+        if (element[0] !== type) {
+            continue;
+        }
+        if (asBeenAdded.includes(element)) {
+            continue;
+        }
+        if (minChange) {
+            roomSelected = allRooms.slice(minRoom);
+            minChange = false;
+        }
+        let my_room = getARandomItem(roomSelected, (roomARR) => {
+            let room = places[roomARR[0]][roomARR[1]];
+            if (!room) {
+                room = {};
+            }
+            // Vérification que la place est libre pour l'élément
+            if (room[element[0]]) {
+                return;
+            }
+
+            room[element[0]] = element[1];
+            places[roomARR[0]][roomARR[1]] = room;
+            // Ajout de l'élément à la liste des éléments ajoutés
+            asBeenAdded.push(element);
+            return true;
+        }, false);
+        console.log('Added to', my_room, ':[' + i + ']', element);
+    }
+}
+
 
 async function generate_board() {
     toBeAdded = [];
     places[3][0] = { 'L': 99 }; //,  ?
     waitUntil(() => db != undefined, () => {
         for (let i = 0; i < placesPriority.length; i++) {
+            toBeAdded.push(i);
             let placeARR = placesPriority[i];
             let placeINT = roomToInt(placeARR);
             let place = places[placeARR[0]][placeARR[1]];
@@ -387,6 +438,10 @@ async function generate_board() {
             }
             for (let y = 0; y < placeDoor.length; y++) {
                 const doorTo = placeDoor[y]; //INT
+                if (!randint(0, 3)) {
+                    console.log(`Door ${doorTo} for ${placeINT} : ignored`);
+                    continue;
+                }
                 try {
                     if (place['R'][doorTo] != undefined) {
                         continue;
@@ -400,6 +455,8 @@ async function generate_board() {
                 }
             }
         }
+        addItemsToRoom('L');
+        addItemsToRoom('P');
         boardGenerated = true;
         console.log("Board generated !")
     });
