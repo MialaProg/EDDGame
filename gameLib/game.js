@@ -545,7 +545,7 @@ async function launch_game() {
  * If there is a duplicate, set select value to none.
 */
 function init_players_values() {
-        let selects = document.querySelectorAll("select.select-player");
+        let selects = document.querySelectorAll("select.player-select");
     selects.forEach(function (select) {
         let selectID = select.id[select.id.length - 1];
         players[selectID - 1] = select.value
@@ -560,7 +560,7 @@ function init_players_values() {
  */
 function init_select_onclick() {
     // Sélectionne tous les éléments <select> sur la page
-    let selects = document.querySelectorAll("select.select-player");
+    let selects = document.querySelectorAll("select.player-select");
 
     // Boucle à travers chaque <select> et définir l'événement change
     selects.forEach(function (select) {
