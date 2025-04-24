@@ -585,6 +585,7 @@ function init_select_onclick() {
 }
 
 function drawImage(imgID, x=0, y=0, px=1, py=1){
+try{
     const canvas = document.getElementById("room-canvas");
         if (!canvas) {
             console.error("Canvas element not found.");
@@ -604,22 +605,25 @@ function drawImage(imgID, x=0, y=0, px=1, py=1){
         const img = new Image();
         img.src = `./Images/Items/${imgID}.png`;
         img.onload = function () {
-            const aspectRatio = img.width / img.height;
+            //const aspectRatio = img.width / img.height;
             let width = px * canvas.width;
             let height = py * canvas.height;
 
-            // Adjust dimensions to maintain aspect ratio
+            /*// Adjust dimensions to maintain aspect ratio
             if (width / height > aspectRatio) {
             width = height * aspectRatio;
             } else {
             height = width / aspectRatio;
-            }
+            }*/
 
             ctx.drawImage(img, x, y, width, height);
         };
         img.onerror = function () {
             console.error(`Failed to load image: ./Images/Items/${imgID}.png`);
-        };
+        };}
+catch(e){
+console.error(e);
+}
 }
 
 function show_room(roomARR){
