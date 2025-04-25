@@ -609,6 +609,7 @@ function drawImage(imgID, x = 0, y = 0, w = 100, h = 100) {
             const aspectRatio = img.width / img.height;
 
             // Adjust dimensions to maintain aspect ratio
+           log(w,h,aspectRatio);
             if (aspectRatio > 1) {
                 w *= canvas.width / 100;
                 h = w / aspectRatio;
@@ -616,6 +617,7 @@ function drawImage(imgID, x = 0, y = 0, w = 100, h = 100) {
                 h *= canvas.height / 100;
                 w = h * aspectRatio;
             }
+log(w,h);
 
             ctx.drawImage(img, x, y, w, h);
         };
