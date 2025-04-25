@@ -300,7 +300,7 @@ function resolveObjects(objectsRequired) {
     let toBeAddedLen = toBeAdded.length;
     return getARandomItem(objectsRequired, (objectID) => {
         if (toBeAddedLen !== toBeAdded.length) {
-            log('toBeAdded: ',toBeAdded);
+            log('toBeAdded: ', toBeAdded);
             toBeAdded = toBeAdded.slice(0, toBeAddedLen);
         }
         // Check if no object is required 
@@ -535,10 +535,12 @@ async function launch_game() {
     document.getElementById("loadinggame-interface").classList.remove("is-hidden");
     setBg('room-canvas', 'black');
     await generate_board();
-    showRoom(startRoom);
-    setProgressBar(100);
-    document.getElementById("loadinggame-interface").classList.add("is-hidden");
-    document.getElementById("ingame-interface").classList.remove("is-hidden");
+    waitUntil(() => startRoom, () => {
+        showRoom(startRoom);
+        setProgressBar(100);
+        document.getElementById("loadinggame-interface").classList.add("is-hidden");
+        document.getElementById("ingame-interface").classList.remove("is-hidden");
+    });
 }
 
 // STARTING GAME CODE
@@ -600,7 +602,7 @@ function drawImage(imgID, x = 0, y = 0, w = 100, h = 100) {
             return;
         }
 
-        
+
         x *= canvas.width / 100;
         y *= canvas.height / 100;
 
@@ -611,7 +613,7 @@ function drawImage(imgID, x = 0, y = 0, w = 100, h = 100) {
             const aspectRatio = img.width / img.height;
 
             // Adjust dimensions to maintain aspect ratio
-        //    log(w,h,aspectRatio);
+            //    log(w,h,aspectRatio);
             if (aspectRatio > 1) {
                 w *= canvas.width / 100;
                 h = w / aspectRatio;
@@ -646,7 +648,24 @@ function showRoom(roomARR) {
     }
     let persoID = room['P'];
     if (persoID) {
-        drawImage('P' + persoID, 35, 40, 30, 20);
+        drawImage('P' + persoID, 40, 40, 30, 20);
+    }
+    let doorIDs = room['R'];
+    if (doorIDs) {
+        for (const key in doorIDs) {
+            if (Object.prototype.hasOwnProperty.call(object, key)) {
+                const doorID = object[key];
+                if (isFinite(key)) {
+                    if (Math.abs(key) > 5) {
+                        drawImage('R' + doorID, 35 + 3.5 * key, 30, 40, 30);
+                    } else {
+                        drawImage('R' + doorID, 30, 35 + 35 * key, 30, 40);
+                    }
+                } else {
+                    log('DoorID not finite:', doorID, roomARR);
+                }
+            }
+        }
     }
 }
 
@@ -726,7 +745,7 @@ async function initGameConst() {
 }
 initGameConst();
 
-function initSelectRoom(){
+function initSelectRoom() {
     let roomSelect = document.getElementById("current-room");
     roomSelect.addEventListener("change", function () {
         showRoom(this.value.split(";").map(Number));
@@ -753,32 +772,32 @@ function updateCanvasSize() {
 }*/
 
 function updateCanvasSize() {
-  const canvas = document.getElementById("room-canvas");
-  const container = document.querySelector(".canvas-container");
-  
-  // Calcul dynamique de la taille
-  const maxWidth = window.innerWidth;
-  const maxHeight = window.innerHeight;
-  const size = Math.min(maxWidth, maxHeight);
-  
-  // Applique les dimensions au conteneur
-  container.style.width = `${size}px`;
-  container.style.height = `${size}px`;
-  
-  // Met à jour les attributs du canvas avec haute résolution
-  const scale = window.devicePixelRatio || 1; // Gestion de la rétine
-  canvas.width = size ;//* scale;
-  canvas.height = size ;//* scale;
-  
-  // Ajuste le contexte pour le scaling
-  const ctx = canvas.getContext("2d");
-  /*ctx.scale(scale, scale);*/
-  
-  // Configuration de la qualité d'image
-  ctx.imageSmoothingEnabled = true;
-  ctx.imageSmoothingQuality = "high";
+    const canvas = document.getElementById("room-canvas");
+    const container = document.querySelector(".canvas-container");
 
-  try{showRoom(actualRoom);}catch(e){}
+    // Calcul dynamique de la taille
+    const maxWidth = window.innerWidth;
+    const maxHeight = window.innerHeight;
+    const size = Math.min(maxWidth, maxHeight);
+
+    // Applique les dimensions au conteneur
+    container.style.width = `${size}px`;
+    container.style.height = `${size}px`;
+
+    // Met à jour les attributs du canvas avec haute résolution
+    const scale = window.devicePixelRatio || 1; // Gestion de la rétine
+    canvas.width = size;//* scale;
+    canvas.height = size;//* scale;
+
+    // Ajuste le contexte pour le scaling
+    const ctx = canvas.getContext("2d");
+    /*ctx.scale(scale, scale);*/
+
+    // Configuration de la qualité d'image
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
+
+    try { showRoom(actualRoom); } catch (e) { }
 }
 
 // Initialisation
