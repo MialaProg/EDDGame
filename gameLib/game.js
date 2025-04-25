@@ -39,7 +39,7 @@ var toBeAdded, db, boardGenerated, startRoom;
 var GameConst = 0;
 var GameConstMax = 1;
 
-function GameConstInitied(){
+function GameConstInitied() {
     return GameConst >= GameConstMax;
 }
 
@@ -128,7 +128,7 @@ async function getDb(path) {
     await fetch(path)
         .then(response => response.text())
         .then(dt => {
-            data =dt;
+            data = dt;
             // db = data.trim().split("\n").map(row => row.split(";"));
         })
         .catch(error => {
@@ -264,7 +264,7 @@ function getARandomItem(arr, conditions, restore = true) {
 // PROGRESS BAR
 var progressInterval, progress;
 function setProgressBar(val) {
-    if (!progress){
+    if (!progress) {
         return;
     }
     if (progressInterval) {
@@ -545,7 +545,7 @@ async function launch_game() {
  * If there is a duplicate, set select value to none.
 */
 function init_players_values() {
-        let selects = document.querySelectorAll("select.player-select");
+    let selects = document.querySelectorAll("select.player-select");
     selects.forEach(function (select) {
         let selectID = select.id[select.id.length - 1];
         players[selectID - 1] = select.value
@@ -584,9 +584,9 @@ function init_select_onclick() {
     });
 }
 
-function drawImage(imgID, x=0, y=0, px=1, py=1){
-try{
-    const canvas = document.getElementById("room-canvas");
+function drawImage(imgID, x = 0, y = 0, w = 1, h = 1) {
+    try {
+        const canvas = document.getElementById("room-canvas");
         if (!canvas) {
             console.error("Canvas element not found.");
             return;
@@ -598,47 +598,50 @@ try{
             return;
         }
 
-        // Clear the canvas
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        x *= canvas.width;
+        y *= canvas.height;
 
         // Draw the image placeID (./Images/Items/Lx.png)
         const img = new Image();
         img.src = `./Images/Items/${imgID}.png`;
         img.onload = function () {
-            //const aspectRatio = img.width / img.height;
-            let width = px * canvas.width;
-            let height = py * canvas.height;
+            const aspectRatio = img.width / img.height;
 
-            /*// Adjust dimensions to maintain aspect ratio
-            if (width / height > aspectRatio) {
-            width = height * aspectRatio;
+            // Adjust dimensions to maintain aspect ratio
+            if (aspectRatio > 1) {
+                w *= canvas.width;
+                h = w / aspectRatio;
             } else {
-            height = width / aspectRatio;
-            }*/
+                h *= canvas.height;
+                w = h * aspectRatio;
+            }
 
-            ctx.drawImage(img, x, y, width, height);
+            ctx.drawImage(img, x, y, w, h);
         };
         img.onerror = function () {
             console.error(`Failed to load image: ./Images/Items/${imgID}.png`);
-        };}
-catch(e){
-console.error(e);
-}
+        };
+    }
+    catch (e) {
+        console.error(e);
+    }
 }
 
-function show_room(roomARR){
+function show_room(roomARR) {
     let room = places[roomARR[0]][roomARR[1]];
     if (!room) {
         console.error("Room not found.");
         return;
     }
+    setBg('room-canvas', 'darkgray');
     let placeID = room['L'];
     if (placeID) {
-        drawImage('L'+placeID);
+        drawImage('L' + placeID);
     }
     let persoID = room['P'];
     if (persoID) {
-        drawImage('P'+persoID);
+        drawImage('P' + persoID);
     }
 }
 
@@ -684,18 +687,18 @@ async function initGameConst() {
     data = data.trim().split("\n");
     for (let i = 0; i < data.length; i++) {
         const line = data[i];
-        if (line.includes("#ROOMS")){
+        if (line.includes("#ROOMS")) {
             let currentRoom_HTML = '';
-            i+=1;
+            i += 1;
             let r = data[i].split(";");
             for (let j = 0; j < r.length; j++) {
                 const element = r[j];
                 currentRoom_HTML += `<option value="0;${j}">${element}</option>`;
             }
-            i+=1;
+            i += 1;
             r = data[i].split(":");
             currentRoom_HTML += `<option value="${r[1][0]};${r[1][1]}">${r[0]}</option>`;
-            i+=1;
+            i += 1;
             let starting_room = data[i];
             startRoom = starting_room.split(";").map(Number);
             waitUntil(() => document.readyState === "complete", () => {
@@ -706,7 +709,7 @@ async function initGameConst() {
                         show_room(this.value.split(";").map(Number));
                     });
                     roomSelect.value = starting_room[i];
-                    
+
                 } else {
                     console.error("Room select element not found.");
                 }
