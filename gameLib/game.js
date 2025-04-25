@@ -1,6 +1,7 @@
 //Initialisation des variables globales
 var InGame = false;
 var ConsoleLog = true;
+var actualMode = 'pregame';
 
 var players = new Array(5)
 // places = [[85, 86, 87, 88, ... 97], [undef * 6] * 3]
@@ -35,7 +36,7 @@ var actualGame = {}
 // For trace edit when generate
 var editGen = [];
 var toBeAdded, db, boardGenerated, startRoom;
-var actualRoom;
+var actualRoom, imgToLoad, imgLoaded;
 
 var GameConst = 0;
 var GameConstMax = 1;
@@ -115,14 +116,6 @@ function setBg(canvasId, color) {
     }
 }
 
-function setProgress(id, val) {
-    let progress = document.getElementById(id);
-    if (progress) {
-        progress.value = val;
-    } else {
-        console.error("Progress element not found.");
-    }
-}
 
 async function getDb(path) {
     let data;
@@ -270,6 +263,9 @@ function setProgressBar(val) {
     }
     if (progressInterval) {
         clearInterval(progressInterval);
+    }
+    if (val == 0) {
+        progress.value = 0;
     }
     let currentVal = progress.value;
     let step = (val - currentVal) / 50; // Adjust the number of steps as needed
@@ -524,22 +520,26 @@ async function generate_board() {
 }
 
 
+// SCREENS CONTROL
+function changeMode(mode) {
+    document.getElementById("pregame-interface").classList.add("is-hidden");
+    document.getElementById("loadinggame-interface").classList.add("is-hidden");
+    document.getElementById("ingame-interface").classList.add("is-hidden");
 
-
+    document.getElementById(mode + "-interface").classList.remove("is-hidden");
+    actualMode = mode;
+}
 
 // IN-GAME CODE
 
 
 async function launch_game() {
-    document.getElementById("pregame-interface").classList.add("is-hidden");
-    document.getElementById("loadinggame-interface").classList.remove("is-hidden");
+    changeMode("loadinggame");
     setBg('room-canvas', 'black');
     await generate_board();
     waitUntil(() => startRoom, () => {
+        changeMode("ingame");
         showRoom(startRoom);
-        setProgressBar(100);
-        document.getElementById("loadinggame-interface").classList.add("is-hidden");
-        document.getElementById("ingame-interface").classList.remove("is-hidden");
     });
 }
 
@@ -609,23 +609,31 @@ function drawImage(imgID, x = 0, y = 0, w = 100, h = 100) {
         // Draw the image placeID (./Images/Items/Lx.png)
         const img = new Image();
         img.src = `./Images/Items/${imgID}.png`;
+        let imgLoadID = imgToLoad;
+        imgToLoad += 1;
         img.onload = function () {
-            const aspectRatio = img.width / img.height;
+            waitUntil(() => imgLoaded >= imgLoadID, () => {
+                const aspectRatio = img.width / img.height;
 
-            // Adjust dimensions to maintain aspect ratio
-            //    log(w,h,aspectRatio);
-            if (aspectRatio > 1) {
-                w *= canvas.width / 100;
-                h = w / aspectRatio;
-            } else {
-                h *= canvas.height / 100;
-                w = h * aspectRatio;
-            }
-            // log(w,h);
+                // Adjust dimensions to maintain aspect ratio
+                //    log(w,h,aspectRatio);
+                if (aspectRatio > 1) {
+                    w *= canvas.width / 100;
+                    h = w / aspectRatio;
+                } else {
+                    h *= canvas.height / 100;
+                    w = h * aspectRatio;
+                }
+                // log(w,h);
 
-            ctx.drawImage(img, x, y, w, h);
+                ctx.drawImage(img, x, y, w, h);
+                imgLoaded += 1;
+            });
         };
         img.onerror = function () {
+            waitUntil(() => imgLoaded >= imgLoadID, () => {
+                imgLoaded += 1;
+            });
             console.error(`Failed to load image: ./Images/Items/${imgID}.png`);
         };
     }
@@ -636,6 +644,12 @@ function drawImage(imgID, x = 0, y = 0, w = 100, h = 100) {
 
 function showRoom(roomARR) {
     actualRoom = roomARR;
+    imgToLoad = 0;
+    imgLoaded = 0;
+    if (actualMode == 'ingame') {
+        setProgressBar(0);
+        changeMode("loadinggame");
+    }
     let room = places[roomARR[0]][roomARR[1]];
     if (!room) {
         console.error("Room not found.");
@@ -667,6 +681,18 @@ function showRoom(roomARR) {
             }
         }
     }
+    if (actualMode != 'loadinggame') {
+        return;
+    }
+    waitUntil(
+        () => {
+            setProgressBar(progress.value + (90 - progress.value) / 2);
+            return imgLoaded == imgToLoad;
+        },
+        () => {
+            changeMode("ingame");
+        }
+    );
 }
 
 
