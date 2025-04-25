@@ -7,9 +7,9 @@ var players = new Array(5)
 // places = [[85, 86, 87, 88, ... 97], [undef * 6] * 3]
 var places = [
     Array.from({ length: 13 }, (_, i) => ({ 'L': 85 + i })), // Row 1: 85 to 97
-    Array(6).fill(undefined),                   // Row 2: undefined
-    Array(6).fill(undefined),                   // Row 3: undefined
-    Array(6).fill(undefined)                    // Row 4: undefined
+    Array(6).fill().map(() => ({})),    // Row 2: unique objects
+    Array(6).fill().map(() => ({})),    // Row 3: unique objects
+    Array(6).fill().map(() => ({}))     // Row 4: unique objects
 ];
 // Priority order of places [,]
 var placesPriority = [
@@ -40,6 +40,16 @@ var actualRoom, imgToLoad, imgLoaded;
 
 var GameConst = 0;
 var GameConstMax = 1;
+
+var _canvasID = 'room-canvas';
+
+function CanvasLibLoaded() {
+    try {
+        return canvasLibLoaded;
+    } catch (e) {
+        return;
+    }
+}
 
 function GameConstInitied() {
     return GameConst >= GameConstMax;
@@ -95,26 +105,7 @@ function ranAndDel(arr) {
     return chosenElement;
 }
 
-/**
- * Set the background color of the canvas
- * @param {HTMLCanvasElement} canvas - The canvas element to set the background color for
- * @param {string} color - The color to set the background to (e.g., "red", "#ff0000")
- * @returns {void}
- */
-function setBg(canvasId, color) {
-    const canvas = document.getElementById(canvasId);
-    if (!canvas) {
-        console.error("Canvas element not found.");
-        return;
-    }
-    if (canvas.getContext) {
-        var ctx = canvas.getContext('2d');
-        ctx.fillStyle = color;
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-    } else {
-        console.error("Canvas not supported in this browser.");
-    }
-}
+
 
 
 async function getDb(path) {
@@ -202,6 +193,7 @@ function getDoors(roomNum) {
     }
     return roomDoors;
 }
+
 
 /**
  * Set in places the door of the room to val
@@ -588,61 +580,14 @@ function init_select_onclick() {
     });
 }
 
-function drawImage(imgID, x = 0, y = 0, w = 100, h = 100) {
-    try {
-        const canvas = document.getElementById("room-canvas");
-        if (!canvas) {
-            console.error("Canvas element not found.");
-            return;
-        }
-        const ctx = canvas.getContext("2d");
-        if (!ctx) {
-            console.error("Canvas not supported in this browser.");
-            alert("Votre navigateur web ne supporte pas l'élément canvas.");
-            return;
-        }
-
-
-        x *= canvas.width / 100;
-        y *= canvas.height / 100;
-
-        // Draw the image placeID (./Images/Items/Lx.png)
-        const img = new Image();
-        img.src = `./Images/Items/${imgID}.png`;
-        let imgLoadID = imgToLoad;
-        imgToLoad += 1;
-        img.onload = function () {
-            waitUntil(() => imgLoaded >= imgLoadID, () => {
-                const aspectRatio = img.width / img.height;
-
-                // Adjust dimensions to maintain aspect ratio
-                //    log(w,h,aspectRatio);
-                if (aspectRatio > 1) {
-                    w *= canvas.width / 100;
-                    h = w / aspectRatio;
-                } else {
-                    h *= canvas.height / 100;
-                    w = h * aspectRatio;
-                }
-                // log(w,h);
-
-                ctx.drawImage(img, x, y, w, h);
-                imgLoaded += 1;
-            });
-        };
-        img.onerror = function () {
-            waitUntil(() => imgLoaded >= imgLoadID, () => {
-                imgLoaded += 1;
-            });
-            //console.error(`Failed to load image: ./Images/Items/${imgID}.png`);
-        };
-    }
-    catch (e) {
-        console.error(e);
-    }
-}
 
 function showRoom(roomARR) {
+    if (!CanvasLibLoaded()) {
+        console.error('Try showRoom without canvasLibLoaded');
+        waitUntil(() => CanvasLibLoaded(), () => {
+            showRoom(roomARR);
+        });
+    }
     actualRoom = roomARR;
     imgToLoad = 0;
     imgLoaded = 0;
@@ -663,12 +608,13 @@ function showRoom(roomARR) {
     let persoID = room['P'];
     if (persoID) {
         drawImage('P' + persoID, 0, 70, 40, 30);
+        drawRect(_canvasID, 0, 70, 40, 30, undefined, 'black', 5);
     }
     // Gestion des portes
     if (roomARR[0] != 0) {
         let doorIDs = room['R'];
         let roomINT = roomToInt(roomARR);
-        let arr = doors[roomINT];
+        let arr = getDoors(roomINT);
         for (let index = 0; index < arr.length; index++) {
             const doorKey = arr[index];
             let doorID = doorIDs ? doorIDs[doorKey] : undefined;
@@ -679,6 +625,11 @@ function showRoom(roomARR) {
                     drawImage('R' + doorID, 40, 40 + 40 * doorKey, 40, 20);
                 }
             } else {
+                if (Math.abs(doorKey) > 5) {
+                    drawArrow(_canvasID, 40 + 4 * doorKey, 50, 10, 10, doorKey > 0 ? 'right' : 'left');
+                } else {
+                    drawArrow(_canvasID, 50, 40 + 40 * doorKey, 10, 10, doorKey > 0 ? 'down' : 'up');
+                }
                 const nextRoom = (roomINT + doorKey).toString();
                 const roomSelect = document.getElementById("current-room");
                 const [x, y] = [parseInt(nextRoom[0]), parseInt(nextRoom[1])];
@@ -686,7 +637,7 @@ function showRoom(roomARR) {
                 if (!Array.from(roomSelect.options).some(option => option.value === optionValue)) {
                     const option = document.createElement("option");
                     option.value = optionValue;
-                    option.textContent = `${alphabet[x - 1]}${y+1}`;
+                    option.textContent = `${alphabet[x - 1]}${y + 1}`;
                     roomSelect.appendChild(option);
                 }
             }
@@ -795,24 +746,6 @@ function initSelectRoom() {
     });
 }
 
-/*// Gestion dynamique de la taille du canvas
-function updateCanvasSize() {
-  const canvas = document.getElementById("room-canvas");
-  const container = document.querySelector(".canvas-container");
-  
-  // Calcul dynamique de la taille
-  const maxWidth = window.innerWidth;
-  const maxHeight = window.innerHeight * 0.7;
-  const size = Math.min(maxWidth, maxHeight);
-  
-  // Applique les dimensions
-  container.style.width = `${size}px`;
-  container.style.height = `${size}px`;
-  
-  // Met à jour les attributs du canvas
-  canvas.width = size;
-  canvas.height = size;
-}*/
 
 function updateCanvasSize() {
     const canvas = document.getElementById("room-canvas");
