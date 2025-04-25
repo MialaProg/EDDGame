@@ -634,7 +634,7 @@ function drawImage(imgID, x = 0, y = 0, w = 100, h = 100) {
             waitUntil(() => imgLoaded >= imgLoadID, () => {
                 imgLoaded += 1;
             });
-            console.error(`Failed to load image: ./Images/Items/${imgID}.png`);
+            //console.error(`Failed to load image: ./Images/Items/${imgID}.png`);
         };
     }
     catch (e) {
@@ -665,13 +665,13 @@ function showRoom(roomARR) {
         drawImage('P' + persoID, 0, 70, 40, 30);
     }
     // Gestion des portes
-    let doorIDs = room['R'];
     if (roomARR[0] != 0 && doorIDs) {
+        let doorIDs = room['R'];
         let roomINT = roomToInt(roomARR);
         let arr = doors[roomINT];
         for (let index = 0; index < arr.length; index++) {
             const doorKey = arr[index];
-            let doorID = doorIDs[doorKey];
+            let doorID = doorIDs ? doorIDs[doorKey] : undefined;
             if (doorID) {
                 if (Math.abs(doorKey) > 5) {
                     drawImage('R' + doorID, 40 + 4 * doorKey, 20, 20, 40);
