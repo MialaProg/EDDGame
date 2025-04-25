@@ -5,11 +5,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Commencer l'aventure | EDD Game</title>
-    <link rel="stylesheet" type="text/css" href="externalLib/bulma.css">
-    <link rel="stylesheet" type="text/css" href="gameLib/style.css">
-    <link rel="stylesheet" type="text/css" href="gameLib/divers.css">
+    <link rel="stylesheet" type="text/css" href="externalLib/bulma.css?for=EDDGame">
+    <link rel="stylesheet" type="text/css" href="gameLib/style.css?for=EDDGame">
+    <link rel="stylesheet" type="text/css" href="gameLib/divers.css?for=EDDGame">
+    <link rel="stylesheet" type="text/css" href="gameLib/buttons.css?for=EDDGame">
+    <!-- ?for=EDDGame for browser's cache -->
     <script src="gameLib/game.js"></script>
     <script src="gameLib/canvas.js"></script>
+
+    <link rel="manifest" href="gameLib/EDDGame.webmanifest">
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('gameLib/sw.js')
+                .then(registration => {
+                    console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                })
+                .catch(error => {
+                    console.log('ServiceWorker registration failed: ', error);
+                });
+        }
+    </script>
 </head>
 
 <body>

@@ -753,7 +753,7 @@ function updateCanvasSize() {
 
     // Calcul dynamique de la taille
     const maxWidth = window.innerWidth;
-    const maxHeight = window.innerHeight;
+    const maxHeight = window.innerHeight * .9;
     const size = Math.min(maxWidth, maxHeight);
 
     // Applique les dimensions au conteneur
