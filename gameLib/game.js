@@ -759,12 +759,12 @@ function updateCanvasSize() {
   
   // Met à jour les attributs du canvas avec haute résolution
   const scale = window.devicePixelRatio || 1; // Gestion de la rétine
-  canvas.width = size * scale;
-  canvas.height = size * scale;
+  canvas.width = size ;//* scale;
+  canvas.height = size ;//* scale;
   
   // Ajuste le contexte pour le scaling
   const ctx = canvas.getContext("2d");
-  ctx.scale(scale, scale);
+  /*ctx.scale(scale, scale);*/
   
   // Configuration de la qualité d'image
   ctx.imageSmoothingEnabled = true;
