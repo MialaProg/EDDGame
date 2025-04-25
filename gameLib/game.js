@@ -584,7 +584,7 @@ function init_select_onclick() {
     });
 }
 
-function drawImage(imgID, x = 0, y = 0, w = 1, h = 1) {
+function drawImage(imgID, x = 0, y = 0, w = 100, h = 100) {
     try {
         const canvas = document.getElementById("room-canvas");
         if (!canvas) {
@@ -599,8 +599,8 @@ function drawImage(imgID, x = 0, y = 0, w = 1, h = 1) {
         }
 
         
-        x *= canvas.width;
-        y *= canvas.height;
+        x *= canvas.width / 100;
+        y *= canvas.height / 100;
 
         // Draw the image placeID (./Images/Items/Lx.png)
         const img = new Image();
@@ -610,10 +610,10 @@ function drawImage(imgID, x = 0, y = 0, w = 1, h = 1) {
 
             // Adjust dimensions to maintain aspect ratio
             if (aspectRatio > 1) {
-                w *= canvas.width;
+                w *= canvas.width / 100;
                 h = w / aspectRatio;
             } else {
-                h *= canvas.height;
+                h *= canvas.height / 100;
                 w = h * aspectRatio;
             }
 
@@ -637,11 +637,11 @@ function show_room(roomARR) {
     setBg('room-canvas', 'darkgray');
     let placeID = room['L'];
     if (placeID) {
-        drawImage('L' + placeID);
+        drawImage('L' + placeID, 25, 25, 50, 50);
     }
     let persoID = room['P'];
     if (persoID) {
-        drawImage('P' + persoID);
+        drawImage('P' + persoID, 35, 40, 30, 20);
     }
 }
 
