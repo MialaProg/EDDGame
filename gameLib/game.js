@@ -35,6 +35,7 @@ var actualGame = {}
 // For trace edit when generate
 var editGen = [];
 var toBeAdded, db, boardGenerated, startRoom;
+var actualRoom;
 
 var GameConst = 0;
 var GameConstMax = 1;
@@ -299,7 +300,7 @@ function resolveObjects(objectsRequired) {
     let toBeAddedLen = toBeAdded.length;
     return getARandomItem(objectsRequired, (objectID) => {
         if (toBeAddedLen !== toBeAdded.length) {
-            log(toBeAdded);
+            log('toBeAdded: ',toBeAdded);
             toBeAdded = toBeAdded.slice(0, toBeAddedLen);
         }
         // Check if no object is required 
@@ -473,7 +474,7 @@ function addItemsToRoom(type) {
             asBeenAdded.push(element);
             return true;
         }, false);
-        log('Added to', my_room, ':[' + i + ']', element);
+        // log('Added to', my_room, ':[' + i + ']', element);
     }
 }
 
@@ -496,7 +497,7 @@ async function generate_board() {
             for (let y = 0; y < placeDoor.length; y++) {
                 const doorTo = placeDoor[y]; //INT
                 if (!randint(0, 3)) {
-                    log(`Door ${doorTo} for ${placeINT} : ignored`);
+                    // log(`Door ${doorTo} for ${placeINT} : ignored`);
                     continue;
                 }
                 try {
@@ -505,7 +506,7 @@ async function generate_board() {
                     }
                 } catch (error) { }
                 let randomDoor = ranDoor();
-                log(`Door ${doorTo} for ${placeINT} : ${randomDoor}`);
+                // log(`Door ${doorTo} for ${placeINT} : ${randomDoor}`);
                 if (randomDoor) {
                     setDoor(doorTo, placeARR, randomDoor);
                     setDoor(-doorTo, intToRoom(placeINT + doorTo), randomDoor);
@@ -516,7 +517,7 @@ async function generate_board() {
         addItemsToRoom('L');
         setProgressBar(80);
         addItemsToRoom('P');
-        setProgressBar(100);
+        setProgressBar(90);
         boardGenerated = true;
         log("Board generated !")
     });
@@ -534,7 +535,8 @@ async function launch_game() {
     document.getElementById("loadinggame-interface").classList.remove("is-hidden");
     setBg('room-canvas', 'black');
     await generate_board();
-    show_room(startRoom);
+    showRoom(startRoom);
+    setProgressBar(100);
     document.getElementById("loadinggame-interface").classList.add("is-hidden");
     document.getElementById("ingame-interface").classList.remove("is-hidden");
 }
@@ -609,7 +611,7 @@ function drawImage(imgID, x = 0, y = 0, w = 100, h = 100) {
             const aspectRatio = img.width / img.height;
 
             // Adjust dimensions to maintain aspect ratio
-           log(w,h,aspectRatio);
+        //    log(w,h,aspectRatio);
             if (aspectRatio > 1) {
                 w *= canvas.width / 100;
                 h = w / aspectRatio;
@@ -617,7 +619,7 @@ function drawImage(imgID, x = 0, y = 0, w = 100, h = 100) {
                 h *= canvas.height / 100;
                 w = h * aspectRatio;
             }
-log(w,h);
+            // log(w,h);
 
             ctx.drawImage(img, x, y, w, h);
         };
@@ -630,13 +632,14 @@ log(w,h);
     }
 }
 
-function show_room(roomARR) {
+function showRoom(roomARR) {
+    actualRoom = roomARR;
     let room = places[roomARR[0]][roomARR[1]];
     if (!room) {
         console.error("Room not found.");
         return;
     }
-    setBg('room-canvas', 'darkgray');
+    setBg('room-canvas', 'white');
     let placeID = room['L'];
     if (placeID) {
         drawImage('L' + placeID, 25, 25, 50, 50);
@@ -707,11 +710,9 @@ async function initGameConst() {
                 let roomSelect = document.getElementById("current-room");
                 if (roomSelect) {
                     roomSelect.innerHTML = currentRoom_HTML;
-                    roomSelect.addEventListener("change", function () {
-                        show_room(this.value.split(";").map(Number));
-                    });
-                    roomSelect.value = starting_room[i];
-
+                    roomSelect.value = starting_room;
+                    log('Starting room:', starting_room);
+                    initSelectRoom();
                 } else {
                     console.error("Room select element not found.");
                 }
@@ -724,6 +725,13 @@ async function initGameConst() {
     log("GameConst initied");
 }
 initGameConst();
+
+function initSelectRoom(){
+    let roomSelect = document.getElementById("current-room");
+    roomSelect.addEventListener("change", function () {
+        showRoom(this.value.split(";").map(Number));
+    });
+}
 
 /*// Gestion dynamique de la taille du canvas
 function updateCanvasSize() {
@@ -750,7 +758,7 @@ function updateCanvasSize() {
   
   // Calcul dynamique de la taille
   const maxWidth = window.innerWidth;
-  const maxHeight = window.innerHeight * 0.7;
+  const maxHeight = window.innerHeight;
   const size = Math.min(maxWidth, maxHeight);
   
   // Applique les dimensions au conteneur
@@ -769,6 +777,8 @@ function updateCanvasSize() {
   // Configuration de la qualité d'image
   ctx.imageSmoothingEnabled = true;
   ctx.imageSmoothingQuality = "high";
+
+  try{showRoom(actualRoom);}catch(e){}
 }
 
 // Initialisation

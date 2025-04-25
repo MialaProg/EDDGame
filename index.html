@@ -11,7 +11,7 @@
     <script src="gameLib/game.js"></script>
 </head>
 
-<body class="block">
+<body>
     <style>
         .error-msg-stop {
             position: fixed;
@@ -34,7 +34,7 @@
         </p>
     </div>
 
-    <div class="content" id="pregame-interface">
+    <div class="block content" id="pregame-interface">
         <h1>Bienvenue sur le compagnon EDD Game !</h1>
         <p>Séléctionnez vos joueurs:</p>
         <form action="#" method="post" id="player-form">
@@ -42,7 +42,7 @@
             <div class="field is-info">
                 <label class="label" for="player1">Joueur 1:</label>
                 <div class="control select">
-                    <select class="player-select"  id="player1" name="player1">
+                    <select class="player-select" id="player1" name="player1">
                         <option value="none" selected>-Vide-</option>
                         <option value="90">Toutie</option>
                         <option value="91">Doudou Noisette</option>
@@ -56,7 +56,7 @@
             <div class="field is-primary">
                 <label class="label" for="player2">Joueur 2:</label>
                 <div class="control select">
-                    <select class="player-select"  id="player2" name="player2">
+                    <select class="player-select" id="player2" name="player2">
                         <option value="none" selected>-Vide-</option>
                         <option value="90" disabled>Toutie</option>
                         <option value="91" disabled>Doudou Noisette</option>
@@ -70,7 +70,7 @@
             <div class="field is-success">
                 <label class="label" for="player3">Joueur 3:</label>
                 <div class="control select">
-                    <select class="player-select"  id="player3" name="player3">
+                    <select class="player-select" id="player3" name="player3">
                         <option value="none" selected>-Vide-</option>
                         <option value="90" disabled>Toutie</option>
                         <option value="91" disabled>Doudou Noisette</option>
@@ -84,7 +84,7 @@
             <div class="field is-warning">
                 <label class="label" for="player4">Joueur 4:</label>
                 <div class="control select">
-                    <select class="player-select"  id="player4" name="player4">
+                    <select class="player-select" id="player4" name="player4">
                         <option value="none" selected>-Vide-</option>
                         <option value="90" disabled>Toutie</option>
                         <option value="91" disabled>Doudou Noisette</option>
@@ -98,7 +98,7 @@
             <div class="field is-danger">
                 <label class="label" for="player5">Joueur 5:</label>
                 <div class="control select">
-                    <select class="player-select"  id="player5" name="player5">
+                    <select class="player-select" id="player5" name="player5">
                         <option value="none" selected>-Vide-</option>
                         <option value="90" disabled>Toutie</option>
                         <option value="91" disabled>Doudou Noisette</option>
@@ -117,7 +117,7 @@
         </form>
     </div>
 
-    <div class="content is-hidden" id="loadinggame-interface">
+    <div class="block content is-hidden" id="loadinggame-interface">
         <div class="has-text-centered centered-height">
             <h1 class="title">Chargement en cours...</h1><br>
             <progress class="progress is-primary" max="100" id="progress-bar">50%</progress>
@@ -125,7 +125,7 @@
     </div>
 
     <div class="content is-hidden" id="ingame-interface">
-        <div class="field is-grouped">
+        <div class="block buttons top">
             <div class="control">
                 <div class="control select">
                     <select id="current-room" name="current-room">
@@ -134,11 +134,11 @@
                 </div>
             </div>
         </div>
-       
-<div class="canvas-container">
-  <canvas id="room-canvas"></canvas>
-</div>
-        <div class="field is-grouped">
+
+        <div class="canvas-container">
+            <canvas id="room-canvas"></canvas>
+        </div>
+        <div class="block buttons bottom" oldclass="field is-grouped">
             <div class="control">
                 <button class="button is-info">Utiliser</button>
             </div>

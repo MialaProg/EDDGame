@@ -1,17 +1,17 @@
 canvas {
-    background-color: lightgray;
+    background-color: black;
 }
-/* Mode portrait */
+/* Mode portrait 
 @media (orientation: portrait) {
     canvas {
         width: 100vw;
         height: 100vw;
     }
 }
-/* Mode paysage */
+/* Mode paysage 
 @media (orientation: landscape) {
     canvas {
         width: 70vh;
         height: 70vh;
     }
-}
+}*/
