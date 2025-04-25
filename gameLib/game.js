@@ -681,12 +681,12 @@ function showRoom(roomARR) {
             } else {
                 const nextRoom = (roomINT + doorKey).toString();
                 const roomSelect = document.getElementById("current-room");
-                const [x, y] = [parseInt(nextRoom[0]), nextRoom[1]];
+                const [x, y] = [parseInt(nextRoom[0]), parseInt(nextRoom[1])];
                 const optionValue = `${x};${y}`;
                 if (!Array.from(roomSelect.options).some(option => option.value === optionValue)) {
                     const option = document.createElement("option");
                     option.value = optionValue;
-                    option.textContent = `${alphabet[x - 1]}${y}`;
+                    option.textContent = `${alphabet[x - 1]}${y+1}`;
                     roomSelect.appendChild(option);
                 }
             }

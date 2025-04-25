@@ -18,20 +18,20 @@ R;12;Chenille;11;open;3,7,13
 R;16;Tagada et Storish;20;open;3,6,7,9,15,16,17,18
 #R;17
 #R;18;Empty;0;open;1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18
-L;85;C1: Classe
-L;86;C2: Classe
-L;87;C3: Classe
-L;88;D1: Dortoir
-L;89;D2: Dortoir
-L;90;R1: Réfectoire
-L;91;R2: Aire de pique-nique
-L;92;R3: Magasin;1,21,0;23,30
-L;93;A1: Aire de Récréation
-L;94;A2: Aire de Récréation
-L;95;TR: Garre de Transports
-L;96;WC: Toilettes
-L;97;HALL
-L;99;Réserve
+L;85;C1: Classe;0;0;used
+L;86;C2: Classe;0;0;used
+L;87;C3: Classe;0;0;used
+L;88;D1: Dortoir;0;0;used
+L;89;D2: Dortoir;0;0;used
+L;90;R1: Réfectoire;0;0;used
+L;91;R2: Aire de pique-nique;0;0;used
+L;92;R3: Magasin;1,21,0;23,30;0;0;used
+L;93;A1: Aire de Récréation;0;0;used
+L;94;A2: Aire de Récréation;0;0;used
+L;95;TR: Garre de Transports;0;0;used
+L;96;WC: Toilettes;0;0;used
+L;97;HALL;0;0;used
+L;99;Réserve;0;0;used
 L;1;Pharmacie;0,21;2
 L;2;Ruines
 L;3;Jardin;0;8,9
