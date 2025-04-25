@@ -665,8 +665,8 @@ function showRoom(roomARR) {
         drawImage('P' + persoID, 0, 70, 40, 30);
     }
     // Gestion des portes
-    if (roomARR[0] != 0) {
-        let doorIDs = room['R'];
+    let doorIDs = room['R'];
+    if (roomARR[0] != 0 && doorIDs) {
         let roomINT = roomToInt(roomARR);
         let arr = doors[roomINT];
         for (let index = 0; index < arr.length; index++) {
