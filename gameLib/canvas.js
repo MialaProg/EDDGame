@@ -155,7 +155,7 @@ function setBg(canvasId, color) {
  * // Dessine une image à la position (50,50) avec taille 200x150
  * drawImage('myImage', 50, 50, 200, 150);
  */
-function drawImage(imgID, x = 0, y = 0, w = 100, h = 100, canvasID=_canvasID) {
+function drawImage(imgID, x = 0, y = 0, w = 100, h = 100, canvasID=_canvasID, rounded=true) {
     try {
         const canvas = document.getElementById(_canvasID);
         if (!canvas) {
@@ -177,6 +177,8 @@ function drawImage(imgID, x = 0, y = 0, w = 100, h = 100, canvasID=_canvasID) {
         // Draw the image placeID (./Images/Items/Lx.png)
         const img = new Image();
         img.src = `./Images/Items/${imgID}.png`;
+        
+
         let imgLoadID = imgToLoad;
         imgToLoad += 1;
         img.onload = function () {
@@ -191,7 +193,31 @@ function drawImage(imgID, x = 0, y = 0, w = 100, h = 100, canvasID=_canvasID) {
                 }
                 
 
-                ctx.drawImage(img, x, y, w, h);
+                if (rounded) {
+                    ctx.save();
+                    // Calculate radius as 10% of the smaller dimension
+                    const radius = Math.min(w, h) * 0.1;
+                    // Create rounded rectangle path
+                    ctx.beginPath();
+                    ctx.moveTo(x + radius, y);
+                    ctx.lineTo(x + w - radius, y);
+                    ctx.arcTo(x + w, y, x + w, y + radius, radius);
+                    ctx.lineTo(x + w, y + h - radius);
+                    ctx.arcTo(x + w, y + h, x + w - radius, y + h, radius);
+                    ctx.lineTo(x + radius, y + h);
+                    ctx.arcTo(x, y + h, x, y + h - radius, radius);
+                    ctx.lineTo(x, y + radius);
+                    ctx.arcTo(x, y, x + radius, y, radius);
+                    ctx.closePath();
+                    ctx.clip();
+                    // Draw the image within the clipped area
+                    ctx.drawImage(img, x, y, w, h);
+                    ctx.restore();
+                } else {
+                    // Draw the image normally without clipping
+                    ctx.drawImage(img, x, y, w, h);
+                }
+                
                 imgLoaded += 1;
             });
         };

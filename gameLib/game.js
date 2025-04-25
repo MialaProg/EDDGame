@@ -780,4 +780,11 @@ function updateCanvasSize() {
 window.addEventListener("load", updateCanvasSize);
 window.addEventListener("resize", updateCanvasSize);
 
-// Votre fonction drawImage existante reste inchangée
+// BUTTONS FUNCTIONS
+function useButton(){
+
+}
+
+function speakButton(){
+    
+}
