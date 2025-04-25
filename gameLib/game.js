@@ -35,7 +35,7 @@ var doors = {
 var actualGame = {}
 // For trace edit when generate
 var editGen = [];
-var toBeAdded, db, boardGenerated, startRoom;
+var toBeAdded, db, boardGenerated, startRoom, alphabet;
 var actualRoom, imgToLoad, imgLoaded;
 
 var GameConst = 0;
@@ -658,29 +658,42 @@ function showRoom(roomARR) {
     setBg('room-canvas', 'white');
     let placeID = room['L'];
     if (placeID) {
-        drawImage('L' + placeID, 25, 25, 50, 50);
+        drawImage('L' + placeID, 20, 20, 40, 40);
     }
     let persoID = room['P'];
     if (persoID) {
-        drawImage('P' + persoID, 40, 40, 30, 20);
+        drawImage('P' + persoID, 0, 70, 40, 30);
     }
-    let doorIDs = room['R'];
-    if (doorIDs) {
-        for (const key in doorIDs) {
-            if (Object.prototype.hasOwnProperty.call(object, key)) {
-                const doorID = object[key];
-                if (isFinite(key)) {
-                    if (Math.abs(key) > 5) {
-                        drawImage('R' + doorID, 35 + 3.5 * key, 30, 40, 30);
-                    } else {
-                        drawImage('R' + doorID, 30, 35 + 35 * key, 30, 40);
-                    }
+    // Gestion des portes
+    if (roomARR[0] != 0) {
+        let doorIDs = room['R'];
+        let roomINT = roomToInt(roomARR);
+        let arr = doors[roomINT];
+        for (let index = 0; index < arr.length; index++) {
+            const doorKey = arr[index];
+            let doorID = doorIDs[doorKey];
+            if (doorID) {
+                if (Math.abs(doorKey) > 5) {
+                    drawImage('R' + doorID, 40 + 4 * doorKey, 20, 20, 40);
                 } else {
-                    log('DoorID not finite:', doorID, roomARR);
+                    drawImage('R' + doorID, 40, 40 + 40 * doorKey, 40, 20);
+                }
+            } else {
+                const nextRoom = (roomINT + doorKey).toString();
+                const roomSelect = document.getElementById("current-room");
+                const [x, y] = [parseInt(nextRoom[0]), nextRoom[1]];
+                const optionValue = `${x};${y}`;
+                if (!Array.from(roomSelect.options).some(option => option.value === optionValue)) {
+                    const option = document.createElement("option");
+                    option.value = optionValue;
+                    option.textContent = `${alphabet[x - 1]}${y}`;
+                    roomSelect.appendChild(option);
                 }
             }
         }
     }
+
+    // Fin du chargement
     if (actualMode != 'loadinggame') {
         return;
     }
@@ -765,6 +778,10 @@ async function initGameConst() {
             });
             log("Rooms created !")
             continue;
+        }
+        if (line.includes("#ALPHABET")) {
+            i += 1;
+            alphabet = data[i].split(";");
         }
     }
     log("GameConst initied");

@@ -3,3 +3,5 @@ Pour changer le jeu, remplacer simplement les éléments ici en conservant la mi
 C1;C2;C3;D1;D2;R1;R2;R3;A1;A2;TR;WC;Hall
 E4:13
 0;12
+#ALPHABET (1,2,3)
+E;F;G

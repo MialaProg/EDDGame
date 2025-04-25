@@ -14,4 +14,4 @@ Rooms: Each case of the board
 
 
 # Warning
-L97 is in reality a .jpg XD
+L97 & P3 are in reality a .jpg XD
