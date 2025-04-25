@@ -722,3 +722,28 @@ async function initGameConst() {
     log("GameConst initied");
 }
 initGameConst();
+
+// Gestion dynamique de la taille du canvas
+function updateCanvasSize() {
+  const canvas = document.getElementById("room-canvas");
+  const container = document.querySelector(".canvas-container");
+  
+  // Calcul dynamique de la taille
+  const maxWidth = window.innerWidth;
+  const maxHeight = window.innerHeight * 0.7;
+  const size = Math.min(maxWidth, maxHeight);
+  
+  // Applique les dimensions
+  container.style.width = `${size}px`;
+  container.style.height = `${size}px`;
+  
+  // Met à jour les attributs du canvas
+  canvas.width = size;
+  canvas.height = size;
+}
+
+// Initialisation
+window.addEventListener("load", updateCanvasSize);
+window.addEventListener("resize", updateCanvasSize);
+
+// Votre fonction drawImage existante reste inchangée
