@@ -658,7 +658,7 @@ function showRoom(roomARR) {
         consoncopyine = findInArr(db, PLACES_LOC[0], PLACES_LOC[1], item => item[0] == 'L' && item[1] == placeID);
         if (placeLine){
             
-            const placeName = placeLine[2];
+            let placeName = placeLine[2];
             log('Place:L' +placeName);
             if (roomARR[0] != 0){
                 placeName = optionSelected.textContent + ' : ' + placeName;
