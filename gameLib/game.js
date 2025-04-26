@@ -514,10 +514,38 @@ async function generate_board() {
 
 
 // SCREENS CONTROL
+function scroll(from, to, callback) {
+    const duration = 500;
+    const distance = to - from;
+    let startTime = null;
+
+    function animation(currentTime) {
+        if (startTime === null) {
+            startTime = currentTime;
+        }
+        const timeElapsed = currentTime - startTime;
+        const progress = Math.min(timeElapsed / duration, 1);
+        const ease = easeInOutQuad(progress);
+        window.scrollTo(0, from + distance * ease);
+
+        if (timeElapsed < duration) {
+            requestAnimationFrame(animation);
+        } else if (callback) {
+            callback(); // Appel du callback à la fin
+        }
+    }
+
+    function easeInOutQuad(t) {
+        return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+    }
+
+    requestAnimationFrame(animation);
+}
+
 function changeMode(mode) {
     document.getElementById("pregame-interface").classList.add("is-hidden");
     document.getElementById("loadinggame-interface").classList.add("is-hidden");
-    document.getElementById("ingame-interface").classList.add("is-hidden");
+    // document.getElementById("ingame-interface").classList.add("is-hidden");
 
     document.getElementById(mode + "-interface").classList.remove("is-hidden");
     actualMode = mode;
@@ -594,6 +622,7 @@ function showRoom(roomARR) {
     if (actualMode == 'ingame') {
         setProgressBar(0);
         changeMode("loadinggame");
+        scroll(canvasObj.canvas.offsetTop , 0);
     }
     let room = places[roomARR[0]][roomARR[1]];
     if (!room) {
@@ -607,8 +636,8 @@ function showRoom(roomARR) {
     }
     let persoID = room['P'];
     if (persoID) {
-        canvasObj.drawImage( 10, 85, 40, 30,'P' + persoID);
-        canvasObj.drawRect(0, 70, 40, 30, undefined, 'black');
+        canvasObj.drawImage( 20, 85, 40, 30,'P' + persoID);
+        canvasObj.drawRect( 20, 85, 40, 30, undefined, 'black');
     }
 
     const roomSelect = document.getElementById("current-room");
@@ -675,7 +704,7 @@ function showRoom(roomARR) {
             return imgLoaded == imgToLoad;
         },
         () => {
-            changeMode("ingame");
+            scroll(0, canvasObj.canvas.offsetTop, () => changeMode("ingame"));
         }
     );
 }
