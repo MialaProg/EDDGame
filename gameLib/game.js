@@ -655,10 +655,9 @@ function showRoom(roomARR) {
         log('Txt content:' + optionSelected.textContent);
      }
     if (optionSelected && placeID && optionSelected.textContent.length < 5){
-        placeLine= findInArr(db, PLACES_LOC[0], PLACES_LOC[1], item => item[0] == 'L' && item[1] == placeID);
-        if (placeLine){
-            
-            let placeName = placeLine[2];
+        const placeLine= findInArr(db, PLACES_LOC[0], PLACES_LOC[1], item => item[0] == 'L' && item[1] == placeID); //Returns [key, val]
+        if (placeLine){            
+            let placeName = placeLine[1][2];
             log('Place:L' +placeName);
             if (roomARR[0] != 0){
                 placeName = optionSelected.textContent + ' : ' + placeName;
