@@ -655,7 +655,7 @@ function showRoom(roomARR) {
         log('Txt content:' + optionSelected.textContent);
      }
     if (optionSelected && placeID && optionSelected.textContent.length < 5){
-        consoncopyine = findInArr(db, PLACES_LOC[0], PLACES_LOC[1], item => item[0] == 'L' && item[1] == placeID);
+        placeLine= findInArr(db, PLACES_LOC[0], PLACES_LOC[1], item => item[0] == 'L' && item[1] == placeID);
         if (placeLine){
             
             let placeName = placeLine[2];
