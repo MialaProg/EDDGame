@@ -37,7 +37,7 @@ var actualGame = {}
 var editGen = [];
 var toBeAdded, db, boardGenerated, startRoom, alphabet;
 var PLACES_LOC, DOORS_LOC, PERSO_LOC, OBJ_LOC;//Not implemented everywhere yet
-var actualRoom, imgToLoad, imgLoaded;
+var actualRoom, canvasObj;
 
 var GameConst = 0;
 var GameConstMax = 1;
@@ -528,7 +528,6 @@ function changeMode(mode) {
 
 async function launch_game() {
     changeMode("loadinggame");
-    setBg('room-canvas', 'black');
     await generate_board();
     waitUntil(() => startRoom, () => {
         changeMode("ingame");
@@ -583,9 +582,9 @@ function init_select_onclick() {
 
 
 function showRoom(roomARR) {
-    if (!CanvasLibLoaded()) {
-        console.error('Try showRoom without canvasLibLoaded');
-        waitUntil(() => CanvasLibLoaded(), () => {
+    if (!canvasObj) {
+        console.error('Try showRoom without canvasObj');
+        waitUntil(() => {return canvasObj;}, () => {
             showRoom(roomARR);
         });
     }
@@ -601,15 +600,15 @@ function showRoom(roomARR) {
         console.error("Room not found.");
         return;
     }
-    setBg('room-canvas', 'white');
+    canvasObj.setBackground();
     let placeID = room['L'];
     if (placeID) {
-        drawImage('L' + placeID, 20, 20, 40, 40);
+        canvasObj.drawImage(40, 40, 40, 40, 'L' + placeID);
     }
     let persoID = room['P'];
     if (persoID) {
-        drawImage('P' + persoID, 0, 70, 40, 30);
-        drawRect(_canvasID, 0, 70, 40, 30, undefined, 'black', 5);
+        canvasObj.drawImage( 10, 85, 40, 30,'P' + persoID);
+        canvasObj.drawRect(0, 70, 40, 30, undefined, 'black');
     }
 
     const roomSelect = document.getElementById("current-room");
@@ -623,15 +622,15 @@ function showRoom(roomARR) {
             let doorID = doorIDs ? doorIDs[doorKey] : undefined;
             if (doorID) {
                 if (Math.abs(doorKey) > 5) {
-                    drawImage('R' + doorID, 40 + 4 * doorKey, 20, 20, 40);
+                    canvasObj.drawImage(50 + 4 * doorKey, 40, 20, 40,'R' + doorID);
                 } else {
-                    drawImage('R' + doorID, 40, 40 + 40 * doorKey, 40, 20);
+                    canvasObj.drawImage(60, 50 + 40 * doorKey, 40, 20,'R' + doorID);
                 }
             } else {
                 if (Math.abs(doorKey) > 5) {
-                    drawArrow(_canvasID, 40 + 4 * doorKey, 50, 10, 10, doorKey > 0 ? 'right' : 'left');
+                    canvasObj.drawArrow(50 + 4 * doorKey, 40, 15, 10, doorKey > 0 ? 'right' : 'left');
                 } else {
-                    drawArrow(_canvasID, 50, 40 + 40 * doorKey, 10, 10, doorKey > 0 ? 'down' : 'up');
+                    canvasObj.drawArrow(60, 50 + 40 * doorKey, 10, 15, doorKey > 0 ? 'down' : 'up');
                 }
                 const nextRoom = (roomINT + doorKey).toString();
                 // const roomSelect = document.getElementById("current-room");
@@ -792,17 +791,17 @@ function updateCanvasSize() {
 
     // Calcul dynamique de la taille
     const maxWidth = window.innerWidth;
-    const maxHeight = window.innerHeight * .9;
-    const size = Math.min(maxWidth, maxHeight);
+    const maxHeight = window.innerHeight;
+    // const size = Math.min(maxWidth, maxHeight);
 
     // Applique les dimensions au conteneur
-    container.style.width = `${size}px`;
-    container.style.height = `${size}px`;
+    // container.style.width = `${size}px`;
+    // container.style.height = `${size}px`;
 
     // Met à jour les attributs du canvas avec haute résolution
-    const scale = window.devicePixelRatio || 1; // Gestion de la rétine
-    canvas.width = size;//* scale;
-    canvas.height = size;//* scale;
+    // const scale = window.devicePixelRatio || 1; // Gestion de la rétine
+    canvas.width = maxWidth;//* scale;
+    canvas.height = maxHeight;//* scale;
 
     // Ajuste le contexte pour le scaling
     const ctx = canvas.getContext("2d");
@@ -812,12 +811,21 @@ function updateCanvasSize() {
     ctx.imageSmoothingEnabled = true;
     ctx.imageSmoothingQuality = "high";
 
-    try { showRoom(actualRoom); } catch (e) { }
+    if (actualRoom){
+        showRoom(actualRoom); 
+    }
 }
 
 // Initialisation
 window.addEventListener("load", updateCanvasSize);
 window.addEventListener("resize", updateCanvasSize);
+
+waitUntil(
+    () => CanvasLibLoaded(),
+    () => {canvasObj = new CanvasLib(_canvasID);
+        log("CanvasObj init");
+    }
+)
 
 // BUTTONS FUNCTIONS
 function useButton(){
