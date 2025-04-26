@@ -36,6 +36,7 @@ var actualGame = {}
 // For trace edit when generate
 var editGen = [];
 var toBeAdded, db, boardGenerated, startRoom, alphabet;
+var PLACES_LOC, DOORS_LOC, PERSO_LOC, OBJ_LOC;//Not implemented everywhere yet
 var actualRoom, imgToLoad, imgLoaded;
 
 var GameConst = 0;
@@ -610,6 +611,8 @@ function showRoom(roomARR) {
         drawImage('P' + persoID, 0, 70, 40, 30);
         drawRect(_canvasID, 0, 70, 40, 30, undefined, 'black', 5);
     }
+
+    const roomSelect = document.getElementById("current-room");
     // Gestion des portes
     if (roomARR[0] != 0) {
         let doorIDs = room['R'];
@@ -631,7 +634,7 @@ function showRoom(roomARR) {
                     drawArrow(_canvasID, 50, 40 + 40 * doorKey, 10, 10, doorKey > 0 ? 'down' : 'up');
                 }
                 const nextRoom = (roomINT + doorKey).toString();
-                const roomSelect = document.getElementById("current-room");
+                // const roomSelect = document.getElementById("current-room");
                 const [x, y] = [parseInt(nextRoom[0]), parseInt(nextRoom[1])];
                 const optionValue = `${x};${y}`;
                 if (!Array.from(roomSelect.options).some(option => option.value === optionValue)) {
@@ -641,6 +644,24 @@ function showRoom(roomARR) {
                     roomSelect.appendChild(option);
                 }
             }
+        }
+    }
+
+    // Rename the option
+    const optionSelected = Array.from(roomSelect.options).find(option => option.value === `${roomARR[0]};${roomARR[1]}`);
+    log('Option selected: ', optionSelected);
+    if (optionSelected && !optionSelected.textContent){
+        optionSelected.textContent = optionSelected.innerHTML + '';
+    }
+    if (optionSelected && placeID && optionSelected.textContent.length < 5){
+        const placeLine = findInArr(db, PLACES_LOC[0], PLACES_LOC[1], item => item[0] == 'L' && item[1] == placeID);
+        if (placeLine){
+            
+            const placeName = placeLine[2];
+            if (roomARR[0] != 0){
+                placeName = optionSelected.textContent + ' : ' + placeName;
+            }
+            optionSelected.textContent = placeName;
         }
     }
 
@@ -734,6 +755,23 @@ async function initGameConst() {
             i += 1;
             alphabet = data[i].split(";");
         }
+        // var PLACES_LOC, DOORS_LOC, PERSO_LOC, OBJ_LOC;
+        if (line.includes("#PLACES_LOC")) {
+            i += 1;
+            PLACES_LOC = data[i].split(";").map(Number);
+        }
+        if (line.includes("#DOORS_LOC")) {
+            i += 1;
+            DOORS_LOC = data[i].split(";").map(Number);
+        }
+        if (line.includes("#PERSO_LOC")) {
+            i += 1;
+            PERSO_LOC = data[i].split(";").map(Number);
+        }
+        if (line.includes("#OBJ_LOC")) {
+            i += 1;
+            OBJ_LOC = data[i].split(";").map(Number);
+        }
     }
     log("GameConst initied");
 }
@@ -786,5 +824,5 @@ function useButton(){
 }
 
 function speakButton(){
-    
+
 }

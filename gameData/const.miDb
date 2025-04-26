@@ -5,3 +5,11 @@ E4:13
 0;12
 #ALPHABET (1,2,3)
 E;F;G
+#PLACES_LOC (Where are places in items.miDb, for optimisation, min;max)
+20;60
+#DOORS_LOC (Where are doors in items.miDb, for optimisation, min;max)
+0;25
+#PERSO_LOC (Where are characters in items.miDb, for optimisation, min;max)
+50;70
+#OBJ_LOC (Where are characters in items.miDb, for optimisation, min;max)
+60
