@@ -5,13 +5,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Commencer l'aventure | EDD Game</title>
-    <link rel="stylesheet" type="text/css" href="externalLib/bulma.css?for=EDDGame">
-    <link rel="stylesheet" type="text/css" href="gameLib/style.css?for=EDDGame">
-    <link rel="stylesheet" type="text/css" href="gameLib/divers.css?for=EDDGame">
-    <link rel="stylesheet" type="text/css" href="gameLib/buttons.css?for=EDDGame">
-    <!-- ?for=EDDGame for browser's cache -->
+    <link rel="stylesheet" type="text/css" href="externalLib/bulma.css">
+    <link rel="stylesheet" type="text/css" href="gameLib/style.css">
+    <link rel="stylesheet" type="text/css" href="gameLib/divers.css">
+    <link rel="stylesheet" type="text/css" href="gameLib/buttons.css">
+    <link rel="stylesheet" type="text/css" href="gameLib/disc.css">
+
     <script src="gameLib/game.js"></script>
     <script src="gameLib/canvas.js"></script>
+    <script src="gameLib/miBasicInterpreter.js"></script>
+    <script src="gameLib/disc.js"></script>
 
     <link rel="manifest" href="gameLib/EDDGame.webmanifest">
     <script>
@@ -161,6 +164,33 @@
             <div class="control">
                 <button class="button is-primary" onclick="speakButton()">Parler</button>
             </div>
+        </div>
+    </div>
+
+    <!-- <div class="modal" id="chatModal">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+          <header class="modal-card-head">
+            <p class="modal-card-title">Conversation avec NPC</p>
+            <button class="delete" aria-label="close"></button>
+          </header>
+          <section class="modal-card-body">
+            <div id="chatMessages" class="content">
+              <!-- Les messages s'afficheront ici --><!--
+        </div>
+        </section>
+        <footer class="modal-card-foot" id="chatOptions">
+            <!-- Les boutons de réponse s'afficheront ici --><!--
+        </footer>
+        </div>
+    </div> -->
+    <div class="modal" id="gameChat">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <section class="modal-card-body" id="chatContent">
+                <div id="messages"></div>
+            </section>
+            <footer class="modal-card-foot" id="answers"></footer>
         </div>
     </div>
 </body>

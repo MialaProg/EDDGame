@@ -37,7 +37,7 @@ var actualGame = {}
 var editGen = [];
 var toBeAdded, db, boardGenerated, startRoom, alphabet;
 var PLACES_LOC, DOORS_LOC, PERSO_LOC, OBJ_LOC;//Not implemented everywhere yet
-var actualRoom, canvasObj;
+var actualRoom, canvasObj, miBasicObj, discObj;
 
 var GameConst = 0;
 var GameConstMax = 1;
@@ -47,6 +47,14 @@ var _canvasID = 'room-canvas';
 function CanvasLibLoaded() {
     try {
         return canvasLibLoaded;
+    } catch (e) {
+        return;
+    }
+}
+
+function libLoaded(libname) {
+    try {
+        return eval(libname + 'Loaded');
     } catch (e) {
         return;
     }
@@ -612,7 +620,7 @@ function init_select_onclick() {
 function showRoom(roomARR) {
     if (!canvasObj) {
         console.error('Try showRoom without canvasObj');
-        waitUntil(() => {return canvasObj;}, () => {
+        waitUntil(() => { return canvasObj; }, () => {
             showRoom(roomARR);
         });
     }
@@ -622,7 +630,7 @@ function showRoom(roomARR) {
     if (actualMode == 'ingame') {
         setProgressBar(0);
         changeMode("loadinggame");
-        scroll(canvasObj.canvas.offsetTop , 0);
+        scroll(canvasObj.canvas.offsetTop, 0);
     }
     let room = places[roomARR[0]][roomARR[1]];
     if (!room) {
@@ -636,8 +644,8 @@ function showRoom(roomARR) {
     }
     let persoID = room['P'];
     if (persoID) {
-        canvasObj.drawImage( 20, 85, 40, 30,'P' + persoID);
-        canvasObj.drawRect( 20, 85, 40, 30, undefined, 'black');
+        canvasObj.drawImage(20, 85, 40, 30, 'P' + persoID);
+        canvasObj.drawRect(20, 85, 40, 30, undefined, 'black');
     }
 
     const roomSelect = document.getElementById("current-room");
@@ -651,9 +659,9 @@ function showRoom(roomARR) {
             let doorID = doorIDs ? doorIDs[doorKey] : undefined;
             if (doorID) {
                 if (Math.abs(doorKey) > 5) {
-                    canvasObj.drawImage(50 + 4 * doorKey, 40, 20, 40,'R' + doorID);
+                    canvasObj.drawImage(50 + 4 * doorKey, 40, 20, 40, 'R' + doorID);
                 } else {
-                    canvasObj.drawImage(60, 50 + 40 * doorKey, 40, 20,'R' + doorID);
+                    canvasObj.drawImage(60, 50 + 40 * doorKey, 40, 20, 'R' + doorID);
                 }
             } else {
                 if (Math.abs(doorKey) > 5) {
@@ -678,16 +686,16 @@ function showRoom(roomARR) {
     // Rename the option
     const optionSelected = Array.from(roomSelect.options).find(option => option.value === `${roomARR[0]};${roomARR[1]}`);
     log('Option selected: ', optionSelected);
-    if (optionSelected && !optionSelected.textContent){
+    if (optionSelected && !optionSelected.textContent) {
         optionSelected.textContent = optionSelected.innerHTML + '';
         log('Txt content:' + optionSelected.textContent);
-     }
-    if (optionSelected && placeID && optionSelected.textContent.length < 5){
-        const placeLine= findInArr(db, PLACES_LOC[0], PLACES_LOC[1], item => item[0] == 'L' && item[1] == placeID); //Returns [key, val]
-        if (placeLine){            
+    }
+    if (optionSelected && placeID && optionSelected.textContent.length < 5) {
+        const placeLine = findInArr(db, PLACES_LOC[0], PLACES_LOC[1], item => item[0] == 'L' && item[1] == placeID); //Returns [key, val]
+        if (placeLine) {
             let placeName = placeLine[1][2];
-            log('Place:L' +placeName);
-            if (roomARR[0] != 0){
+            log('Place:L' + placeName);
+            if (roomARR[0] != 0) {
                 placeName = optionSelected.textContent + ' : ' + placeName;
             }
             optionSelected.textContent = placeName;
@@ -840,8 +848,8 @@ function updateCanvasSize() {
     ctx.imageSmoothingEnabled = true;
     ctx.imageSmoothingQuality = "high";
 
-    if (actualRoom){
-        showRoom(actualRoom); 
+    if (actualRoom) {
+        showRoom(actualRoom);
     }
 }
 
@@ -851,16 +859,53 @@ window.addEventListener("resize", updateCanvasSize);
 
 waitUntil(
     () => CanvasLibLoaded(),
-    () => {canvasObj = new CanvasLib(_canvasID);
+    () => {
+        canvasObj = new CanvasLib(_canvasID);
         log("CanvasObj init");
     }
 )
 
+// miBasic LIBS
+getDb("gameData/txt.miBasic").then(data => {
+    waitUntil(
+        () => libLoaded('miBasicInterpreter') && libLoaded('disc'),
+        () => {
+            miBasicObj = new miBasicInterpreter(data);
+            miBasicObj.setFunc('open', (door) => {
+                console.log('Open ' + door);
+            });
+            miBasicObj.setFunc('get', (obj) => {
+                console.log('Get ' + obj);
+            });
+            miBasicObj.setFunc('show', async (txt) => {
+                console.log('Show ' + txt);
+                chat.createMessage(txt);
+            });
+            miBasicObj.setFunc('choice', async (type, options) => {
+                console.log('Choice ' + type, options);
+                chat.clearAns();
+                for (let index = 0; index < options.length; index++) {
+                    const option = options[index];
+                    chat.createAnswer(option[0], (rep) => {
+                        // miBasicObj.goTo();
+                        miBasicObj.run(option[1]);
+                    });
+                }
+            });
+            log("miBasicObj init");
+            chat.show();
+            miBasicObj.run('UR6');
+            chat.createMessage('*Fin de la discussion...');
+        }
+    )
+});
+
+
 // BUTTONS FUNCTIONS
-function useButton(){
+function useButton() {
 
 }
 
-function speakButton(){
+function speakButton() {
 
 }

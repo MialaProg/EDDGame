@@ -1,15 +1,19 @@
 const CACHE_NAME = 'cache-v1';
 // find . -type f
 const ASSETS = [
-    './externalLib/bulma.css?for=EDDGame',
+    './externalLib/bulma.css',
     './gameData/const.miDb',
     './gameData/items.miDb',
-    './gameLib/buttons.css?for=EDDGame',
+    './gameData/txt.miBasic',
+    './gameLib/miBasicInterpreter.js',
+    './gameLib/buttons.css',
     './gameLib/canvas.js',
-    './gameLib/divers.css?for=EDDGame',
+    './gameLib/divers.css',
+    './gameLib/disc.js',
+    './gameLib/disc.css',
     './gameLib/EDDGame.webmanifest',
     './gameLib/game.js',
-    './gameLib/style.css?for=EDDGame',
+    './gameLib/style.css',
     './gameLib/sw.js',
     './Images/icon.png',
     './Images/Items/O21.png',

@@ -81,7 +81,7 @@ class miBasicInterpreter {
         if (this.location > this.script.length) {
             return '#STOP';
         }
-        let line = script[this.location].trim();
+        let line = this.script[this.location].trim();
         this.location += 1;
         return line;
     }
@@ -108,8 +108,8 @@ class miBasicInterpreter {
         if (typeof from == 'string') {
             from = this.script.findIndex(line => line.startsWith(':' + from)) + 1;
         }
-        let line = this.location = from;
-        this.readLine();
+        this.location = from;
+        let line = this.readLine();
 
         if (line.startsWith('#')) {
             line = line.substring(1).split(':');
@@ -126,13 +126,14 @@ class miBasicInterpreter {
                 case 'ON':
                 case 'REP':
                     let options = [];
+                    let type = line[0];
                     line = this.readLine();
                     while (!line.startsWith('#')) {
                         line = line.split(':');
                         options.push(line);
                         line = this.readLine();
                     }
-                    this.funcs[2](line[0], options).then(this.run);
+                    this.funcs[2](type, options).then();
                     return;
                 case 'STOP':
                     return;
@@ -153,7 +154,7 @@ class miBasicInterpreter {
             this.readLine();
         }
 
-        this.funcs[3](line).then(this.run);
+        this.funcs[3](line).then(() => {this.run;});
         return;
 
     }
@@ -187,3 +188,5 @@ class miBasicInterpreter {
  * interpreter.setFunc('open', (door) => console.log(door));
  * interpreter.run('START');
  */
+
+var miBasicInterpreterLoaded = true;
