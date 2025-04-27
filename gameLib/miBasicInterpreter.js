@@ -33,7 +33,7 @@ class miBasicInterpreter {
        */
     _scanScript() {
         for (let i = 0; i < this.script.length; i++) {
-            const line = this.script[i];
+            const line = this.script[i].trim();
             if (line.startsWith(':')) {
                 this.keywords[i] = line.substring(1);
             }
@@ -81,7 +81,7 @@ class miBasicInterpreter {
         if (this.location > this.script.length) {
             return '#STOP';
         }
-        let line = script[this.location];
+        let line = script[this.location].trim();
         this.location += 1;
         return line;
     }

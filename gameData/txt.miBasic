@@ -1,0 +1,14 @@
+:UR6
+*Vous ne pouvez pas atteindre cette porte sous-marine.
+#OBJ
+    O10:UR6+O10
+#
+:O10
+#ON
+    R10:UR6+O10
+#
+:UR6+O10
+*Grâce à vos cours de plongée, vous parvenez à atteindre la porte.
+*Vous l'ouvrez.
+#OPEN:R6
+#STOP
