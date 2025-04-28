@@ -36,6 +36,7 @@ const chat = {
         btn.textContent = text;
         btn.onclick = () => {
             chat.createMessage(text, 'user'); // Optionnel: afficher la réponse du joueur
+            chat.clearAns();
             callback(text);
         };
         answersDiv.appendChild(btn);
@@ -48,6 +49,11 @@ const chat = {
 
     clearAns: () => {
         answersDiv.innerHTML = '';
+    },
+
+    switch: (mode) => {
+        document.getElementById('messages').classList.toggle('is-hidden', mode !== 'msg');
+        document.getElementById('choices-list').classList.toggle('is-hidden', mode !== 'choice');
     }
 };
 
@@ -56,22 +62,24 @@ var discLoaded;
 document.addEventListener('DOMContentLoaded', () => {
     // Éléments UI
     chatModal = document.getElementById('gameChat');
-    messagesDiv = document.getElementById('chatContent');
+    messagesDiv = document.getElementById('messages');//chatCnt ?
     answersDiv = document.getElementById('answers');
 
 
     // Événement pour fermer la modale
-    try {
-        chatModal.querySelector('.delete').addEventListener('click', chat.hide);
-        chatModal.querySelector('.modal-background').addEventListener('click', chat.hide);
-    } catch (e) { }
+    document.querySelectorAll('.modal-background, .modal-close').forEach(($el) => {
+        $el.addEventListener('click', () => {
+            chat.hide();
+        });
+    })
 
     discLoaded = true;
 
 });
 
-
+var chatSelectedChoice = null;
 // // Exemple d'utilisation :
+
 // // Début de conversation
 // chat.clearConv();
 // chat.show();
@@ -91,3 +99,49 @@ document.addEventListener('DOMContentLoaded', () => {
 // });
 
 // });
+
+/* LISTE DE CHOIX: */
+
+// const choices = [
+//     { id: 1, text: 'Option 1' },
+//     { id: 2, text: 'Option 2' },
+//     { id: 3, text: 'Option 3' },
+//     { id: 4, text: 'Option 4' }
+// ];
+var chatChoices;
+
+// Remplir la liste des options
+function populateChoices() {
+    const list = document.getElementById('choices-list');
+    list.innerHTML = '';
+    chatChoices.forEach(choice => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+            <a class="choice-item is-rounded ${chatSelectedChoice === choice.id ? 'is-active' : ''}" 
+               onclick="selectChoice(${choice.id})">
+                ${choice.text}
+            </a>
+        `;
+        list.appendChild(li);
+    });
+}
+
+// Sélectionner une option
+function selectChoice(choiceId) {
+    chatSelectedChoice = choiceId;
+    populateChoices(); // Met à jour l'affichage des sélections
+    confirmSelection();
+}
+
+// Confirmer la sélection
+function confirmSelection() {
+    if (chatSelectedChoice) {
+        const selected = chatChoices.find(c => c.id === chatSelectedChoice);
+        console.log('Option sélectionnée:', selected);
+        chat.clearConv();
+        chat.switch('msg');
+        miBasicObj.run(chatSelectedChoice);
+    } else {
+        alert('Veuillez sélectionner une option');
+    }
+}

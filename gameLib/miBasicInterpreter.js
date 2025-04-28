@@ -24,6 +24,7 @@ class miBasicInterpreter {
             async (txt) => { }
         ];
         this.keywords = {};
+        this.vars = [];
         this._scanScript();
     }
 
@@ -147,6 +148,13 @@ class miBasicInterpreter {
                     let label = line[1];
                     this.goTo(label);
                     break;
+                case 'SAVE':
+                    this.vars.push(line[1]);
+                    break;
+                case 'VAR':
+                    if (this.vars.includes(line[1])){
+                        this.goTo(line[2]);
+                    }
 
             }
 

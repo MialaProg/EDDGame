@@ -22,13 +22,13 @@ var placesPriority = [
     [3, 5], [2, 5], [1, 5],
     [2, 3], [1, 4],
     [1, 3]
-]
+];
 // doors
 var doors = {
     10: [1, 10], 11: [1], 12: [1], 13: [1, 10], 14: [1], 15: [10],
     20: [10], 21: [10], 22: [10], 23: [1], 24: [], 25: [10],
     30: [1], 31: [1], 32: [1], 33: [1], 34: [1], 35: []
-}
+};
 
 
 // actualGame = {place: [objects]}
@@ -46,15 +46,10 @@ var GameConstMax = 1;
 var _canvasID = 'room-canvas';
 
 // ItemID => {REQ => GIVE, ..., 'unlocked'=?, 'used'=?}
+var myItemsHistory = [];
 var myItems = {};
 
-function CanvasLibLoaded() {
-    try {
-        return canvasLibLoaded;
-    } catch (e) {
-        return;
-    }
-}
+
 
 function libLoaded(libname) {
     try {
@@ -62,6 +57,10 @@ function libLoaded(libname) {
     } catch (e) {
         return;
     }
+}
+
+function CanvasLibLoaded() {
+    return libLoaded('canvasLib');
 }
 
 function GameConstInitied() {
@@ -143,26 +142,67 @@ getDb("gameData/items.miDb").then(data => {
  * Set and save change
  * @param {string} idx 
  * @param {string} val 
+ * @param {string} arr 
+ * @param {string} history 
  */
-function setDb(idx, val) {
+function setArr(idx, val, arr, history) {
+    if (!history) {
+        history = arr + 'History';
+    }
+    log(idx, val, arr, history);
     eval(`
-        editGen.push(['${idx}', JSON.stringify(db${idx})]);
-        if (Array.isArray(db${idx})) {
-            db${idx}.push('${val}');
+        ${history}.push(["${idx}", JSON.stringify(${arr}${idx})]);
+        if (Array.isArray(${arr}${idx})) {
+            ${arr}${idx}.push(${val});
         } else {
-            db${idx} = '${val}';
+            ${arr}${idx} = ${val};
         }
     `);
 }
 
-function restoreDb(toLen) {
-    for (let i = editGen.length; i > toLen; i--) {
-        const e = editGen[i - 1];
-        eval(`
-            db${e[0]} = JSON.parse('${e[1]}');
-        `);
-        editGen.pop();
+function restoreArr(toLen, arr, history) {
+    if (!history) {
+        history = arr + 'History';
     }
+    // log(toLen);
+    for (let i = eval(history).length; i > toLen; i--) {
+        const e = eval(history)[i - 1];
+        log('Restore: ', e);
+        eval(`
+            ${arr}${e[0]} = JSON.parse("${e[1]}");
+        `);
+        eval(history).pop();
+    }
+}
+
+function setMyItems(ItemID, Prop, val) {
+    if (!myItems[ItemID]) {
+        setArr(`['${ItemID}']`, '{}', 'myItems');
+    }
+    setArr(`['${ItemID}']['${Prop}']`, `"${val}"`, 'myItems');
+}
+
+function setDb(idx, val) {
+    setArr(idx, `"${val}"`, 'db', 'editGen');
+    // eval(`
+    //     editGen.push(['${idx}', JSON.stringify(db${idx})]);
+    //     if (Array.isArray(db${idx})) {
+    //         db${idx}.push('${val}');
+    //     } else {
+    //         db${idx} = '${val}';
+    //     }
+    // `);
+}
+
+function restoreDb(toLen) {
+    restoreArr(toLen, 'db', 'editGen');
+    // for (let i = editGen.length; i > toLen; i--) {
+    //     const e = editGen[i - 1];
+    //     eval(`
+    //         db${e[0]} = JSON.parse('${e[1]}');
+    //     `);
+    //     editGen.pop();
+    // }
 }
 
 /**
@@ -201,31 +241,31 @@ function waitUntil(condition, callback) {
  */
 function wait(condition, interval = 100, timeout = 10000) {
     return new Promise((resolve, reject) => {
-      let intervalId;
-      const timeoutId = setTimeout(() => {
-        clearInterval(intervalId);
-        reject(new Error(`Timeout after ${timeout}ms`));
-      }, timeout);
-  
-      const check = () => {
-        try {
-          const result = condition();
-          if (result) {
-            clearTimeout(timeoutId);
+        let intervalId;
+        const timeoutId = setTimeout(() => {
             clearInterval(intervalId);
-            resolve(result);
-          }
-        } catch (error) {
-          clearTimeout(timeoutId);
-          clearInterval(intervalId);
-          reject(error);
-        }
-      };
-  
-      check(); // Premier check immédiat
-      intervalId = setInterval(check, interval);
+            reject(new Error(`Timeout after ${timeout}ms`));
+        }, timeout);
+
+        const check = () => {
+            try {
+                const result = condition();
+                if (result) {
+                    clearTimeout(timeoutId);
+                    clearInterval(intervalId);
+                    resolve(result);
+                }
+            } catch (error) {
+                clearTimeout(timeoutId);
+                clearInterval(intervalId);
+                reject(error);
+            }
+        };
+
+        check(); // Premier check immédiat
+        intervalId = setInterval(check, interval);
     });
-  }
+}
 
 function intToRoom(num) {
     num = num.toString();
@@ -297,8 +337,12 @@ function getARandomItem(arr, conditions, restore = true) {
     let usable = [...arr];
     let result = undefined;
     const initLen = editGen.length;
+    const initMyItMLen = myItemsHistory.length;
     while (!result && usable.length > 0) {
-        if (restore) { restoreDb(initLen); }
+        if (restore) {
+            restoreDb(initLen);
+            restoreArr(initMyItMLen, 'myItems');
+        }
         let item = ranAndDel(usable);
         if (conditions(item)) {
             result = item;
@@ -345,7 +389,7 @@ document.addEventListener("DOMContentLoaded", function () {
 // BOARD GENERATION CODE
 
 //  Resolve objects required for a system
-function resolveObjects(objectsRequired) {
+function resolveObjects(objectsRequired, _for = '0') {
     let toBeAddedLen = toBeAdded.length;
     return getARandomItem(objectsRequired, (objectID) => {
         if (toBeAddedLen !== toBeAdded.length) {
@@ -378,19 +422,21 @@ function resolveObjects(objectsRequired) {
                 return;
             }
             // Check objects required
-            let object = resolveObjects(perso[3].split(","));
+            let object = resolveObjects(perso[3].split(","), 'P' + perso[1]);
             if (!object) {
                 return;
             }
 
             // Save and return
             let idx = getIndex(perso, db, 50, 70);
+            setMyItems('P' + perso[1], 'O' + object, 'O' + objectID);
             setDb(`[${idx}]`, '1');
             return true;
         });
         if (perso) {
 
             toBeAdded.push(perso);
+            setMyItems('O' + objectID, 'P' + perso[1], _for);
         } else {
             // Check for location
             let loc = getARandomItem(db.slice(0, 60), (loc) => {
@@ -407,13 +453,14 @@ function resolveObjects(objectsRequired) {
                     return;
                 }
                 // Check objects required
-                let object = resolveObjects(loc[3].split(","));
+                let object = resolveObjects(loc[3].split(","), 'L' + loc[1]);
                 if (!object) {
                     return;
                 }
 
                 // Save and return
                 let idx = getIndex(loc, db, 0, 60);
+                setMyItems('L' + loc[1], 'O' + object, 'O' + objectID);
                 setDb(`[${idx}]`, '1');
                 return true;
             });
@@ -421,9 +468,11 @@ function resolveObjects(objectsRequired) {
                 return;
             }
             toBeAdded.push(loc);
+            setMyItems('O' + objectID, 'L' + loc[1], _for);
         }
 
         // Save and return
+
         setDb(`[${idx}]`, 1);
         return true;
     });
@@ -466,12 +515,13 @@ function ranDoor(roomITM) {
         //     return;
         // }
         // ### Check for objects required
-        let object = resolveObjects(cacheDoor[3].split(","));
-        if (!object) {
+        let objectID = resolveObjects(cacheDoor[3].split(","), 'R' + doorID);
+        if (!objectID) {
             return;
         }
 
         // Save and return
+        setMyItems('R' + doorID, 'O' + objectID, 'OPEN');
         setDb(`[${idx}]`, 1);
         return true;
     });
@@ -574,7 +624,7 @@ async function generate_board() {
 
 
 // SCREENS CONTROL
-function scroll(from, to, callback) {
+function scrollPage(from, to, callback) {
     const duration = 500;
     const distance = to - from;
     let startTime = null;
@@ -683,7 +733,7 @@ function showRoom(roomARR) {
     if (actualMode == 'ingame') {
         setProgressBar(0);
         changeMode("loadinggame");
-        scroll(canvasObj.canvas.offsetTop, 0);
+        scrollPage(canvasObj.canvas.offsetTop, 0);
     }
     let room = places[roomARR[0]][roomARR[1]];
     if (!room) {
@@ -768,7 +818,7 @@ function showRoom(roomARR) {
             return imgLoaded == imgToLoad;
         },
         () => {
-            scroll(0, canvasObj.canvas.offsetTop, () => changeMode("ingame"));
+            scrollPage(0, canvasObj.canvas.offsetTop, () => changeMode("ingame"));
         }
     );
 }
@@ -956,17 +1006,52 @@ getDb("gameData/txt.miBasic").then(data => {
             // chat.show();
             // await miBasicObj.run('PR8');
             // chat.createMessage('*Fin de la discussion...');
-            
+
         }
     )
 });
 
 
 // BUTTONS FUNCTIONS
-function useButton() {
+function addChoice(itemID, type = '') {
+    let pos = miBasicObj.keywords[type + itemID];
+    if (pos) {
+        chatChoices.push({ id: pos, text: db.find(e => e[0] == itemID[0] && e[1] == itemID.substring(1))[2] });
+        return true;
+    }
+    return;
+}
 
+function createChoice(itemID, spe, pre) {
+    if (!(itemID.startsWith('R') || itemID.startsWith(spe))) {
+        return;
+    }
+
+    if (!addChoice(itemID)) {
+        addChoice(itemID, pre)
+    }
+}
+
+function createChoices(spe, pre) {
+    chatChoices = [];
+    for (let i = 0; i < actualItems.length; i++) {
+        createChoice(actualItems[i], spe, pre);
+    }
+    for (const key in myItems) {
+        if (myItems[key]['unlocked'] && !myItems[key]['used']) {
+            createChoice(key, spe, pre);
+        }
+    }
+    populateChoices();
+    chat.switch('choice');
+    chat.show();
+}
+
+function useButton() {
+    // let ItemsAvailable = actualItems.concat()
+    createChoices('O', 'U');
 }
 
 function speakButton() {
-
+    createChoices('P', 'P');
 }
