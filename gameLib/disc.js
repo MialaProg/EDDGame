@@ -1,4 +1,4 @@
-var chatModal, messagesDiv, answersDiv;
+var chatModal, messagesDiv, answersDiv, lastChatWriter;
 // Fonctions principales
 const chat = {
     show: () => chatModal.classList.add('is-active'),
@@ -14,6 +14,20 @@ const chat = {
     `;
         messagesDiv.appendChild(msg);
         messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        lastChatWriter = from;
+    },
+
+    addMessage: (text, from = 'npc') => {
+        if (text.trim().startsWith('*')) {
+            text = '<i>' + text.substring(1) + '</i>';
+        }
+        if (from === lastChatWriter) {
+            let lastMsg = document.getElementsByClassName(`${from}-message`);
+            lastMsg = lastMsg[lastMsg.length - 1].childNodes[1];
+            lastMsg.innerHTML += "<br>" + text;
+        } else {
+            chat.createMessage(text, from);
+        }
     },
 
     createAnswer: (text, callback) => {

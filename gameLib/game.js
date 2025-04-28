@@ -175,6 +175,54 @@ function waitUntil(condition, callback) {
     }, 100); // Check every 100 milliseconds
 }
 
+/**
+ * Attend qu'une condition soit remplie en vérifiant à intervalles réguliers
+ * @param {function} condition - Fonction à tester qui retourne une valeur truthy quand prête
+ * @param {number} [interval=100] - Intervalle de vérification en millisecondes
+ * @param {number} [timeout=10000] - Délai maximum d'attente en millisecondes
+ * @returns {Promise<any>} Promesse résolue avec la valeur retournée par la condition
+ * @throws {Error} Si le timeout est atteint ou si la condition lève une erreur
+ * 
+ * @example
+ * // Attendre un élément DOM
+ * const button = await wait(() => document.querySelector('#submit-btn'));
+ * 
+ * @example
+ * // Attendre une valeur spécifique avec vérification
+ * const data = await wait(
+ *   () => api.data?.status === 'ready' ? api.data : null,
+ *   200,
+ *   5000
+ * );
+ */
+function wait(condition, interval = 100, timeout = 10000) {
+    return new Promise((resolve, reject) => {
+      let intervalId;
+      const timeoutId = setTimeout(() => {
+        clearInterval(intervalId);
+        reject(new Error(`Timeout after ${timeout}ms`));
+      }, timeout);
+  
+      const check = () => {
+        try {
+          const result = condition();
+          if (result) {
+            clearTimeout(timeoutId);
+            clearInterval(intervalId);
+            resolve(result);
+          }
+        } catch (error) {
+          clearTimeout(timeoutId);
+          clearInterval(intervalId);
+          reject(error);
+        }
+      };
+  
+      check(); // Premier check immédiat
+      intervalId = setInterval(check, interval);
+    });
+  }
+
 function intToRoom(num) {
     num = num.toString();
     if (num.length < 2) {
@@ -866,10 +914,11 @@ waitUntil(
 )
 
 // miBasic LIBS
+var chatAnsSelected;
 getDb("gameData/txt.miBasic").then(data => {
     waitUntil(
         () => libLoaded('miBasicInterpreter') && libLoaded('disc'),
-        () => {
+        async () => {
             miBasicObj = new miBasicInterpreter(data);
             miBasicObj.setFunc('open', (door) => {
                 console.log('Open ' + door);
@@ -879,23 +928,28 @@ getDb("gameData/txt.miBasic").then(data => {
             });
             miBasicObj.setFunc('show', async (txt) => {
                 console.log('Show ' + txt);
-                chat.createMessage(txt);
+                chat.addMessage(txt);
             });
             miBasicObj.setFunc('choice', async (type, options) => {
                 console.log('Choice ' + type, options);
                 chat.clearAns();
+                chatAnsSelected = false;
                 for (let index = 0; index < options.length; index++) {
                     const option = options[index];
                     chat.createAnswer(option[0], (rep) => {
                         // miBasicObj.goTo();
-                        miBasicObj.run(option[1]);
+                        chatAnsSelected = option[1];
                     });
                 }
+                await wait(() => chatAnsSelected, undefined, 10 ** 7)
+                await miBasicObj.run(chatAnsSelected);
             });
             log("miBasicObj init");
             chat.show();
-            miBasicObj.run('UR6');
+            while (true){
+            await miBasicObj.run('PR8');
             chat.createMessage('*Fin de la discussion...');
+            }
         }
     )
 });

@@ -35,7 +35,7 @@ class miBasicInterpreter {
         for (let i = 0; i < this.script.length; i++) {
             const line = this.script[i].trim();
             if (line.startsWith(':')) {
-                this.keywords[i] = line.substring(1);
+                this.keywords[line.substring(1)] = i;
             }
         }
     }
@@ -104,11 +104,13 @@ class miBasicInterpreter {
    * @example
    * run('START') // Start from :START label
    */
-    run(from = this.location) {
+    async run(from = this.location) {
         if (typeof from == 'string') {
-            from = this.script.findIndex(line => line.startsWith(':' + from)) + 1;
+            // from = this.script.findIndex(line => line.startsWith(':' + from)) + 1;
+            this.goTo(from);
+        } else {
+            this.location = from;
         }
-        this.location = from;
         let line = this.readLine();
 
         if (line.startsWith('#')) {
@@ -116,11 +118,9 @@ class miBasicInterpreter {
             switch (line[0]) {
                 case 'OPEN':
                     this.funcs[0](line[1]);
-                    this.run();
                     break;
                 case 'GET':
                     this.funcs[1](line[1]);
-                    this.run();
                     break;
                 case 'OBJ':
                 case 'ON':
@@ -133,8 +133,7 @@ class miBasicInterpreter {
                         options.push(line);
                         line = this.readLine();
                     }
-                    this.funcs[2](type, options).then();
-                    return;
+                    await this.funcs[2](type, options);
                 case 'STOP':
                     return;
                 case 'IF':
@@ -148,13 +147,19 @@ class miBasicInterpreter {
                     let label = line[1];
                     this.goTo(label);
                     break;
+
             }
+
+            await this.run();
+            return;
         }
         if (line.startsWith(':')) {
-            this.readLine();
+            await this.run();
+            return;
         }
 
-        this.funcs[3](line).then(() => {this.run;});
+        await this.funcs[3](line);
+        await this.run();
         return;
 
     }
