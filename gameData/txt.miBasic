@@ -12,3 +12,188 @@
 *Vous l'ouvrez.
 #OPEN:R6
 #STOP
+-------------
+:PR2
+Salut.
+#REP
+  Tu peux me laisser passer ?:PR2LP
+  Tu viens me faire un câlin ?:PR2CL
+#
+:PR2LP
+Non.
+#STOP
+:PR2CL
+C'est pas gratuit hein
+#OBJ
+  O21:PR2OPEN
+  0:PR2NADA
+#ENDOBJ
+:PR2NADA
+Bon ben tant pis.
+#STOP
+:PR2OPEN
+Bon... D'accord...
+*Polisson vous fait un câlin et vous laisse ainsi passer.
+#OPEN:R2
+#STOP
+-------
+:O22
+#ON
+R2:O22.2
+#ENDON
+:O22.2
+*Polisson s'endort dans un profond sommeil.
+*Vous pouvez passer.
+#OPEN:R2
+#STOP
+--------
+:O19
+#ON
+R1:O19.2
+#ENDON
+:O19.2
+*Le piège vous laisse donc passer.
+#OPEN:R1
+#STOP
+---------
+:UR1
+*C'est un piège conçu par Doudou Noisette.
+*Il y a marqué dessus: "Une noisette pour la paroisse"
+*Le piège vous empêche de passer.
+#STOP
+---------
+:UR3
+*La porte est bloquée...
+#STOP
+-------
+:O23
+#ON
+R3:O23.2
+#ENDON
+:O23.2
+*Vous débloquez la porte avec le pied de biche.
+#OPEN:R3
+#STOP
+-----------
+:PR4
+Salut !
+#REP
+Tu peux nous laisser passer ?:PR4.2
+#ENDREP
+:PR4.2
+D'accord mais à une condition au choix:
+soit je te fais peur,
+soit tu me donne à manger.
+#OBJ
+O16:PR4.6
+O7:PR4xO7
+0:PR4.Nada
+#ENDOBJ
+:PR4.Nada
+C'est pas grave je vais te faire peur !
+Bouh !
+*Ta peur n'est pas assez crédible
+Ouinn je fais pas peur !
+#STOP
+:PR4.6
+Miam miam miam miam !
+Tchu pcheux pchacher.
+#OPEN:R4
+#STOP
+:PR4xO7
+Bouh !
+*Tu as peur de façon super crédible
+Ouiiiii !
+#OPEN:R4
+#STOP
+----------
+:UR5
+Cette porte est fermée à clef...
+#OBJ
+O4:UR5xO4
+#ENDOBJ
+****
+:O4
+#ON
+R5:UR5xO4
+#ENDON
+****
+:UR5xO4
+*La porte s'ouvre.
+#OPEN:R5
+#STOP
+------------
+:UR6
+*Vous ne pouvez pas atteindre cette porte sous-marine.
+#OBJ
+O10:UR6xO10
+#ENDOBJ
+****
+:O10
+#ON
+R6:UR6xO10
+#ENDOBJ
+****
+:UR6xO10
+*Grâce à vos cours de plongée, vous parvenez à atteindre la porte.
+*Vous l'ouvrez.
+#OPEN:R6
+#STOP
+-----------
+:UR7
+*Des runes étranges sont inscrites sur cette porte verrouillée
+#OBJ
+O23:R7xO23
+O3:R7xO3
+#ENDOBJ
+***
+:R7xO23
+*La porte est trop lourde.
+#STOP
+***
+:O3
+#ON
+R7:R7xO3
+#
+***
+:R7xO3
+*Vous arrivez à prononcer le fourchelangue.
+*La porte s'ouvre.
+#OPEN:R7
+#STOP
+-------------
+:PR8
+Bouh !
+*Vous avez peur...
+J'ai faim ! Donne-moi de la nourriture !
+#REP
+Je.. Je suis ami avec Galette...:DMGal
+Je.. Tiens..:DMCh
+0:DMfuite
+#
+:DMfuite
+GRRRR !
+*Vous partez en courant.
+#STOP
+:DMGal
+Ahh... Mon amouur...
+Tu aurais un peu de nourriture ?
+Et je te laisse passer.
+:DMAsk
+#REP
+Oui, tiens.:DMCh
+Tu veux quoi comme nourriture ?:DMQwa
+#
+:DMQwa
+Moi je mange de la viande cuite.
+Tu en as?
+#GOTO:DMAsk
+:DMCh
+Merchi !
+#OPEN:R8
+#STOP
+-------------
+
+
+
+
