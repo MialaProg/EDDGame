@@ -37,12 +37,16 @@ var actualGame = {}
 var editGen = [];
 var toBeAdded, db, boardGenerated, startRoom, alphabet;
 var PLACES_LOC, DOORS_LOC, PERSO_LOC, OBJ_LOC;//Not implemented everywhere yet
-var actualRoom, canvasObj, miBasicObj, discObj;
+var actualRoom, actualItems;
+var canvasObj, miBasicObj, discObj;
 
 var GameConst = 0;
 var GameConstMax = 1;
 
 var _canvasID = 'room-canvas';
+
+// ItemID => {REQ => GIVE, ..., 'unlocked'=?, 'used'=?}
+var myItems = {};
 
 function CanvasLibLoaded() {
     try {
@@ -673,6 +677,7 @@ function showRoom(roomARR) {
         });
     }
     actualRoom = roomARR;
+    actualItems = []
     imgToLoad = 0;
     imgLoaded = 0;
     if (actualMode == 'ingame') {
@@ -688,10 +693,12 @@ function showRoom(roomARR) {
     canvasObj.setBackground();
     let placeID = room['L'];
     if (placeID) {
+        actualItems.push('L' + placeID);
         canvasObj.drawImage(40, 40, 40, 40, 'L' + placeID);
     }
     let persoID = room['P'];
     if (persoID) {
+        actualItems.push('P' + persoID);
         canvasObj.drawImage(20, 85, 40, 30, 'P' + persoID);
         canvasObj.drawRect(20, 85, 40, 30, undefined, 'black');
     }
@@ -706,6 +713,7 @@ function showRoom(roomARR) {
             const doorKey = arr[index];
             let doorID = doorIDs ? doorIDs[doorKey] : undefined;
             if (doorID) {
+                actualItems.push('R' + doorID);
                 if (Math.abs(doorKey) > 5) {
                     canvasObj.drawImage(50 + 4 * doorKey, 40, 20, 40, 'R' + doorID);
                 } else {
@@ -945,11 +953,10 @@ getDb("gameData/txt.miBasic").then(data => {
                 await miBasicObj.run(chatAnsSelected);
             });
             log("miBasicObj init");
-            chat.show();
-            while (true){
-            await miBasicObj.run('PR8');
-            chat.createMessage('*Fin de la discussion...');
-            }
+            // chat.show();
+            // await miBasicObj.run('PR8');
+            // chat.createMessage('*Fin de la discussion...');
+            
         }
     )
 });
