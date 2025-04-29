@@ -1,4 +1,5 @@
 --- NO TOGO DTC +++
+---------- PORTES ------------------
 :UR6
 *Vous ne pouvez pas atteindre cette porte sous-marine.
 #OBJ
@@ -194,7 +195,139 @@ Merchi !
 #OPEN:R8
 #STOP
 -------------
-
-
+:PR9
+Salut !
+#VAR:QNQ:QNQ
+Comment ça va ?
+#REP
+Bien et toi ?:QNB
+Pas trop bien et toi ?:QNM
+#
+:QNB
+Ca va, si ce n'est que j'ai faim.
+#GOTO:QNQ
+:QNM
+Ah mince, moi j'ai faim...
+#GOTO:QNQ
+:QNQ
+#SAVE:QNQ
+Tu n'aurais pas à manger par hasard ?
+Et je te laisse passer.
+#OBJ
+O31:QNMiam
+O14:QNMiam
+O32:QNPwasson
+0:QN0
+#
+:QN0
+Si tu as du poisson, où des bouts bon d'humain, n'hésite pas à me les apporter !
+#STOP
+:QNPwasson
+Miam ! Merchi !
+#GOTO:QNOpen
+:QNMiam
+Miaaam ! Merchi bjeauqchou !
+:QNOpen
+*Quinou vous laisse passer.
+#OPEN:R9
+#STOP
+-------------
+:PR10
+*Voici Plouf-Anouk, la fille de Doudou Âne et de Peupeuvre.
+Agaa ! 
+Miam-miam agabo !
+#OBJ
+O5:PDAMiam
+O8:PDAMiam
+0:PDAz
+#
+:PDAz
+Agabapabo !
+*Elle vous électrocute avec ses antennes.
+#STOP
+:PDAMiam
+Gabo !!!
+*Elle vous laisse passer.
+#OPEN:R10
+#STOP
+--------------
+:PR11
+Sa-
+lut.
+#REP
+Tu pourrais me laisser passer ?:R11C
+#
+:R11C
+Ouais-
+ouais.
+Il
+faut
+juste
+que
+je
+fi-
+nisse
+ma
+dé-
+co-
+ra-
+tion
+a-
+vant.
+Il
+me
+manque
+des
+fleurs.
+#OBJ
+O9:R11Op
+0:R110
+#
+:R110
+Je
+vais
+bien
+fi-
+nir
+par
+en
+trou-
+ver...
+#STOP
+:R11Op
+Oh !
+Mer-
+ci !
+*Il se ddddddéééééécccccaaaaalllllleeee pour vous laisser passer.
+#OPEN:R11
+#STOP
+---------------
+:PR12
+Ouïlle !
+Mon platre à la patte s'est cassé !
+Aide-moi !
+#OBJ
+O11:R12Op
+#
+:R12Op
+Merci beaucoup !
+Je vais me reposer.
+#OPEN:R12
+#STOP
+----------------- 
+:PR16
+On a mal au ventre !
+On a trop mangé, mais on a pas pu digérer:
+il nous manque des cailloux.
+Donnez-nous en t on vous laisse passer.
+#OBJ:
+O20:R16Op
+#
+:R16p
+Merci beaucoup !
+#OPEN:R16
+#STOP
+------------
+------------- PERSOS -----------------
 
 
