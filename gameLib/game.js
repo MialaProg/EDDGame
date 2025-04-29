@@ -35,10 +35,12 @@ var doors = {
 var actualGame = {}
 // For trace edit when generate
 var editGen = [];
-var toBeAdded, db, boardGenerated, startRoom, alphabet;
-var PLACES_LOC, DOORS_LOC, PERSO_LOC, OBJ_LOC;//Not implemented everywhere yet
-var actualRoom, actualItems;
+var toBeAdded, db, boardGenerated, startRoom, alphabet, nbPlayers;
+var PLACES_LOC, DOORS_LOC, PERSO_LOC, OBJ_LOC, LOADING_LOC;//Not implemented everywhere yet
+var actualRoom, actualItems, actualPlayer;
 var canvasObj, miBasicObj, discObj;
+
+var [nbActions, nbTours] = [0, 0];
 
 var GameConst = 0;
 var GameConstMax = 1;
@@ -69,7 +71,7 @@ function GameConstInitied() {
 
 function log(...arguments) {
     logs.push(...arguments);
-    if (!arguments[0]){
+    if (!arguments[0]) {
         return;
     }
     if (ConsoleLog) {
@@ -542,7 +544,7 @@ function addItemsToRoom(type) {
     for (let i = 0; i < lenStandartPlaces; i++) {
         allRooms.push([0, i]);
     }
-    let asBeenAdded = [];
+    let asBeenAdded = [db.find(item => item[0] == 'L' && item[1] == '92')]; //Bugfix: #2
 
     for (let i = toBeAdded.length - 1; i > 0; i--) {
         let element = toBeAdded[i];
@@ -677,51 +679,6 @@ async function launch_game() {
     });
 }
 
-// STARTING GAME CODE
-
-/**Set array <players> values to actual select values.
- * If there is a duplicate, set select value to none.
-*/
-function init_players_values() {
-    let selects = document.querySelectorAll("select.player-select");
-    selects.forEach(function (select) {
-        let selectID = select.id[select.id.length - 1];
-        players[selectID - 1] = select.value
-        if (hasDuplicates(players)) {
-            players[selectID - 1] = select.value = "none";
-        }
-    });
-}
-
-/**
- * Initialise les actions lors des mises à jour des select
- */
-function init_select_onclick() {
-    // Sélectionne tous les éléments <select> sur la page
-    let selects = document.querySelectorAll("select.player-select");
-
-    // Boucle à travers chaque <select> et définir l'événement change
-    selects.forEach(function (select) {
-        //Récupération de l'ID select
-        let selectID = parseInt(select.id[6])
-        let prev_select = document.getElementById('player' + (selectID - 1))
-
-
-        select.onclick = function () {
-            let options = select.querySelectorAll('option');
-
-            options.forEach(function (option) {
-                option.disabled = players.includes(option.value) || (prev_select && prev_select.value === "none");
-            });
-        }
-        select.addEventListener("change", function () {
-            log("Option selected: " + this.value);
-            //Save value
-            players[selectID - 1] = this.value
-        });
-    });
-}
-
 
 function showRoom(roomARR) {
     if (!canvasObj) {
@@ -827,22 +784,69 @@ function showRoom(roomARR) {
     );
 }
 
+// STARTING PREGAME CODE
+
+/**Set array <players> values to actual select values.
+ * If there is a duplicate, set select value to none.
+*/
+function init_players_values() {
+    let selects = document.querySelectorAll("select.player-select");
+    selects.forEach(function (select) {
+        let selectID = select.id[select.id.length - 1];
+        players[selectID - 1] = select.value
+        if (hasDuplicates(players)) {
+            players[selectID - 1] = select.value = "none";
+        }
+    });
+}
+
+/**
+ * Initialise les actions lors des mises à jour des select
+ */
+function init_select_onclick() {
+    // Sélectionne tous les éléments <select> sur la page
+    let selects = document.querySelectorAll("select.player-select");
+
+    // Boucle à travers chaque <select> et définir l'événement change
+    selects.forEach(function (select) {
+        //Récupération de l'ID select
+        let selectID = parseInt(select.id[6])
+        let prev_select = document.getElementById('player' + (selectID - 1))
+
+
+        select.onclick = function () {
+            let options = select.querySelectorAll('option');
+
+            options.forEach(function (option) {
+                option.disabled = players.includes(option.value) || (prev_select && prev_select.value === "none");
+            });
+        }
+        select.addEventListener("change", function () {
+            log("Option selected: " + this.value);
+            //Save value
+            players[selectID - 1] = this.value
+        });
+    });
+}
+
+
+
 
 function set_player_form_submit() {
     document.getElementById("player-form").addEventListener("submit", function (e) {
         e.preventDefault();
 
-        let nb_player = players.indexOf("none");
+        nbPlayers = players.indexOf("none");
 
-        if (!nb_player) {
+        if (!nbPlayers) {
             alert("Cela risque d'etre compliqué sans joueurs...");
             return
         }
-        if (nb_player == -1) {
-            nb_player = players.length;
+        if (nbPlayers == -1) {
+            nbPlayers = players.length;
         }
 
-        if (!confirm("Démarre la partie à " + (nb_player) + " joueurs ?")) {
+        if (!confirm("Démarre la partie à " + (nbPlayers) + " joueurs ?")) {
             return;
         }
 
@@ -870,7 +874,7 @@ async function initGameConst() {
     for (let i = 0; i < data.length; i++) {
         const line = data[i];
         if (line.includes("#ROOMS")) {
-            let currentRoom_HTML = '';
+            let currentRoom_HTML = '<option value="OFF">Destinations possibles:</option>';
             i += 1;
             let r = data[i].split(";");
             for (let j = 0; j < r.length; j++) {
@@ -919,15 +923,35 @@ async function initGameConst() {
             i += 1;
             OBJ_LOC = data[i].split(";").map(Number);
         }
+        if (line.includes("#LOADING_LOC")) {
+            i += 1;
+            LOADING_LOC = data[i].split(";").map(Number);
+        }
     }
     log("GameConst initied");
 }
 initGameConst();
 
+var isMouseOverRoomSelect;
 function initSelectRoom() {
     let roomSelect = document.getElementById("current-room");
     roomSelect.addEventListener("change", function () {
-        showRoom(this.value.split(";").map(Number));
+        if (this.value != "OFF") {
+            nbActions += 1;
+            nbTours += 1;
+            actualPlayer = players[(nbTours - 1) % nbPlayers];
+            document.getElementById('loadingTitle').innerHTML = findInArr(db, LOADING_LOC[0], undefined, (item) => item[1] === actualPlayer)[1][2];
+            showRoom(this.value.split(";").map(Number));
+            wait(() => !isMouseOverRoomSelect, 200, 10 ** 9).then(() => { wait(() => isMouseOverRoomSelect, 200, 10 ** 9).then(() => roomSelect.value = "OFF") });
+        }
+    });
+
+    roomSelect.addEventListener('mouseenter', () => {
+        isMouseOverRoomSelect = true;
+    });
+
+    roomSelect.addEventListener('mouseleave', () => {
+        isMouseOverRoomSelect = false;
     });
 }
 

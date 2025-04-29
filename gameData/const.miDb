@@ -13,3 +13,5 @@ E;F;G
 50;70
 #OBJ_LOC (Where are characters in items.miDb, for optimisation, min;max)
 60
+#LOADING_LOC
+100
