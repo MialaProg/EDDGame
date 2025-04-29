@@ -45,6 +45,7 @@ const chat = {
     clearConv: () => {
         messagesDiv.innerHTML = '';
         answersDiv.innerHTML = '';
+        lastChatWriter = '';
     },
 
     clearAns: () => {

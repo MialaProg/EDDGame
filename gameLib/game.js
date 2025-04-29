@@ -49,7 +49,7 @@ var _canvasID = 'room-canvas';
 var myItemsHistory = [];
 var myItems = {};
 
-
+var logs = [];
 
 function libLoaded(libname) {
     try {
@@ -68,6 +68,10 @@ function GameConstInitied() {
 }
 
 function log(...arguments) {
+    logs.push(...arguments);
+    if (!arguments[0]){
+        return;
+    }
     if (ConsoleLog) {
         console.log(...arguments);
     }
@@ -149,7 +153,7 @@ function setArr(idx, val, arr, history) {
     if (!history) {
         history = arr + 'History';
     }
-    log(idx, val, arr, history);
+    log(false, idx, val, arr, history);
     eval(`
         ${history}.push(["${idx}", JSON.stringify(${arr}${idx})]);
         if (Array.isArray(${arr}${idx})) {
@@ -749,8 +753,8 @@ function showRoom(roomARR) {
     let persoID = room['P'];
     if (persoID) {
         actualItems.push('P' + persoID);
-        canvasObj.drawImage(20, 85, 40, 30, 'P' + persoID);
-        canvasObj.drawRect(20, 85, 40, 30, undefined, 'black');
+        canvasObj.drawImage(20, 85, 39, 29, 'P' + persoID);
+        canvasObj.drawRect(20, 85, 41, 31, undefined, 'black');
     }
 
     const roomSelect = document.getElementById("current-room");
@@ -1023,7 +1027,7 @@ function addChoice(itemID, type = '') {
 }
 
 function createChoice(itemID, spe, pre) {
-    if (!(itemID.startsWith('R') || itemID.startsWith(spe))) {
+    if (!(itemID.startsWith('L') || itemID.startsWith('R') || itemID.startsWith(spe))) {
         return;
     }
 
@@ -1054,4 +1058,8 @@ function useButton() {
 
 function speakButton() {
     createChoices('P', 'P');
+}
+
+function searchButton() {
+    createChoices('Z', 'C');
 }
