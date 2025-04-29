@@ -1,4 +1,6 @@
 --- NO TOGO DTC +++
++ actualPlayer : DADNPET
++ L
 ---------- PORTES ------------------
 :UR6
 *Vous ne pouvez pas atteindre cette porte sous-marine.
@@ -329,5 +331,105 @@ Merci beaucoup !
 #STOP
 ------------
 ------------- PERSOS -----------------
+:P1
+Salut ! Moi c'est éfelant !
+J'suis le plus fort de l'école !
+*C'est faux
+#IF:actualPlayer==='DN':EFDN
+#IF:actualPlayer==='DA':EFDA
+#IF:actualPlayer==='P':EFP
+#IF:actualPlayer==='T':EFT
+*Erreur: joueur inconnu
+:EFDN
+Oh ! Mais tu es Doudou Noisette en fait !
+J'ai tellement l'habitude...
+:EFDNA
+Tu veux quoi ?
+#REP
+Des noisettes.:EFGN
+Un bon d'achat.:EFBA
+#
+:EFGN
+Oops !
+Il y en a plus...
+#GOTO:EFDNA
+*
+:EFDA
+Oh ! Mais tu es Doudou Âne en fait !
+J'ai tellement l'habitude...
+:EFDAA
+Tu veux quoi ?
+#REP
+De l'herbe.:EFGA
+Un bon d'achat.:EFBA
+#
+:EFGA
+Oops !
+Il y en a plus...
+#GOTO:EFDAA
+*
+:EFP
+Oh ! Mais tu es Peupeuvre en fait !
+J'ai tellement l'habitude...
+:EFPA
+Tu veux quoi ?
+#REP
+Du plancton.:EFGP
+Un bon d'achat.:EFBA
+#
+:EFGP
+Oops !
+Il y en a plus...
+#GOTO:EFPA
+*
+:EFT
+Oh ! Mais tu es Toutie en fait !
+J'ai tellement l'habitude...
+:EFTA
+Tu veux quoi ?
+#REP
+Des salades.:EFGT
+Un bon d'achat.:EFBA
+#
+:EFGT
+Oops !
+Il y en a plus...
+#GOTO:EFTA
+*
+:EFBA
+#IF:myItems['P1']['0']:EFOK
+#VAR:EFOK:EFDeja
+D'accord, mais donne moi d'abord des médocs !
+#OBJ
+O2:EFOK
+#
+:EFDeja
+Dis, je t'en ai déjà donné un !
+#STOP
+:EFOK
+Tient !
+#GET:O1
+#SAVE:EFOK
+#STOP
+--------------
+:P2
+Seethaaa ssss hathehh hathehh ayaeeh , hatheeey seethaaa haa ssseya  ssaah ayaeeh  haaaaaah ayaeeh esseytha  hatheeey haa seyythaa ssseya  ?
+ssseya esseytha  saahthay ssss esseytha seeeeeh  haa aaah aaah hasseey ssss seyythaa ssaah hasseey ssss  hathehh ssss  hassay ayaeeh esseytha hasseey hass seethaaa ssss 
+hathehh haa seyythaa ehhh esseytha ssss  ?
+:P2R
+#REP
+ayaeeh esseytha aayaa (Oui):P2SI
+De quoi ?:P2Q
+#
+:P2Q
+*Athéna:
+Elle viens de te demander si tu voulais un dico de fourchelangue.
+#GOTO:P2R
+:P2SI
+ssseya aayaa ssss seyythaa ssssaytha  saahthay ayaeeh aayaa hathehh à esseytha seyythaa  ssaah aayaa hass ayaeeh
+#GET:O3
+#STOP
+-------------------
+
 
 
