@@ -142,6 +142,7 @@ function confirmSelection() {
         chat.clearConv();
         chat.switch('msg');
         miBasicObj.run(chatSelectedChoice);
+        log("ENDChat");
     } else {
         alert('Veuillez sélectionner une option');
     }

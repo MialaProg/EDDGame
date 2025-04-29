@@ -723,7 +723,7 @@ function showRoom(roomARR) {
         for (let index = 0; index < arr.length; index++) {
             const doorKey = arr[index];
             let doorID = doorIDs ? doorIDs[doorKey] : undefined;
-            if (doorID) {
+            if (doorID && !myItems['R' + doorID]['opened']) {
                 actualItems.push('R' + doorID);
                 if (Math.abs(doorKey) > 5) {
                     canvasObj.drawImage(50 + 4 * doorKey, 40, 20, 40, 'R' + doorID);
@@ -1008,13 +1008,21 @@ getDb("gameData/txt.miBasic").then(data => {
             miBasicObj = new miBasicInterpreter(data);
             miBasicObj.setFunc('open', (door) => {
                 console.log('Open ' + door);
+                myItems[door]['opened'] = true;
+                showRoom(actualRoom);
             });
             miBasicObj.setFunc('get', (obj) => {
                 console.log('Get ' + obj);
+                if (!myItems[obj]['unlocked']){
+                    myItems[obj]['unlocked'] = 0;
+                }
+                myItems[obj]['unlocked'] += 1;
             });
             miBasicObj.setFunc('show', async (txt) => {
                 console.log('Show ' + txt);
                 chat.addMessage(txt);
+                let time = Date.now();
+                await wait(() => Date.now() - time > 500, 300);
             });
             miBasicObj.setFunc('choice', async (type, options) => {
                 console.log('Choice ' + type, options);
