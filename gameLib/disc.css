@@ -75,7 +75,7 @@ overflow-y: auto;
     box-shadow: -2px 0 0 #3273dc;
 }
 
-.choice-item.is-active {
+/* .choice-item.is-active {
     background-color: #3273dc;
     color: white;
     transform: translateX(0);
@@ -84,7 +84,7 @@ overflow-y: auto;
 
 .choice-item.is-active:hover {
     background-color: #276cda;
-}
+} */
 
 .choice-item:last-child {
     border-bottom: none;

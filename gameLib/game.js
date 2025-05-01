@@ -53,6 +53,12 @@ var myItems = {};
 
 var logs = [];
 
+var UNIQUEID = Math.floor(Date.now() / (10000)) - 174612000;
+function getUniqueID() {
+    UNIQUEID += 1;
+    return UNIQUEID;
+}
+
 function libLoaded(libname) {
     try {
         return eval(libname + 'Loaded');
@@ -435,7 +441,15 @@ function resolveObjects(objectsRequired, _for = '0') {
 
             // Save and return
             let idx = getIndex(perso, db, 50, 70);
-            setMyItems('P' + perso[1], 'O' + object, 'O' + objectID);
+
+            // For multiple 0
+            if (object == '0') {
+                object += getUniqueID();
+            } else {
+                object = 'O' + object;
+            }
+
+            setMyItems('P' + perso[1], object, 'O' + objectID);
             setDb(`[${idx}]`, '1');
             return true;
         });
@@ -466,7 +480,15 @@ function resolveObjects(objectsRequired, _for = '0') {
 
                 // Save and return
                 let idx = getIndex(loc, db, 0, 60);
-                setMyItems('L' + loc[1], 'O' + object, 'O' + objectID);
+
+                // For multiple 0
+                if (object == '0') {
+                    object += getUniqueID();
+                } else {
+                    object = 'O' + object;
+                }
+
+                setMyItems('L' + loc[1], object, 'O' + objectID);
                 setDb(`[${idx}]`, '1');
                 return true;
             });
@@ -891,7 +913,7 @@ async function initGameConst() {
                 let roomSelect = document.getElementById("current-room");
                 if (roomSelect) {
                     roomSelect.innerHTML = currentRoom_HTML;
-                    roomSelect.value = starting_room;
+                    roomSelect.value = 'OFF';
                     log('Starting room:', starting_room);
                     initSelectRoom();
                 } else {
@@ -1013,7 +1035,7 @@ getDb("gameData/txt.miBasic").then(data => {
             });
             miBasicObj.setFunc('get', (obj) => {
                 console.log('Get ' + obj);
-                if (!myItems[obj]['unlocked']){
+                if (!myItems[obj]['unlocked']) {
                     myItems[obj]['unlocked'] = 0;
                 }
                 myItems[obj]['unlocked'] += 1;
@@ -1025,18 +1047,36 @@ getDb("gameData/txt.miBasic").then(data => {
                 await wait(() => Date.now() - time > 500, 300);
             });
             miBasicObj.setFunc('choice', async (type, options) => {
+                // Types: OBJ, REP, ON
                 console.log('Choice ' + type, options);
                 chat.clearAns();
                 chatAnsSelected = false;
                 for (let index = 0; index < options.length; index++) {
-                    const option = options[index];
+                    let option = options[index];
+                    if (option[0] == '0') {
+                        option[0] = "Je n'ai rien pour toi, pour l'instant...";
+                    }
+                    else if (type == 'OBJ') {
+                        chat.addMessage('*Sur quoi souhaitez vous utiliser cet objet ?');
+                        if (!myItems[option[0]]['unlocked'] || myItems[option[0]]['used']) {
+                            continue;
+                        }
+                        option[1] = findInArr(db, 0, undefined, item => item[0] + item[1] == option[0])[1][2];
+                    }
+                    else if (type == 'ON') {
+                        if (!actualItems.includes(option[0])) {
+                            continue;
+                        }
+                        option[1] = findInArr(db, 0, undefined, item => item[0] + item[1] == option[0])[1][2];
+                    }
                     chat.createAnswer(option[0], (rep) => {
                         // miBasicObj.goTo();
                         chatAnsSelected = option[1];
                     });
                 }
-                await wait(() => chatAnsSelected, undefined, 10 ** 7)
-                await miBasicObj.run(chatAnsSelected);
+                const thisChat = chatID;
+                await wait(() => chatAnsSelected || thisChat != chatID, undefined, 10 ** 7)
+                if (thisChat == chatID) await miBasicObj.run(chatAnsSelected);
             });
             log("miBasicObj init");
             // chat.show();
@@ -1069,6 +1109,7 @@ function createChoice(itemID, spe, pre) {
 }
 
 function createChoices(spe, pre) {
+    chat.clearConv();
     chatChoices = [];
     for (let i = 0; i < actualItems.length; i++) {
         createChoice(actualItems[i], spe, pre);
@@ -1093,5 +1134,41 @@ function speakButton() {
 }
 
 function searchButton() {
-    createChoices('Z', 'C');
+    log('Seaching..');
+    chat.clearConv();
+    chatChoices = [];
+    try {
+        let actualPlaceObjs = myItems[
+            'L' + findInArr(actualItems, 0, undefined, item => item[0] == 'L')[1][1]
+        ];
+        if (actualPlaceObjs) {
+            Object.keys(actualPlaceObjs).forEach((key) => {
+                log('Find', key);
+                if (key.startsWith('0')) {
+                    let getID = actualPlaceObjs[key];
+                    if ((getID == 'O21' || !myItems[getID]['unlocked']) && !addChoice(getID)) {
+                        let txt = db.find(e => e[0] == getID[0] && e[1] == getID.substring(1))[2] ;
+                        chatChoices.push({ id: 0, text: txt});
+                        chat.addMessage(
+                            '*Vous trouvez: ' + txt
+                            + `<br><a onclick = "myItems['${getID}']['unlocked'] += 1; this.remove();">Ramasser</a>`
+                        );
+                    };
+                }
+            });
+        }
+    } catch (e) {
+        console.log('Location error for search:', e);
+    }
+    if (!chatChoices.length) {
+        log('Nothing to see here');
+        chat.switch('msg');
+        chat.addMessage('*Vous ne trouvez rien.');
+        chat.show();
+    } else {
+        log('Founded');
+        populateChoices();
+        chat.switch('choice');
+        chat.show();
+    }
 }

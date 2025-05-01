@@ -15,7 +15,8 @@ class miBasicInterpreter {
    */
     constructor(script) {
         this.script = script.split('\n');
-        this.script.push(':STOP', '#STOP');
+        this.script.unshift(':STOP');
+        this.script.unshift('#STOP');
         this.location = 0;
         this.funcs = [
             (door) => { },

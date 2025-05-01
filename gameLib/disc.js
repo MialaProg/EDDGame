@@ -1,4 +1,5 @@
 var chatModal, messagesDiv, answersDiv, lastChatWriter;
+var chatID = 0;
 // Fonctions principales
 const chat = {
     show: () => chatModal.classList.add('is-active'),
@@ -45,7 +46,8 @@ const chat = {
     clearConv: () => {
         messagesDiv.innerHTML = '';
         answersDiv.innerHTML = '';
-        lastChatWriter = '';
+        lastChatWriter = undefined;
+        chatID += 1;
     },
 
     clearAns: () => {
@@ -139,7 +141,7 @@ function confirmSelection() {
     if (chatSelectedChoice) {
         const selected = chatChoices.find(c => c.id === chatSelectedChoice);
         console.log('Option sélectionnée:', selected);
-        chat.clearConv();
+        // chat.clearConv();
         chat.switch('msg');
         miBasicObj.run(chatSelectedChoice);
         log("ENDChat");
