@@ -121,7 +121,7 @@ function populateChoices() {
         const li = document.createElement('li');
         li.innerHTML = `
             <a class="choice-item is-rounded ${chatSelectedChoice === choice.id ? 'is-active' : ''}" 
-               onclick="selectChoice(${choice.id})">
+               onclick="selectChoice('${choice.id}')">
                 ${choice.text}
             </a>
         `;
@@ -139,6 +139,10 @@ function selectChoice(choiceId) {
 // Confirmer la sélection
 function confirmSelection() {
     if (![false, undefined].includes(chatSelectedChoice)) {
+        const intCSC = parseInt(chatSelectedChoice);
+        if (!isNaN(intCSC)){
+            chatSelectedChoice = intCSC;
+        }
         const selected = chatChoices.find(c => c.id === chatSelectedChoice);
         console.log('Option sélectionnée:', selected);
         // chat.clearConv();

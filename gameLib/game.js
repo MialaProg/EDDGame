@@ -279,6 +279,14 @@ function wait(condition, interval = 100, timeout = 10000) {
     });
 }
 
+function searchInMyItems(obj, value) {
+    let entry = Object.entries(myItems[obj]).find(([key, val]) => val === value);
+    if (!entry) {
+        return [undef, undef];
+    }
+    return entry;
+}
+
 function intToRoom(num) {
     num = num.toString();
     if (num.length < 2) {
@@ -1057,17 +1065,17 @@ getDb("gameData/txt.miBasic").then(data => {
                         option[0] = "Je n'ai rien pour toi, pour l'instant...";
                     }
                     else if (type == 'OBJ') {
-                        chat.addMessage('*Sur quoi souhaitez vous utiliser cet objet ?');
                         if (!myItems[option[0]]['unlocked'] || myItems[option[0]]['used']) {
                             continue;
                         }
-                        option[1] = findInArr(db, 0, undefined, item => item[0] + item[1] == option[0])[1][2];
+                        option[0] = 'Utiliser: ' + findInArr(db, 0, undefined, item => item[0] + item[1] == option[0])[1][2];
                     }
                     else if (type == 'ON') {
+                        // chat.addMessage('*Sur quoi souhaitez vous utiliser cet objet ?');
                         if (!actualItems.includes(option[0])) {
                             continue;
                         }
-                        option[1] = findInArr(db, 0, undefined, item => item[0] + item[1] == option[0])[1][2];
+                        option[0] = 'Utiliser sur: ' + findInArr(db, 0, undefined, item => item[0] + item[1] == option[0])[1][2];
                     }
                     chat.createAnswer(option[0], (rep) => {
                         // miBasicObj.goTo();
@@ -1099,7 +1107,7 @@ function addChoice(itemID, type = '') {
 }
 
 function createChoice(itemID, spe, pre) {
-    if (!(itemID.startsWith('L') || itemID.startsWith('R') || itemID.startsWith(spe))) {
+    if (!(itemID.startsWith('R') || itemID.startsWith(spe))) {
         return;
     }
 
@@ -1139,19 +1147,21 @@ function searchButton() {
     chatChoices = [];
     try {
         let actualPlaceObjs = myItems[
-            'L' + findInArr(actualItems, 0, undefined, item => item[0] == 'L')[1]
+            findInArr(actualItems, 0, undefined, item => item[0] == 'L')[1]
         ];
         if (actualPlaceObjs) {
             Object.keys(actualPlaceObjs).forEach((key) => {
                 log('Find', key);
                 if (key.startsWith('0')) {
                     let getID = actualPlaceObjs[key];
-                    if ((getID == 'O21' || !myItems[getID]['unlocked']) && !addChoice(getID)) {
-                        let txt = db.find(e => e[0] == getID[0] && e[1] == getID.substring(1))[2] ;
-                        chatChoices.push({ id: 0, text: txt});
+                    if ((getID == 'O21' || !myItems[getID]['unlocked'])) { // && !addChoice(getID) (Retiré car noisettes)
+                        let txt = db.find(e => e[0] == getID[0] && e[1] == getID.substring(1))[2];
+                        chatChoices.push({ id: 0, text: txt });
                         chat.addMessage(
                             '*Vous trouvez: ' + txt
-                            + `<br><a onclick = "myItems['${getID}']['unlocked'] += 1; this.remove();">Ramasser</a>`
+                            + `<br><a onclick = "
+                                if (!myItems['${getID}']['unlocked']) myItems['${getID}']['unlocked'] = 0;
+                                myItems['${getID}']['unlocked'] += 1; this.remove();">Ramasser</a>`
                         );
                     };
                 }

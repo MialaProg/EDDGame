@@ -70,7 +70,7 @@ overflow-y: auto;
 }
 
 .choice-item:hover {
-    background-color: #f8f8f8;
+    /* background-color: #f8f8f8; */
     transform: translateX(5px);
     box-shadow: -2px 0 0 #3273dc;
 }

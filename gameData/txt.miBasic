@@ -7,9 +7,12 @@
     O10:UR6+O10
 #
 :O10
+C'est votre cours de plongée.
 #ON
     R10:UR6+O10
-#
+    R6:UR6xO10
+#ENDOBJ
+****
 :UR6+O10
 *Grâce à vos cours de plongée, vous parvenez à atteindre la porte.
 *Vous l'ouvrez.
@@ -42,6 +45,7 @@ Bon... D'accord...
 -------
 :O22
 #ON
+C'est une boite qui fait de la musique.
 R2:O22.2
 #ENDON
 :O22.2
@@ -71,6 +75,7 @@ R1:O19.2
 -------
 :O23
 #ON
+C'est un outils pour dévérouiller les portes.
 R3:O23.2
 #ENDON
 :O23.2
@@ -118,6 +123,7 @@ O4:UR5xO4
 ****
 :O4
 #ON
+C'esst une clé.
 R5:UR5xO4
 #ENDON
 ****
@@ -125,24 +131,7 @@ R5:UR5xO4
 *La porte s'ouvre.
 #OPEN:R5
 #STOP
-------------
-:UR6
-*Vous ne pouvez pas atteindre cette porte sous-marine.
-#OBJ
-O10:UR6xO10
-#ENDOBJ
-****
-:O10
-#ON
-R6:UR6xO10
-#ENDOBJ
-****
-:UR6xO10
-*Grâce à vos cours de plongée, vous parvenez à atteindre la porte.
-*Vous l'ouvrez.
-#OPEN:R6
-#STOP
------------
+-------------
 :UR7
 *Des runes étranges sont inscrites sur cette porte verrouillée
 #OBJ
@@ -156,6 +145,7 @@ O3:R7xO3
 ***
 :O3
 #ON
+C'est un dictionnaire de fourchelangue.
 R7:R7xO3
 #
 ***
@@ -477,7 +467,7 @@ O5:P3.Ok
 0:P3.NoPl
 #
 :P3.NoPl
-*Kro-Chou::
+*Kro-Chou:
 Kro pas plancton, kro pas kro chou.
 #STOP
 :P3.Ok
@@ -485,7 +475,7 @@ Kro pas plancton, kro pas kro chou.
 Tiens !
 #GET:O4
 #STOP
-:P3.1O
+:P3.10
 *Plouf-Kalamaki:
 Oui, bien sûr !
 #IF:!searchInMyItems("P3", "O10") || searchInMyItems("P3", "O10")[0] == "0":#P3.O10.Ok
@@ -591,6 +581,7 @@ Existe-t-il un instrument facilement transportable ?:P11.a
 Si tu veux, je fais des cours de solfège, regarde sur le planning.
 #STOP
 :P11.a
+#VAR:Get22:P11.deja
 Il y a la voix...
 #REP
 Un instrument très très facile à jouer de manière jolie sans fausses notes, c'est possible ?:P11.b
@@ -600,7 +591,11 @@ Oula ! Tu en demandepeut-être un peu trop.
 Après je suis experte dans le domaine des boites à musiques, alors je ne peut que te les conseiller.
 Tu en veux une ?
 Tiens, elle joue une très belle mélodie.
+#SAVE:Get22
 #GET:O22
+#STOP
+:P11.deja
+Je t'ai déjà donné une boite à musique...
 #STOP
 
 
