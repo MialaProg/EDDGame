@@ -430,5 +430,181 @@ ssseya aayaa ssss seyythaa ssssaytha  saahthay ayaeeh aayaa hathehh à esseytha 
 #STOP
 -------------------
 
+to add: 
+searchInMyItems(obj, value)
+let entry = Object.entries(myItems[obj]).find(([key, val]) => val === value)
+if !
+return [undef,undef]
+return entry
+----------
+:P3.Ask
+#STOP
+(Pour compter plusieurs actions.)
+:P3
+*Le gang de Pieuvre à l'unisson:
+Salut !
+*Plouf-Kalamaki
+Tu veux quoi ?
+#REP
+Vous auriez pas vu une licorne volante par hasard ?:P3.Li
+Vous n'auriez pas vu des clés par hasard ?:P3.4
+Vous pouvez me donner du plancton ?:P3.Pl
+Vous pouvez m'apprendre à nager ?:P3.10
+Vous pouvez m'apprendre à avoir peur ?:P3.7
+#:P3.Li
+*Plouf-Ori:
+Non, je crois pas...
+*Plouf-Doli:
+Moi non plus...
+*Kro-Chou:
+Kro pas chou...
+#GOTO:P3.Ask
+:P3.Pl
+*A l'unisson:
+Tu rêve.
+#GOTO:P3.Ask
+:P3.4
+*Plouf-Ori:
+#IF:searchInMyItems("P3", "O4")[0]:P3.4Ex
+Non... Il me semble pas...
+#GOTO:P3.Ask
+:P3.4Ex
+Oui, celle-là.
+#IF:searchInMyItems("P3", "O4")[0] == "0":P3.Ok
+Mais elle sera pas gratuite hein !
+#OBJ
+O5:P3.Ok
+0:P3.NoPl
+#
+:P3.NoPl
+*Kro-Chou::
+Kro pas plancton, kro pas kro chou.
+#STOP
+:P3.Ok
+*Plouf-Kalamaki:
+Tiens !
+#GET:O4
+#STOP
+:P3.1O
+*Plouf-Kalamaki:
+Oui, bien sûr !
+#IF:!searchInMyItems("P3", "O10") || searchInMyItems("P3", "O10")[0] == "0":#P3.O10.Ok
+*Plouf-Ori:
+Mais ce ne sera pas gratuit hein.
+#OBJ
+O5:#P3.O10.Ok
+0:P3.NoPl
+#
+:P3.O10.Ok
+*Les pieuvres te font donc un cours de plongée.
+#GET:O10
+#STOP
+:P3.7
+*Plouf-Kalamaki:
+Oui, bien sûr !
+#IF:!searchInMyItems("P3", "O7") || searchInMyItems("P3", "O7")[0] == "0":#P3.O7.Ok
+*Plouf-Ori:
+Mais ce ne sera pas gratuit hein.
+#OBJ
+O5:#P3.O7.Ok
+0:P3.NoPl
+#
+:P3.O7.Ok
+*Les pieuvres te font donc un cours de peur.
+#GET:O7
+#STOP
+-----------------
+:P4
+Salut, moi c'est Riri.
+#REP
+Je...:P4r
+Co..:P4r
+Tu...:P4r
+#
+:P4r
+Je peux pas j'suis occcupé.
+#STOP
+------------
+:P5
+*Pouki:
+Salut !
+*Neige:
+Je m'en vais chez mes parents, à la grotte Chauvet.
+#REP
+Bon voyage !:P5r
+Salut !:P5r
+#
+:P5r
+*Pouki:
+Fait bonne route !
+*Neige:
+J'essaie de vous envoyer une lettre !
+#STOP
+-------------
+:P7
+#VAR:P7.15:P7.15
+#VAR:P7B:P7.C
+Salut ! Moi c'est Baboum.
+J'suis l'cuisto.
+Tu m'donne une banane, et j'te cuisine c'que tu veux !
+#OBJ
+O13:P7.B
+#
+:P7.B
+#SAVE:P7B
+Merchi !
+:P7.C
+Tu veux qu'je t'cuisine quoi ?
+#OBJ
+O15:P7.15
+0:P7.0
+#
+:P7.0
+Oops, j'ai déjà mangé la banane...
+Si t'as quoi qu'ce soit à cuisiner n'hésite pas !
+#STOP
+:P7.15
+#SAVE:P7.15
+Quelle cuisson ?
+#REP
+Bleue:P7H
+Saignant:P7Q
+A point:P7Q
+Bien cuite:P7Q
+#
+:P7H
+Ah non moi je fais pas ça !
+#GOTO:P7.15
+:P7Q
+Et voilà !
+#GET:O16
+#STOP
+--------------------
+:P11
+*Vous vous approchez de votre professeur Musique.
+Bonjour !
+#REP
+Tu pourrais m'apprendre la musique ?:P11.Ask
+Existe-t-il un instrument facilement transportable ?:P11.a
+#
+:P11.Ask
+Si tu veux, je fais des cours de solfège, regarde sur le planning.
+#STOP
+:P11.a
+Il y a la voix...
+#REP
+Un instrument très très facile à jouer de manière jolie sans fausses notes, c'est possible ?:P11.b
+#
+:P11.b
+Oula ! Tu en demandepeut-être un peu trop.
+Après je suis experte dans le domaine des boites à musiques, alors je ne peut que te les conseiller.
+Tu en veux une ?
+Tiens, elle joue une très belle mélodie.
+#GET:O22
+#STOP
+
+
+
+
 
 
