@@ -408,6 +408,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // BOARD GENERATION CODE
 
+// Resolve where persos have to be.
+function resolvePlace(placesRequired, _for) {
+    return getARandomItem(placesRequired, (placeID) => {
+        let placeIDL = 'L' + placeID;
+        if (myItems[placeIDL][_for[0]]) {
+            return;
+        }
+        toBeAdded.push(findInArr(db, PLACES_LOC[0], PLACES_LOC[1], (itm) => itm[0] + itm[1] == placeIDL)[1]);
+        setMyItems(placeIDL, _for[0], _for.slice(1));
+        return true;
+    });
+}
+
 //  Resolve objects required for a system
 function resolveObjects(objectsRequired, _for = '0') {
     let toBeAddedLen = toBeAdded.length;
@@ -446,6 +459,11 @@ function resolveObjects(objectsRequired, _for = '0') {
             if (!object) {
                 return;
             }
+
+            // Check places required
+            let plr = perso[5].split(',');
+            if (plr[0] == '*') plr = Array.from({ length: 18 }, (_, i) => i + 1).concat(Array.from({ length: 15 }, (_, i) => i + 85));
+            if (!resolvePlace(plr, 'P' + perso[1])) return;
 
             // Save and return
             let idx = getIndex(perso, db, 50, 70);
@@ -529,27 +547,20 @@ function ranDoor(roomITM) {
         if (cacheDoor[6]) {
             return;
         }
-        // // ### Check if places avaible
+
+        // ### Check if places avaible
+
+
         // let placesRequired = cacheDoor[5].split(",");
-        // // ## Check if actual place is compatible with the door
-        // if (roomITM['L']) {
-        //     return placesRequired.includes(roomITM['L'].toString());
-        // }
-        // // ## Else, check if one place required is available
-        // let place = getARandomItem(placesRequired, (placeID) => {
-        //     let cachePlace = findInArr(db, 15, 60, item => item[0] == 'L' && item[1] == placeID);
-        //     if (!cachePlace) {
-        //         return;
-        //     }
-        //     // ### Check if place already used
-        //     if (cachePlace[6]) {
-        //         return;
-        //     }
-        //     return true;
-        // });
-        // if (!place) {
-        //     return;
-        // }
+        // ## Check if actual place is compatible with the door
+        if (roomITM['L']) {
+            if (!placesRequired.includes(roomITM['L'].toString())) return;
+        } else {
+            let place = resolvePlace(cacheDoor[5].split(','), 'R' + cacheDoor[1]);
+            if (!place) return;
+            roomITM['L'] = place;
+        }
+
         // ### Check for objects required
         let objectID = resolveObjects(cacheDoor[3].split(","), 'R' + doorID);
         if (!objectID) {
@@ -564,6 +575,23 @@ function ranDoor(roomITM) {
     return door;
 }
 
+// function initAsBeenAdded(){
+//     let asBeenAdded = [];
+//     places.forEach((placesRow) => {
+//         placesRow.forEach((place) => {
+//             Object.keys(place).forEach((key) => {
+//                 if (place['L']){
+//                     asBeenAdded.push(db.find(item => item[0] + item[1] == place['L']));
+//                 }
+//                 if (place['L']){
+//                     asBeenAdded.push(db.find(item => item[0] + item[1] == place['L']));
+//                 }
+//             });
+//         });
+//     });
+// }
+
+/*
 function addItemsToRoom(type) {
     let minRoom = placesPriority.length - 1;
     let minChange = true;
@@ -593,7 +621,7 @@ function addItemsToRoom(type) {
             roomSelected = allRooms.slice(minRoom);
             minChange = false;
         }
-        let my_room = getARandomItem(roomSelected, (roomARR) => {
+        getARandomItem(roomSelected, (roomARR) => {
             let room = places[roomARR[0]][roomARR[1]];
             if (!room) {
                 room = {};
@@ -603,7 +631,7 @@ function addItemsToRoom(type) {
                 return;
             }
 
-            room[element[0]] = element[1];
+            room[type] = element[1];
             places[roomARR[0]][roomARR[1]] = room;
             // Ajout de l'élément à la liste des éléments ajoutés
             asBeenAdded.push(element);
@@ -611,6 +639,71 @@ function addItemsToRoom(type) {
         }, false);
         // log('Added to', my_room, ':[' + i + ']', element);
     }
+}*/
+
+function addPlacesToRoom() {
+    let minRoom = placesPriority.length - 1;
+    let minChange = true;
+    let roomSelected = undefined;
+
+    let allRooms = [...placesPriority];
+    const lenStandartPlaces = places[0].length;
+    for (let i = 0; i < lenStandartPlaces; i++) {
+        allRooms.push([0, i]);
+    }
+
+    let asBeenAdded = [];
+    places.forEach((row) => {
+        row.forEach((place) => {
+            if (place['L']) asBeenAdded.push(place['L']);
+        })
+    })
+
+    for (let i = toBeAdded.length - 1; i > 0; i--) {
+        let element = toBeAdded[i];
+        if (typeof element === 'number') {
+            minRoom = element;
+            minChange = true;
+            continue;
+        }
+        if (element[0] !== 'L') {
+            continue;
+        }
+        if (asBeenAdded.includes(element[1])) {
+            continue;
+        }
+        if (minChange) {
+            roomSelected = allRooms.slice(minRoom);
+            minChange = false;
+        }
+        getARandomItem(roomSelected, (roomARR) => {
+            let room = places[roomARR[0]][roomARR[1]];
+            if (!room) {
+                room = {};
+            }
+            // Vérification que la place est libre pour l'élément
+            if (room['L']) {
+                return;
+            }
+
+            room['L'] = element[1];
+            places[roomARR[0]][roomARR[1]] = room;
+            // Ajout de l'élément à la liste des éléments ajoutés
+            asBeenAdded.push(element[1]);
+            return true;
+        }, false);
+        // log('Added to', my_room, ':[' + i + ']', element);
+    }
+}
+
+function addCharsToRoom(){
+    places.forEach((row) => {
+        row.forEach((place) => {
+            if (place['L'] && myItems['L'+place['L']] && myItems['L'+place['L']]['P']){
+                place['P'] == myItems['L'+place['L']]['P'];
+            };
+        })
+    })
 }
 
 
@@ -649,9 +742,9 @@ async function generate_board() {
             }
         }
         setProgressBar(70);
-        addItemsToRoom('L');
+        addPlacesToRoom();
         setProgressBar(80);
-        addItemsToRoom('P');
+        addCharsToRoom();
         setProgressBar(90);
         boardGenerated = true;
         log("Board generated !")
