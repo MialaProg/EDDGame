@@ -138,7 +138,7 @@ function selectChoice(choiceId) {
 
 // Confirmer la sélection
 function confirmSelection() {
-    if (chatSelectedChoice) {
+    if (![false, undefined].includes(chatSelectedChoice)) {
         const selected = chatChoices.find(c => c.id === chatSelectedChoice);
         console.log('Option sélectionnée:', selected);
         // chat.clearConv();

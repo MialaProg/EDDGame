@@ -1139,7 +1139,7 @@ function searchButton() {
     chatChoices = [];
     try {
         let actualPlaceObjs = myItems[
-            'L' + findInArr(actualItems, 0, undefined, item => item[0] == 'L')[1][1]
+            'L' + findInArr(actualItems, 0, undefined, item => item[0] == 'L')[1]
         ];
         if (actualPlaceObjs) {
             Object.keys(actualPlaceObjs).forEach((key) => {
