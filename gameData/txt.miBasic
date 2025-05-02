@@ -320,7 +320,7 @@ Je vais me reposer.
 On a mal au ventre !
 On a trop mangé, mais on a pas pu digérer:
 il nous manque des cailloux.
-Donnez-nous en t on vous laisse passer.
+Donnez-nous en et on vous laisse passer.
 #OBJ:
 O20:R16Op
 #
@@ -331,7 +331,7 @@ Merci beaucoup !
 ------------
 ------------- PERSOS -----------------
 :P1
-Salut ! Moi c'est éfelant !
+Salut ! Moi c'est Efelant !
 J'suis le plus fort de l'école !
 *C'est faux
 #IF:actualPlayer==='DN':EFDN
@@ -443,7 +443,7 @@ return entry
 :P3
 *Le gang de Pieuvre à l'unisson:
 Salut !
-*Plouf-Kalamaki
+*Plouf-Kalamaki:
 Tu veux quoi ?
 #REP
 Vous auriez pas vu une licorne volante par hasard ?:P3.Li
@@ -461,7 +461,7 @@ Kro pas chou...
 #GOTO:P3.Ask
 :P3.Pl
 *A l'unisson:
-Tu rêve.
+Tu rêves.
 #GOTO:P3.Ask
 :P3.4
 *Plouf-Ori:
