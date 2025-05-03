@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="fr" class="theme-dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Commencer l'aventure | EDD Game</title>
+    <link rel="stylesheet" type="text/css" href="externalLib/bulma.css">
+    <link rel="stylesheet" type="text/css" href="gameLib/style.css">
+    <link rel="stylesheet" type="text/css" href="gameLib/divers.css">
+    <link rel="stylesheet" type="text/css" href="gameLib/buttons.css">
+    <link rel="stylesheet" type="text/css" href="gameLib/disc.css">
+
+    <script src="gameLib/game.js"></script>
+    <script src="gameLib/canvas.js"></script>
+    <script src="gameLib/miBasicInterpreter.js"></script>
+    <script src="gameLib/disc.js"></script>
+
+    <link rel="manifest" href="gameLib/EDDGame.webmanifest">
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('gameLib/sw.js')
+                .then(registration => {
+                    console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                })
+                .catch(error => {
+                    console.log('ServiceWorker registration failed: ', error);
+                });
+        }
+    </script>
+</head>
+
+<body>
+    <style>
+        .error-msg-stop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(128, 48, 1, 0.527);
+            font-size: 4em;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+    <div class="is-hidden error-msg-stop">
+        <p>
+            Bulma CSS (et autres) n'est pas supporté...
+            Vérifiez votre connexion internet.
+        </p>
+    </div>
+
+    <div class="block content" id="pregame-interface">
+        <h1>Bienvenue sur le compagnon EDD Game !</h1>
+        <p>Séléctionnez vos joueurs:</p>
+        <form action="#" method="post" id="player-form">
+
+            <div class="field is-info">
+                <label class="label" for="player1">Joueur 1:</label>
+                <div class="control select">
+                    <select class="player-select" id="player1" name="player1">
+                        <option value="none" selected>-Vide-</option>
+                        <option value="T">Toutie</option>
+                        <option value="DN">Doudou Noisette</option>
+                        <option value="DA">Doudou Âne</option>
+                        <option value="P">Peupeuvre</option>
+                        <option value="E">Efélant</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="field is-primary">
+                <label class="label" for="player2">Joueur 2:</label>
+                <div class="control select">
+                    <select class="player-select" id="player2" name="player2">
+                        <option value="none" selected>-Vide-</option>
+                        <option value="T">Toutie</option>
+                        <option value="DN">Doudou Noisette</option>
+                        <option value="DA">Doudou Âne</option>
+                        <option value="P">Peupeuvre</option>
+                        <option value="E">Efélant</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="field is-success">
+                <label class="label" for="player3">Joueur 3:</label>
+                <div class="control select">
+                    <select class="player-select" id="player3" name="player3">
+                        <option value="none" selected>-Vide-</option>
+                        <option value="T">Toutie</option>
+                        <option value="DN">Doudou Noisette</option>
+                        <option value="DA">Doudou Âne</option>
+                        <option value="P">Peupeuvre</option>
+                        <option value="E">Efélant</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="field is-warning">
+                <label class="label" for="player4">Joueur 4:</label>
+                <div class="control select">
+                    <select class="player-select" id="player4" name="player4">
+                        <option value="none" selected>-Vide-</option>
+                        <option value="T">Toutie</option>
+                        <option value="DN">Doudou Noisette</option>
+                        <option value="DA">Doudou Âne</option>
+                        <option value="P">Peupeuvre</option>
+                        <option value="E">Efélant</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="field is-danger">
+                <label class="label" for="player5">Joueur 5:</label>
+                <div class="control select">
+                    <select class="player-select" id="player5" name="player5">
+                        <option value="none" selected>-Vide-</option>
+                        <option value="T">Toutie</option>
+                        <option value="DN">Doudou Noisette</option>
+                        <option value="DA">Doudou Âne</option>
+                        <option value="P">Peupeuvre</option>
+                        <option value="E">Efélant</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="field is-grouped">
+                <div class="control">
+                    <button class="button is-primary">Jouer !</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="block content is-hidden" id="loadinggame-interface">
+        <div class="has-text-centered centered-height">
+            <h1 class="title" id="loadingTitle">Chargement en cours...</h1><br>
+            <progress class="progress is-primary" max="100" id="progress-bar">50%</progress>
+        </div>
+    </div>
+
+    <div class="content is-hidden" id="ingame-interface">
+        <div class="block buttons top">
+            <div class="control">
+                <div class="control select">
+                    <select id="current-room" name="current-room">
+                        <option value="0">Chargement en cours...</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="canvas-container">
+            <canvas id="room-canvas"></canvas>
+        </div>
+        <div class="block buttons bottom" oldclass="field is-grouped">
+            <div class="control">
+                <button class="button is-info" onclick="useButton()">Utiliser</button>
+            </div>
+            <div class="control">
+                <button class="button is-primary" onclick="speakButton()">Parler</button>
+            </div>
+            <div class="control">
+                <button class="button is-warning" onclick="searchButton()">Chercher</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="gameChat">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <header class="modal-card-head">
+                <p class="modal-card-title">Module d'intéraction</p>
+                <button class="delete modal-close" aria-label="close"></button>
+            </header>
+            <section class="modal-card-body" id="chatContent">
+                <div id="messages"></div>
+                <ul id="choices-list" class="menu-list is-hidden"></ul>
+            </section>
+            <footer class="modal-card-foot is-flex-wrap-wrap" id="answers"></footer>
+        </div>
+    </div>
+</body>
+
+</html>

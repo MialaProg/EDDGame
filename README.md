@@ -10,7 +10,8 @@ Item: R;L;P or O
 Places: Story places (L)
 Rooms: Each case of the board
 
-
+# Format de variables de chargement
+*Lib*JSLoaded
 
 
 # Warning
