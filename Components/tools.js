@@ -1,4 +1,4 @@
-var UNIQUEID = Math.floor(Date.now() / (10000)) - 174612000;
+var UNIQUEID = Math.floor(Date.now() / (10000)) - 174600000;
 var ConsoleLog = true;
 
 function log(...arguments) {

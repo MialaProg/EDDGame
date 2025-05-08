@@ -67,13 +67,13 @@ var Game = {
         setArr(`['${ItemID}']['${Prop}']`, `"${val}"`, 'Game.db');
     },
 
-    getARandomItemAndRestore: (arr, conditions, restorate = ()=>{}) => {
-        toBeRestored.forEach((v)=>{
+    getARandomItemAndRestore: (arr, conditions, restorate = () => { }) => {
+        toBeRestored.forEach((v) => {
             eval(`let initLen4${v} = Game.${v}History : Game.${v}History.length ? 0;`);
         });
-        return getARandomItem(arr, conditions, ()=>{
-            toBeRestored.forEach((v)=>{
-                this.restoreArr('initLen4'+v, 'Game.'+v);
+        return getARandomItem(arr, conditions, () => {
+            toBeRestored.forEach((v) => {
+                this.restoreArr('initLen4' + v, 'Game.' + v);
             });
             restorate();
         });
@@ -134,16 +134,14 @@ var Game = {
         return room;
     },
 
-    resolvePlace: (plReq, type) => {
-        // TODO: if asBeenAdded
-        return Game.getARandomItemAndRestore(allDoors, (doorID) => {});
-    },
-
-    resolveGiver: (type, _for) => {
-
-    },
-
-    resolveObjects: (objReq) => {
+    delItemGetter: (item) => {
+        for (let i = 0; i < Object.keys(Game.db).length; i++) {
+            const getter = Object.keys(Game.db)[i];
+            for (let j = 0; j < Object.keys(getter).length; j++) {
+                const req = Object.keys(getter)[j];
+                if (getter[req].includes(item)) delete getter[req];
+            }
+        }
 
     },
 
@@ -152,18 +150,167 @@ var Game = {
         objReq.split(',').forEach((e) => { // x&y|z>a&b|c
             let poss = e.split('>');
             let objsNF = poss[1].split('|');
-            poss[0].split('|').forEach((reqs)=>{ // x&y ; z
-                objsNF.forEach((objs)=>{
+            poss[0].split('|').forEach((reqs) => { // x&y ; z
+                objsNF.forEach((objs) => {
                     objReqFormatted[reqs] = objs;
                 });
             });
         });
         return objReqFormatted;
-     },
+    },
+
+    resolvePlace: (plReq, type) => {
+        return Game.getARandomItemAndRestore(plReq, (placeID) => {
+
+            // Check if it exist
+            if (!miDb.lib.find(e => e[0] == 'L'+placeID)) return;
+
+            // Check if already added
+            if (Game.placesAdded.includes(placeID)) return;
+
+            // Check if already taken for type
+            if (Game.db['L' + placeID][type]) return;
+
+            setArr('', placeID, 'Game.placesToBeAdded');
+            return true;
+        });
+    },
+
+    resolveGiver: (_for) => {
+        return Game.getARandomItemAndRestore(miDb.lib.slice(miDb.LOC_PERSO[0], miDb.LOC_PERSO[1]), (perso) => {
+            // Check if it is a perso
+            if (perso[0][0] != 'P') {
+                return;
+            }
+            // Check if it is already used
+            try {
+                if (Game.db[perso[0]]['exists']) {
+                    Game.delItemGetter(perso[0]);
+                }
+            } catch (e) {
+                if (!(e instanceof TypeError)) throw e;
+            }
+
+            let objReq = Game.objectsReqFormat(perso[4]);
+
+            let object = resolveObjects(objReq, _for.slice(1));
+            if (!object) {
+                return;
+            }
+
+            // Check places required
+            let plr = perso[3].split(',');
+            if (plr[0] == '*') plr = Array.from({ length: 99 }, (_, i) => i + 1);//.concat(Array.from({ length: 15 }, (_, i) => i + 85));
+            let place = resolvePlace(plr, 'P');
+            if (!place) return;
+
+            // Save and return
+
+            // For multiple 0
+            if (object == '0') {
+                object += getUniqueID();
+            } else {
+                object = 'O' + object;
+            }
+
+            Game.setDbItem(perso[0],  object, _for);
+            Game.setDbItem('L'+place,  'P', perso[0].slice(1));
+            return true;
+        });
+    },
+
+    resolveObjects: (objReq, toGet='open') => {
+        return Game.getARandomItemAndRestore(Object.keys(objReq), (e) => {
+            // Check if it gives the toGet
+            if (!objReq[e].split('&').includes(toGet)) return;
+
+            objectIDs = e.split('&');
+
+            for (let i = 0; i < objectIDs.length; i++) {
+                const objectID = objectIDs[i];
+
+                // Check if no object is required 
+                if (objectID == '0') {
+                    continue;
+                }
+
+                // Check if object already used  
+                let [idx, cacheObject] = findInArr(db, 60, undefined, item => item[0] == 'O' + objectID);
+
+                try {
+                    if (Game.db[cacheObject[0]]['exists']) {
+                        if (cacheObject[2] == '1') {
+                            return;
+                        }
+                        if (cacheObject[2] == '0') {
+                            // Re-evaluate the location where getting the object
+                            Game.delItemGetter(cacheObject[0]);
+                        }
+                    }
+                } catch (e) {
+                    if (!(e instanceof TypeError)) throw e;
+                }
+
+                let perso = resolveGiver(cacheObject[0]);
+                //HERE TODO CTN
+                if (perso) {
+
+                    toBeAdded.push(perso);
+                    setMyItems('O' + objectID, 'P' + perso[1], _for);
+                } else {
+                    // Check for location
+                    let loc = getARandomItem(db.slice(0, 60), (loc) => {
+                        // Check if it is a loc
+                        if (loc[0] != 'L') {
+                            return;
+                        }
+                        // Check if it is already used
+                        // if (loc[6]) {
+                        //     return;
+                        // }
+                        // Check if he give the object
+                        if (!loc[4] || !loc[4].split(',').includes(objectID)) {
+                            return;
+                        }
+                        // Check objects required
+                        let object = resolveObjects(loc[3].split(","), 'L' + loc[1]);
+                        if (!object) {
+                            return;
+                        }
+
+                        // Save and return
+                        let idx = getIndex(loc, db, 0, 60);
+
+                        // For multiple 0
+                        if (object == '0') {
+                            object += getUniqueID();
+                        } else {
+                            object = 'O' + object;
+                        }
+
+                        setMyItems('L' + loc[1], object, 'O' + objectID);
+                        setDb(`[${idx}]`, '1');
+                        return true;
+                    });
+                    if (!loc) {
+                        return;
+                    }
+                    toBeAdded.push(loc);
+                    setMyItems('O' + objectID, 'L' + loc[1], _for);
+                }
+                // Save and return
+                setDb(`[${idx}]`, 1);
+
+
+            }
+
+            return true;
+        });
+    },
 
     ranDoor: (room) => {
         let allDoors = Array.from({ length: miDb.NB_DOORS }, (_, i) => i + 1);
-        let iniRoom = {... room};
+        let iniRoom = { ...room };
         return Game.getARandomItemAndRestore(allDoors, (doorID) => {
             let [idx, cacheDoor] = findInArr(db, miDb.LOC_DOORS[0], miDb.LOC_DOORS[1], item => item[0] == 'R' + doorID);
             if (!cacheDoor) {
@@ -196,7 +343,7 @@ var Game = {
             setMyItems(cacheDoor[0], 'O' + objectID, 'OPEN');
             setDb(`[${idx}]`, 1);
             return true;
-        }, ()=>{room = iniRoom;});
+        }, () => { room = iniRoom; });
     },
 
     generate: () => {
