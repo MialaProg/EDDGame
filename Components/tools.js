@@ -1,11 +1,8 @@
 var UNIQUEID = Math.floor(Date.now() / (10000)) - 174612000;
-function getUniqueID() {
-    UNIQUEID += 1;
-    return UNIQUEID;
-}
+var ConsoleLog = true;
 
 function log(...arguments) {
-    logs.push(...arguments);
+    //logs.push(...arguments);
     if (!arguments[0]) {
         return;
     }
@@ -14,6 +11,19 @@ function log(...arguments) {
     }
 }
 
+// ## INT
+
+function getUniqueID() {
+    UNIQUEID += 1;
+    return UNIQUEID;
+}
+
+function randint(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+// ## ARRAY
+
 /**
  * Detect duplicates from an array
  * @param {array} Array 
@@ -21,10 +31,6 @@ function log(...arguments) {
  */
 function hasDuplicates(arr) {
     return arr.some((item, index) => arr.indexOf(item) !== index);
-}
-
-function randint(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 /**
@@ -38,6 +44,50 @@ function ranAndDel(arr) {
     arr.splice(randomIndex, 1); // Change arr even outside the func
     return chosenElement;
 }
+
+/**
+ * Find something in a part of an array
+ * @param {*} arr 
+ * @param {*} min 
+ * @param {*} max 
+ * @param {*} condition
+ */
+function findInArr(arr, min = 0, max = undefined, condition) {
+    if (max === undefined || max >= arr.length) {
+        max = arr.length - 1;
+    }
+    let i = min;
+    while (i <= max) {
+        if (condition(arr[i])) {
+            return [i, arr[i]];
+        }
+        i++;
+    }
+    return [-1, undefined];
+}
+
+function getIndex(item, arr, min = 0, max = undefined) {
+    let [idx, obj] = findInArr(arr, min, max, e => e === item);
+    return idx;
+}
+
+function getARandomItem(arr, conditions, restoration = () => {}) {
+    let usable = [...arr];
+    let result = undefined;
+    while (!result && usable.length > 0) {
+        restoration();
+        let item = ranAndDel(usable);
+        if (conditions(item)) {
+            result = item;
+        }
+    }
+    if (!result) {
+        restoration();
+    }
+    return result;
+}
+
+// ## FETCH
 
 async function getDb(path) {
     let data;
@@ -61,5 +111,4 @@ async function getDb(path) {
 
 
 
-
-var ToolsJSLoaded
+var ToolsJSLoaded = true;

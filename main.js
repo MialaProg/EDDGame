@@ -1,3 +1,9 @@
+var pageMode = 'pregame';
+
+
+
+
+
 function libLoaded(libname) {
     try {
         return eval(libname + 'JSLoaded');
@@ -55,22 +61,43 @@ function wait(condition, interval = 100, timeout = 10 ** 7) {
 }
 
 // Initialisation of the game.
+async function initMain() {
+    await wait(() => libLoaded('Tools') && libLoaded('Players'));
+    // Players choice init
+    log('Players init...')
+    PlayersJS.init();
+    await wait(() => libLoaded('Loading'));
+    // Loading init
+    Loading.init();
+
+    PlayersJS.playBtnChecks[0] = true;
+    document.getElementById('players-p').innerText = 'Séléctionnez vos joueurs:';
+
+    await wait(() => libLoaded('MiDbReader') && libLoaded('Game') && libLoaded('Canvas') && libLoaded('Imgs'));
+    // Init all & preparing hall img
+    miDb.initConst();
+    Loading.setTitle('Téléchargement des données...');
+    Loading.setProgressBar(0);
+
+    await miDb.initLib();
+    
+    // Game generation: 10% to 50%
+    wait(() => PlayersJS.PlayersChoiced && miDb.const()).then(() => {
+        Loading.setTitle('Création de la partie...');
+        Loading.setProgressBar(10);
+    });
+
+    await wait(() => libLoaded('Buttons'));
+    // Buttons init
+    await wait(() => libLoaded('Modal') && libLoaded('MiBasicReader'));
+    // Init all
+
+}
+
+console.log('Main:init...');
 document.addEventListener("DOMContentLoaded", function () {
-    wait(() => libLoaded('Tools') && libLoaded('Players')).then(() => {
-        // Players choice init
-        wait(() => libLoaded('Loading')).then(() => {
-            // Loading init
-            wait(() => libLoaded('MiDbReader') && libLoaded('Game') && libLoaded('Canvas') && libLoaded('Imgs')).then(() => {
-                // Init all & preparing hall img
-                wait(() => libLoaded('Buttons')).then(() => {
-                    // Buttons init
-                    wait(() => libLoaded('Modal') && libLoaded('MiBasicReader')).then(() => {
-                        // Init all
-                    })
-                })
-            })
-        })
-    })
+    console.log('Doc loaded');
+    initMain();
 });
 
 

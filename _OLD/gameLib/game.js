@@ -280,7 +280,11 @@ function wait(condition, interval = 100, timeout = 10000) {
 }
 
 // RL: Before = complete
+// HERE
 
+
+
+// REI
 function searchInMyItems(obj, value) {
     let entry = Object.entries(myItems[obj]).find(([key, val]) => val === value);
     if (!entry) {
@@ -289,6 +293,7 @@ function searchInMyItems(obj, value) {
     return entry;
 }
 
+//REI
 function intToRoom(num) {
     num = num.toString();
     if (num.length < 2) {
@@ -300,6 +305,7 @@ function intToRoom(num) {
     return [parseInt(num[0]), parseInt(num[1])];
 }
 
+//REI
 function roomToInt(arr) {
     if (arr.length !== 2) {
         throw new Error("Array must have exactly two elements.");
@@ -307,6 +313,7 @@ function roomToInt(arr) {
     return parseInt(arr[0].toString() + arr[1].toString());
 }
 
+//REI
 function getDoors(roomNum) {
     let roomDoors = [...doors[roomNum]];
     for (let i = 1; i < 11; i += 9) {
@@ -317,7 +324,7 @@ function getDoors(roomNum) {
     return roomDoors;
 }
 
-
+//REI
 /**
  * Set in places the door of the room to val
  */
@@ -329,6 +336,7 @@ function setDoor(door, roomARR, val) {
     places[roomARR[0]][roomARR[1]] = room;
 }
 
+//REI
 /**
  * Find something in a part of an array
  * @param {*} arr 
@@ -350,11 +358,13 @@ function findInArr(arr, min = 0, max = undefined, condition) {
     return [-1, undefined];
 }
 
+//REI
 function getIndex(item, arr, min = 0, max = undefined) {
     let [idx, obj] = findInArr(arr, min, max, e => e === item);
     return idx;
 }
 
+// +-REI
 function getARandomItem(arr, conditions, restore = true) {
     let usable = [...arr];
     let result = undefined;
@@ -754,7 +764,7 @@ async function generate_board() {
 }
 
 
-// SCREENS CONTROL
+// SCREENS CONTROL (Reimplemented)
 function scrollPage(from, to, callback) {
     const duration = 500;
     const distance = to - from;
