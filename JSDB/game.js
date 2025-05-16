@@ -8,7 +8,7 @@ var Game = {
     ],
 
     roomsPriority: [
-        '30', '20', '21', '10', '31', '22', '11', '32', '12', '33', '24', '34', '35', '25', '15', '23', '14', '13'
+        30, 20, 21, 10, 31, 22, 11, 32, 12, 33, 24, 34, 35, 25, 15, 23, 14, 13
     ]
 
     , doors: {
@@ -37,12 +37,12 @@ var Game = {
             history = arr + 'History';
         }
 
-        try{
-            eval('nothing('+val+');');
-        }catch (e) {
-            if (!(e instanceof ReferenceError)) throw e;
+        try {
+            eval('nothing(' + val + ');');
+        } catch (e) {
+            if (!(e instanceof ReferenceError || e instanceof SyntaxError)) throw e;
             val = `'${val}'`;
-        } 
+        }
 
         log(false, idx, val, arr, history);
         eval(`
@@ -159,6 +159,7 @@ var Game = {
     },
 
     objectsReqFormat: (objReq) => {
+        if (!objReq) return {};
         let objReqFormatted = {};
         objReq.split(',').forEach((e) => { // x&y|z>a&b|c
             let poss = e.split('>');
@@ -182,8 +183,12 @@ var Game = {
             // Check if already added
             if (Game.placesAdded.includes(placeID)) return;
 
-            // Check if already taken for type
-            if (Game.db['L' + placeID][type]) return;
+            // Check if already taken for typeof
+            try {
+                if (Game.db['L' + placeID][type]) return;
+            } catch (e) {
+                if (!(e instanceof TypeError)) throw e;
+            }
 
             Game.setArr('', placeID, 'Game.placesToBeAdded');
             return true;
@@ -209,7 +214,7 @@ var Game = {
 
             let objReq = Game.objectsReqFormat(perso[4]);
 
-            let object = resolveObjects(objReq, _for.slice(1));
+            let object = Game.resolveObjects(objReq, _for.slice(1));
             if (!object) {
                 return;
             }
@@ -217,7 +222,7 @@ var Game = {
             // Check places required
             let plr = perso[3].split(',');
             if (plr[0] == '*') plr = Array.from({ length: 99 }, (_, i) => i + 1);//.concat(Array.from({ length: 15 }, (_, i) => i + 85));
-            let place = resolvePlace(plr, 'P');
+            let place = Game.resolvePlace(plr, 'P');
             if (!place) return;
 
             // Save and return
@@ -251,7 +256,7 @@ var Game = {
                 }
 
                 // Check if object already used  
-                let [idx, cacheObject] = findInArr(db, 60, undefined, item => item[0] == 'O' + objectID);
+                let [idx, cacheObject] = findInArr(miDb.lib, 60, undefined, item => item[0] == 'O' + objectID);
 
 
                 Game.setArr('', cacheObject[0], 'Game.logPath');
@@ -270,22 +275,22 @@ var Game = {
                     if (!(e instanceof TypeError)) throw e;
                 }
 
-                let perso = resolveGiver(cacheObject[0]);
+                let perso = Game.resolveGiver(cacheObject[0]);
                 //HERE TODO CTN
                 if (!perso) {
                     // Check for location
-                    let loc = getARandomItem(db.slice(LOC_PLACES[0], LOC_PLACES[1]), (loc) => {
+                    let loc = getARandomItem(miDb.lib.slice(miDb.LOC_PLACES[0], miDb.LOC_PLACES[1]), (loc) => {
                         // Check if it is a loc
                         if (loc[0][0] != 'L') {
                             return;
                         }
 
                         // Check if already added
-                        if (Game.placesAdded.includes(placeID)) return;
+                        if (Game.placesAdded.includes(loc[0].slice(1))) return;
 
                         // Check if he give the object
                         let objReq = Game.objectsReqFormat(loc[4]);
-                        let object = resolveObjects(objReq, _for.slice(1));
+                        let object = Game.resolveObjects(objReq, cacheObject[0].slice(1));
                         if (!object) {
                             return;
                         }
@@ -299,7 +304,8 @@ var Game = {
                             object = 'O' + object;
                         }
 
-                        Game.setDbItem(loc[0], object, _for);
+                        Game.setDbItem(loc[0], object, cacheObject[0]);
+                        Game.setArr('', loc[0].slice(1), 'Game.placesToBeAdded');
                         return true;
                     });
                     if (!loc) {
@@ -347,10 +353,10 @@ var Game = {
             }
 
             // ### Check for objects required
-            let objectID = resolveObjects(objectsReqFormat(cacheDoor[4]));
+            let objectID = Game.resolveObjects(Game.objectsReqFormat(cacheDoor[4]));
             log('ROb', doorID, objectID);
             if (!objectID) return;
-            
+
 
             // Save and return
             Game.setDbItem(cacheDoor[0], 'O' + objectID, 'OPEN');
@@ -376,8 +382,8 @@ var Game = {
                 let randomDoor = Game.ranDoor(room);
                 log(`Door ${doorRelative} for ${roomINT} : ${randomDoor}`);
                 if (randomDoor) {
-                    Game.setDoor(doorRelative, intToRoom(roomINT), randomDoor);
-                    Game.setDoor(-doorRelative, intToRoom(roomINT + doorRelative), randomDoor);
+                    Game.setDoor(doorRelative, Game.intToCoords(roomINT), randomDoor);
+                    Game.setDoor(-doorRelative, Game.intToCoords(roomINT + doorRelative), randomDoor);
                 }
             }
         }
