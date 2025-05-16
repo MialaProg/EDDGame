@@ -2,26 +2,35 @@ var players = [];
 var playersNb = 0;
 
 var PlayersJS = {
-  playBtnChecks: [false,false], // LoadingLoaded, NbPlayers > 0
+  playBtnChecks: [false, false], // LoadingLoaded, NbPlayers > 0
   PlayersChoiced: false,
 
   init: () => {
     PlayersJS.playBtn = document.getElementById('playBtn');
+    PlayersJS.initSubmit();
     PlayersJS.createSelects();
     setInterval(PlayersJS.updateSelects, 500);
     PlayersJS.initSubmit();
+
+    if (devFast) {
+      setTimeout(() => {
+
+        document.getElementById('player1').value = 'T';
+        PlayersJS.submit();
+      }, 1000);
+    }
   },
 
   createSelects: () => {
-    let form = document.getElementById('players-form');
+    // let form = document.getElementById('players-form');
     for (let i = 1; i < 6; i++) {
       let container = document.createElement('div');
       container.className = 'field is-danger';
 
       let label = document.createElement('label');
       label.className = 'label';
-      label.setAttribute('for', 'player'+i);
-      label.textContent = 'Joueur '+i+':';
+      label.setAttribute('for', 'player' + i);
+      label.textContent = 'Joueur ' + i + ':';
       container.appendChild(label);
 
       let controlDiv = document.createElement('div');
@@ -29,34 +38,34 @@ var PlayersJS = {
 
       let select = document.createElement('select');
       select.className = 'player-select';
-      select.id = 'player'+i;
-      select.name = 'player'+i;
+      select.id = 'player' + i;
+      select.name = 'player' + i;
 
       let options = [{
         value: 'none',
         text: '-Vide-',
         selected: true
       },
-        {
-          value: 'T',
-          text: 'Toutie'
-        },
-        {
-          value: 'DN',
-          text: 'Doudou Noisette'
-        },
-        {
-          value: 'DA',
-          text: 'Doudou Âne'
-        },
-        {
-          value: 'P',
-          text: 'Peupeuvre'
-        },
-        {
-          value: 'E',
-          text: 'Efélant'
-        }];
+      {
+        value: 'T',
+        text: 'Toutie'
+      },
+      {
+        value: 'DN',
+        text: 'Doudou Noisette'
+      },
+      {
+        value: 'DA',
+        text: 'Doudou Âne'
+      },
+      {
+        value: 'P',
+        text: 'Peupeuvre'
+      },
+      {
+        value: 'E',
+        text: 'Efélant'
+      }];
 
       options.forEach(optionData => {
         let option = document.createElement('option');
@@ -101,28 +110,27 @@ var PlayersJS = {
         playersNb = players.length;
       }
       PlayersJS.playBtnChecks[1] = !!playersNb
-      PlayersJS.playBtn.innerText = 'Jouer (à '+playersNb+') !';
+      PlayersJS.playBtn.innerText = 'Jouer (à ' + playersNb + ') !';
       PlayersJS.playBtn.disabled = PlayersJS.playBtnChecks.includes(false);
     });
   },
-  
+
+  submit: async () => {
+    PlayersJS.updateSelects();
+
+    PlayersJS.PlayersChoiced = true;
+    log("Game start !");
+
+    await wait(() => libLoaded('Loading'));
+    Loading.changeMode(1);
+  },
+
   initSubmit: () => {
+    log('Players:initSubmit')
     document.getElementById("players-form").addEventListener("submit", function (e) {
-        e.preventDefault();
+      e.preventDefault();
 
-        PlayersJS.updateSelects();
-
-        if (!playersNb) {
-            alert("Cela risque d'etre compliqué sans joueurs...");
-            return
-        }
-
-        if (!confirm("Démarrer la partie à " + (playersNb) + " joueurs ?")) {
-            return;
-        }
-
-        PlayersChoiced = true;
-        log("Game start !");
+      PlayersJS.submit();
     });
   }
 }

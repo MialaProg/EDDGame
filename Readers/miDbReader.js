@@ -6,10 +6,10 @@ var miDb = {
     },
 
     constNb: 0,
-    constMax: 2,
+    constMax: 1,
 
-    const: async () => {
-        await wait(() => miDb.constNb >= miDb.constMax);
+    constLoaded: () => {
+        return wait(() => miDb.constNb >= miDb.constMax);
     },
 
     // Gestion des variables global venant de const.miDb
@@ -68,9 +68,9 @@ var miDb = {
 };
 
 
-
-miDb.constNum = ['NB_DOORS', 'LOC_DOORS', 'LOC_PERSO'];
-miDb.constVars = [].concat(miDb.constNum);
+// Avaible vars - Variables disponibles
+miDb.constNum = ['NB_DOORS', 'LOC_DOORS', 'LOC_PERSO', 'LOC_PLACES'];
+miDb.constVars = ['IMGS_PATH'].concat(miDb.constNum);
 /* ['PLACES_LOC', 'DOORS_LOC', 'PERSO_LOC', 'OBJ_LOC', 'LOADING_LOC'],
 constVars: ['ALPHABET'].concat(miDb.constNum), */
 
@@ -83,4 +83,4 @@ constVars: ['ALPHABET'].concat(miDb.constNum), */
 
 
 
-var miDbReaderLoaded = true;
+var MiDbReaderJSLoaded = true;

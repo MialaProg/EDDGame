@@ -4,7 +4,7 @@ var Loading = {
     init: () => {
         Loading.title = document.getElementById('loadingTitle');
         Loading.progress = document.getElementById('loadingProgress');
-        PlayersJS.playBtn.addEventListener('click', () => {Loading.changeMode(1)});
+        // PlayersJS.playBtn.addEventListener('click', () => {Loading.changeMode(1)});
     },
 
     setProgressBar: (val) => {

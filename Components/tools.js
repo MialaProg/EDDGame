@@ -11,6 +11,8 @@ function log(...arguments) {
     }
 }
 
+function nothing(){}
+
 // ## INT
 
 function getUniqueID() {

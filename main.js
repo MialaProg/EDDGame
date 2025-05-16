@@ -74,17 +74,23 @@ async function initMain() {
     document.getElementById('players-p').innerText = 'Séléctionnez vos joueurs:';
 
     await wait(() => libLoaded('MiDbReader') && libLoaded('Game') && libLoaded('Canvas') && libLoaded('Imgs'));
+    log('Db,Game,Canvas&Imgs Loaded');
+
     // Init all & preparing hall img
     miDb.initConst();
     Loading.setTitle('Téléchargement des données...');
     Loading.setProgressBar(0);
+    Loading.setProgressBar(3);
 
     await miDb.initLib();
     
-    // Game generation: 10% to 50%
-    wait(() => PlayersJS.PlayersChoiced && miDb.const()).then(() => {
+    // Game generation: 10% to 40%
+    wait(() => PlayersJS.PlayersChoiced).then(async () => {
+        log('Waiting for const loaded...');
+        await miDb.constLoaded();
         Loading.setTitle('Création de la partie...');
         Loading.setProgressBar(10);
+        Game.generate();
     });
 
     await wait(() => libLoaded('Buttons'));
@@ -95,6 +101,7 @@ async function initMain() {
 }
 
 console.log('Main:init...');
+var devFast = true;
 document.addEventListener("DOMContentLoaded", function () {
     console.log('Doc loaded');
     initMain();

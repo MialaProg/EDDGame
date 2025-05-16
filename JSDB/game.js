@@ -19,9 +19,11 @@ var Game = {
 
     , db: {},
     // dbHistory: [],
+    logPath: [],
+
     placesToBeAdded: [],
     placesAdded: [],
-    toBeRestored: ['db', 'placesToBeAdded', 'placesAdded'],
+    toBeRestored: ['db', 'placesToBeAdded', 'placesAdded', 'logPath'],
 
     /**
      * Set and save change
@@ -34,6 +36,14 @@ var Game = {
         if (!history) {
             history = arr + 'History';
         }
+
+        try{
+            eval('nothing('+val+');');
+        }catch (e) {
+            if (!(e instanceof ReferenceError)) throw e;
+            val = `'${val}'`;
+        } 
+
         log(false, idx, val, arr, history);
         eval(`
         ${history}.push(["${idx}", JSON.stringify(${arr}${idx})]);
@@ -49,40 +59,43 @@ var Game = {
         if (!history) {
             history = arr + 'History';
         }
-        // log(toLen);
+        if (!eval(history)) {
+            eval(history + '= [];');
+        }
         for (let i = eval(history).length; i > toLen; i--) {
             const e = eval(history)[i - 1];
             log('Restore: ', e);
             eval(`
-            ${arr}${e[0]} = JSON.parse("${e[1]}");
-        `);
+                ${arr}${e[0]} = JSON.parse('${e[1]}');
+            `);
             eval(history).pop();
         }
     }
 
     , setDbItem: (ItemID, Prop, val) => {
         if (!Game.db[ItemID]) {
-            setArr(`['${ItemID}']`, '{}', 'Game.db');
+            Game.setArr(`['${ItemID}']`, '{}', 'Game.db');
         }
-        setArr(`['${ItemID}']['${Prop}']`, `"${val}"`, 'Game.db');
+        Game.setArr(`['${ItemID}']['${Prop}']`, `"${val}"`, 'Game.db');
     },
 
     getARandomItemAndRestore: (arr, conditions, restorate = () => { }) => {
-        toBeRestored.forEach((v) => {
-            eval(`let initLen4${v} = Game.${v}History : Game.${v}History.length ? 0;`);
+        Game.toBeRestored.forEach((v) => {
+            eval(`let initLen4${v} = Game.${v}History ? Game.${v}History.length : 0;`);
         });
         return getARandomItem(arr, conditions, () => {
-            toBeRestored.forEach((v) => {
-                this.restoreArr('initLen4' + v, 'Game.' + v);
+            Game.toBeRestored.forEach((v) => {
+                Game.restoreArr('initLen4' + v, 'Game.' + v);
             });
             restorate();
         });
     },
 
     searchIn: (obj, value) => {
-        let entry = Object.entries(myItems[obj]).find(([key, val]) => val === value);
+        if (!Game.db[obj]) Game.db[obj] = {};
+        let entry = Object.entries(Game.db[obj]).find(([key, val]) => val === value);
         if (!entry) {
-            return [undef, undef];
+            return [undefined, undefined];
         }
         return entry;
     },
@@ -161,9 +174,10 @@ var Game = {
 
     resolvePlace: (plReq, type) => {
         return Game.getARandomItemAndRestore(plReq, (placeID) => {
+            Game.setArr('', 'L' + placeID, 'Game.logPath');
 
             // Check if it exist
-            if (!miDb.lib.find(e => e[0] == 'L'+placeID)) return;
+            if (!miDb.lib.find(e => e[0] == 'L' + placeID)) return;
 
             // Check if already added
             if (Game.placesAdded.includes(placeID)) return;
@@ -171,7 +185,7 @@ var Game = {
             // Check if already taken for type
             if (Game.db['L' + placeID][type]) return;
 
-            setArr('', placeID, 'Game.placesToBeAdded');
+            Game.setArr('', placeID, 'Game.placesToBeAdded');
             return true;
         });
     },
@@ -182,6 +196,8 @@ var Game = {
             if (perso[0][0] != 'P') {
                 return;
             }
+            Game.setArr('', perso[0], 'Game.logPath');
+
             // Check if it is already used
             try {
                 if (Game.db[perso[0]]['exists']) {
@@ -213,13 +229,13 @@ var Game = {
                 object = 'O' + object;
             }
 
-            Game.setDbItem(perso[0],  object, _for);
-            Game.setDbItem('L'+place,  'P', perso[0].slice(1));
+            Game.setDbItem(perso[0], object, _for);
+            Game.setDbItem('L' + place, 'P', perso[0].slice(1));
             return true;
         });
     },
 
-    resolveObjects: (objReq, toGet='open') => {
+    resolveObjects: (objReq, toGet = 'open') => {
         return Game.getARandomItemAndRestore(Object.keys(objReq), (e) => {
             // Check if it gives the toGet
             if (!objReq[e].split('&').includes(toGet)) return;
@@ -237,6 +253,9 @@ var Game = {
                 // Check if object already used  
                 let [idx, cacheObject] = findInArr(db, 60, undefined, item => item[0] == 'O' + objectID);
 
+
+                Game.setArr('', cacheObject[0], 'Game.logPath');
+                log(Game.logPath.join('>'));
                 try {
                     if (Game.db[cacheObject[0]]['exists']) {
                         if (cacheObject[2] == '1') {
@@ -253,33 +272,25 @@ var Game = {
 
                 let perso = resolveGiver(cacheObject[0]);
                 //HERE TODO CTN
-                if (perso) {
-
-                    toBeAdded.push(perso);
-                    setMyItems('O' + objectID, 'P' + perso[1], _for);
-                } else {
+                if (!perso) {
                     // Check for location
-                    let loc = getARandomItem(db.slice(0, 60), (loc) => {
+                    let loc = getARandomItem(db.slice(LOC_PLACES[0], LOC_PLACES[1]), (loc) => {
                         // Check if it is a loc
-                        if (loc[0] != 'L') {
+                        if (loc[0][0] != 'L') {
                             return;
                         }
-                        // Check if it is already used
-                        // if (loc[6]) {
-                        //     return;
-                        // }
+
+                        // Check if already added
+                        if (Game.placesAdded.includes(placeID)) return;
+
                         // Check if he give the object
-                        if (!loc[4] || !loc[4].split(',').includes(objectID)) {
-                            return;
-                        }
-                        // Check objects required
-                        let object = resolveObjects(loc[3].split(","), 'L' + loc[1]);
+                        let objReq = Game.objectsReqFormat(loc[4]);
+                        let object = resolveObjects(objReq, _for.slice(1));
                         if (!object) {
                             return;
                         }
 
                         // Save and return
-                        let idx = getIndex(loc, db, 0, 60);
 
                         // For multiple 0
                         if (object == '0') {
@@ -288,18 +299,16 @@ var Game = {
                             object = 'O' + object;
                         }
 
-                        setMyItems('L' + loc[1], object, 'O' + objectID);
-                        setDb(`[${idx}]`, '1');
+                        Game.setDbItem(loc[0], object, _for);
                         return true;
                     });
                     if (!loc) {
                         return;
                     }
-                    toBeAdded.push(loc);
-                    setMyItems('O' + objectID, 'L' + loc[1], _for);
                 }
+
                 // Save and return
-                setDb(`[${idx}]`, 1);
+                // setDb(`[${idx}]`, 1); 
 
 
             }
@@ -312,12 +321,15 @@ var Game = {
         let allDoors = Array.from({ length: miDb.NB_DOORS }, (_, i) => i + 1);
         let iniRoom = { ...room };
         return Game.getARandomItemAndRestore(allDoors, (doorID) => {
-            let [idx, cacheDoor] = findInArr(db, miDb.LOC_DOORS[0], miDb.LOC_DOORS[1], item => item[0] == 'R' + doorID);
+            let [idx, cacheDoor] = findInArr(miDb.lib, miDb.LOC_DOORS[0], miDb.LOC_DOORS[1], item => item[0] == 'R' + doorID);
             if (!cacheDoor) {
+                log('No cacheDoor for', doorID);
                 return;
             }
+            Game.setArr('', cacheDoor[0], 'Game.logPath');
             // ### Check if door already used
-            if (Game.searchIn(cacheDoor[0], 'open')) {
+            if (Game.searchIn(cacheDoor[0], 'open')[0]) {
+                log('DRA:', doorID);
                 return;
             }
 
@@ -327,21 +339,21 @@ var Game = {
             if (room['L']) {
                 if (!placesRequired.includes(room['L'].toString())) return;
             } else {
-                let place = resolvePlace(cacheDoor[3].split(','), 'R');
+                let place = Game.resolvePlace(cacheDoor[3].split(','), 'R');
+                log('RPl:', doorID, place);
                 if (!place) return;
                 room['L'] = place;
-                setArr('', place, 'Game.placesAdded');
+                Game.setArr('', place, 'Game.placesAdded');
             }
 
             // ### Check for objects required
             let objectID = resolveObjects(objectsReqFormat(cacheDoor[4]));
-            if (!objectID) {
-                return;
-            }
+            log('ROb', doorID, objectID);
+            if (!objectID) return;
+            
 
             // Save and return
-            setMyItems(cacheDoor[0], 'O' + objectID, 'OPEN');
-            setDb(`[${idx}]`, 1);
+            Game.setDbItem(cacheDoor[0], 'O' + objectID, 'OPEN');
             return true;
         }, () => { room = iniRoom; });
     },
@@ -349,8 +361,8 @@ var Game = {
     generate: () => {
         const len = Game.roomsPriority.length;
         for (let i = 0; i < len; i++) {
-            setProgressBar(10 + (i / len) * 30);
-            placesToBeAdded.push(i);
+            Loading.setProgressBar(10 + (i / len) * 30);
+            Game.placesToBeAdded.push(i);
             const roomINT = Game.roomsPriority[i];
             const roomDoors = Game.getRoomDoors(roomINT);
             const room = Game.getRoom(roomINT);
@@ -362,10 +374,10 @@ var Game = {
                     if (room['R'][doorRelative] != undefined) continue;
                 } catch (e) { }
                 let randomDoor = Game.ranDoor(room);
-                log(`Door ${doorRelative} for ${placeINT} : ${randomDoor}`);
+                log(`Door ${doorRelative} for ${roomINT} : ${randomDoor}`);
                 if (randomDoor) {
-                    Game.setDoor(doorRelative, placeARR, randomDoor);
-                    Game.setDoor(-doorRelative, intToRoom(placeINT + doorRelative), randomDoor);
+                    Game.setDoor(doorRelative, intToRoom(roomINT), randomDoor);
+                    Game.setDoor(-doorRelative, intToRoom(roomINT + doorRelative), randomDoor);
                 }
             }
         }

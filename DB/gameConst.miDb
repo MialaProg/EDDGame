@@ -4,3 +4,7 @@
 0;25
 #LOC_PERSO
 50;70
+#LOC_PLACES
+15;60
+#IMGS_PATH
+./Images/Items;.png
