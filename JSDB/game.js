@@ -368,7 +368,7 @@ var Game = {
         const len = Game.roomsPriority.length;
         for (let i = 0; i < len; i++) {
             Loading.setProgressBar(10 + (i / len) * 30);
-            Game.placesToBeAdded.push(i);
+            Game.placesToBeAdded.push(1000+i);
             const roomINT = Game.roomsPriority[i];
             const roomDoors = Game.getRoomDoors(roomINT);
             const room = Game.getRoom(roomINT);
