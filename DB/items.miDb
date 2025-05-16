@@ -51,17 +51,17 @@ L16;Cascade
 L17;Parc d'attraction
 L18;Plage
 ###########################
-P1;Efelant;0;2,0;1;89,90,91,92,94,97,3,6,13,17
-P2;Athena & Neila;0;0;3;85,86,87,88,89,93,94,97
-P3;Le Gang des Pieuvres;0;0,5;4,7,10;*
-P4;Riri;0;0;0;*
-P5;Neige & Dragounet;0;0;0;*
+P1;Efelant;0;89,90,91,92,94,97,3,6,13,17;2|0>1
+P2;Athena & Neila;0;85,86,87,88,89,93,94,97;0>3
+P3;Le Gang des Pieuvres;0;*;0|5>4|7|10
+P4;Riri;0;*;0>0
+P5;Neige & Dragounet;0;*;0>0
 #P6
-P7;Baboum;0;13;16;*
+P7;Baboum;0;-;13>16
 #P8
 #P9
 #P10
-P11;Musique;0;0;22;*
+P11;Musique;0;*;0>22
 ###############
 O0;none;0
 O1;Bon d'achat;1
