@@ -96,7 +96,7 @@ async function initMain() {
 
     // Preload hall image
     Imgs.get('L97');
-    canvas = CanvasLib('room-canvas');
+    canvas = new CanvasLib('room-canvas');
 
     await wait(() => libLoaded('Buttons'));
     // Buttons init

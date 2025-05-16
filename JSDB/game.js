@@ -387,6 +387,7 @@ var Game = {
 
     generate: () => {
         const len = Game.roomsPriority.length;
+        const roomChecked = [];
         for (let i = 0; i < len; i++) {
             Loading.setProgressBar(10 + (i / len) * 30);
             Game.placesToBeAdded.push(1000 + i);
@@ -394,7 +395,7 @@ var Game = {
             const roomDoors = Game.getRoomDoors(roomINT);
             const roomCoords = Game.intToCoords(roomINT);
             const room = Game.getRoom(roomINT);
-            room['checked'] = true;
+            roomChecked.push(roomINT)
             if (!roomDoors) continue;
             // OK: roomDoors shuffle
             shuffleArray(roomDoors);
@@ -408,7 +409,7 @@ var Game = {
                 } catch (e) { }
 
                 let randomDoor
-                if (oroom['checked']) {
+                if (roomChecked.includes(oroomINT)) {
                     randomDoor = Game.ranDoor(room);
                 } else {
                     randomDoor = Game.ranDoor(oroom);
