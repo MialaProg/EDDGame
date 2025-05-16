@@ -17,6 +17,27 @@ class CanvasLib {
         this.ctx = this.canvas.getContext('2d');
         this.defaultFill = defaultFill;
         this.defaultStroke = defaultStroke;
+        this.update = ()=>{};
+        window.addEventListener("load", this.updateCanvasSize);
+        window.addEventListener("resize", this.updateCanvasSize);
+    }
+
+    updateCanvasSize() {
+    
+        // Calcul dynamique de la taille
+        const maxWidth = window.innerWidth;
+        const maxHeight = window.innerHeight;
+        
+        // Met à jour les attributs du canvas avec haute résolution
+        // const scale = window.devicePixelRatio || 1; // Gestion de la rétine
+        this.canvas.width = maxWidth;//* scale;
+        this.canvas.height = maxHeight;
+        
+        // Configuration de la qualité d'image
+        this.ctx.imageSmoothingEnabled = true;
+        this.ctx.imageSmoothingQuality = "high";
+    
+        this.update();
     }
 
     /**
@@ -48,6 +69,9 @@ class CanvasLib {
         this._restoreStyles();
     }
 
+    numImgsPrinted = 0;
+    numImgsToPrint = 0;
+
     /**
      * Dessine une image centrée (chemin ou objet Image)
      * @param {number} x - Position X centrale en %
@@ -61,9 +85,12 @@ class CanvasLib {
     drawImage(x, y, w, h, image, rounded = true, fillColor) {
         if (typeof image === 'string') {
             const img = Imgs.get(image);
-            Imgs.isLoaded(image).then(()=>{
-                wait(Imgs.isToLoad(img)).then(()=>{
-                    this.drawImage(x, y, w, h, img, rounded, fillColor);
+            const num = numImgsToPrint;
+            numImgsToPrint += 1;
+            Imgs.isLoading(image).then(()=>{
+                wait(this.numImgsPrinted > num).then(()=>{
+                    if (img.isLoaded) this.drawImage(x, y, w, h, img, rounded, fillColor);
+                    this.numImgsPrinted += 1;
                 })
             });
         }

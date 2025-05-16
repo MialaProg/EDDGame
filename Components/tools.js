@@ -11,7 +11,7 @@ function log(...arguments) {
     }
 }
 
-function nothing(){}
+function nothing() { }
 
 // ## INT
 
@@ -47,6 +47,14 @@ function ranAndDel(arr) {
     return chosenElement;
 }
 
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]]; // Swap elements
+    }
+    return array;
+}
+
 /**
  * Find something in a part of an array
  * @param {*} arr 
@@ -73,7 +81,7 @@ function getIndex(item, arr, min = 0, max = undefined) {
     return idx;
 }
 
-function getARandomItem(arr, conditions, restoration = () => {}) {
+function getARandomItem(arr, conditions, restoration = () => { }) {
     let usable = [...arr];
     let result = undefined;
     while (!result && usable.length > 0) {

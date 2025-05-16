@@ -60,6 +60,7 @@ function wait(condition, interval = 100, timeout = 10 ** 7) {
     });
 }
 
+var canvas;
 // Initialisation of the game.
 async function initMain() {
     await wait(() => libLoaded('Tools') && libLoaded('Players'));
@@ -92,6 +93,10 @@ async function initMain() {
         Loading.setProgressBar(10);
         Game.generate();
     });
+
+    // Preload hall image
+    Imgs.get('L97');
+    canvas = CanvasLib('room-canvas');
 
     await wait(() => libLoaded('Buttons'));
     // Buttons init

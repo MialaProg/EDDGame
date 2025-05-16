@@ -23,7 +23,8 @@ var Game = {
 
     placesToBeAdded: [],
     placesAdded: [],
-    toBeRestored: ['db', 'placesToBeAdded', 'placesAdded', 'logPath'],
+    numPlaces: 2, // Len & > 
+    toBeRestored: ['db', 'placesToBeAdded', 'placesAdded', 'logPath', 'numPlaces'],
 
     /**
      * Set and save change
@@ -62,11 +63,15 @@ var Game = {
         if (!eval(history)) {
             eval(history + '= [];');
         }
+        log('Restore: ', arr, 'to', toLen);
         for (let i = eval(history).length; i > toLen; i--) {
             const e = eval(history)[i - 1];
-            log('Restore: ', e);
             eval(`
+                if ('${e[1]}' === 'undefined'){
+                ${arr}${e[0]} = undefined;
+                }else{
                 ${arr}${e[0]} = JSON.parse('${e[1]}');
+                }
             `);
             eval(history).pop();
         }
@@ -80,13 +85,15 @@ var Game = {
     },
 
     getARandomItemAndRestore: (arr, conditions, restorate = () => { }) => {
+        const initLen = []
         Game.toBeRestored.forEach((v) => {
-            eval(`let initLen4${v} = Game.${v}History ? Game.${v}History.length : 0;`);
+            eval(`initLen.push(Game.${v}History ? Game.${v}History.length : 0);`);
         });
         return getARandomItem(arr, conditions, () => {
-            Game.toBeRestored.forEach((v) => {
-                Game.restoreArr('initLen4' + v, 'Game.' + v);
-            });
+            for (let i = 0; i < Game.toBeRestored.length; i++) {
+                const v = Game.toBeRestored[i];
+                Game.restoreArr(initLen[i], 'Game.' + v);
+            }
             restorate();
         });
     },
@@ -134,11 +141,15 @@ var Game = {
  * Set in places the door of the room to val
  */
     setDoor: (door, roomARR, val) => {
-        let room = Game.rooms[roomARR[0]][roomARR[1]];
-        if (!room) { room = {}; }
-        if (!room['R']) { room['R'] = {}; }
-        room['R'][door] = val;
-        Game.rooms[roomARR[0]][roomARR[1]] = room;
+        let place = Game.db['L'+Game.rooms[roomARR[0]][roomARR[1]]];
+        if (!place['R']) { place['R'] = {}; }
+        place['R'][door] = val;
+        
+        // let room = Game.rooms[roomARR[0]][roomARR[1]];
+        // if (!room) { room = {}; }
+        // if (!room['R']) { room['R'] = {}; }
+        // room['R'][door] = val;
+        // Game.rooms[roomARR[0]][roomARR[1]] = room;
     },
 
     getRoom: (roomINT) => {
@@ -173,6 +184,16 @@ var Game = {
         return objReqFormatted;
     },
 
+    placeChecks: (placeID) => {
+        // Check if already added
+        if (Game.placesAdded.includes(placeID)) return;
+
+        // Check if it can be used
+        if (!Game.placesToBeAdded.includes(placeID) && Game.numPlaces > Game.roomsPriority.length) return;
+
+        return true;
+    },
+
     resolvePlace: (plReq, type) => {
         return Game.getARandomItemAndRestore(plReq, (placeID) => {
             Game.setArr('', 'L' + placeID, 'Game.logPath');
@@ -180,8 +201,7 @@ var Game = {
             // Check if it exist
             if (!miDb.lib.find(e => e[0] == 'L' + placeID)) return;
 
-            // Check if already added
-            if (Game.placesAdded.includes(placeID)) return;
+            if (!Game.placeChecks(placeID)) return;
 
             // Check if already taken for typeof
             try {
@@ -190,6 +210,7 @@ var Game = {
                 if (!(e instanceof TypeError)) throw e;
             }
 
+            Game.setArr('', Game.numPlaces+1, 'Game.numPlaces');
             Game.setArr('', placeID, 'Game.placesToBeAdded');
             return true;
         });
@@ -285,8 +306,7 @@ var Game = {
                             return;
                         }
 
-                        // Check if already added
-                        if (Game.placesAdded.includes(loc[0].slice(1))) return;
+                        if (!Game.placeChecks(loc[0].slice(1))) return;
 
                         // Check if he give the object
                         let objReq = Game.objectsReqFormat(loc[4]);
@@ -305,6 +325,7 @@ var Game = {
                         }
 
                         Game.setDbItem(loc[0], object, cacheObject[0]);
+                        Game.setArr('', Game.numPlaces+1, 'Game.numPlaces');
                         Game.setArr('', loc[0].slice(1), 'Game.placesToBeAdded');
                         return true;
                     });
@@ -368,24 +389,88 @@ var Game = {
         const len = Game.roomsPriority.length;
         for (let i = 0; i < len; i++) {
             Loading.setProgressBar(10 + (i / len) * 30);
-            Game.placesToBeAdded.push(1000+i);
+            Game.placesToBeAdded.push(1000 + i);
             const roomINT = Game.roomsPriority[i];
             const roomDoors = Game.getRoomDoors(roomINT);
+            const roomCoords = Game.intToCoords(roomINT);
             const room = Game.getRoom(roomINT);
+            room['checked'] = true;
             if (!roomDoors) continue;
-            // TODO: roomDoors shuffle
+            // OK: roomDoors shuffle
+            shuffleArray(roomDoors);
             for (let j = 0; j < roomDoors.length; j++) {
                 const doorRelative = roomDoors[j];
+                const oroomINT = roomINT + doorRelative;
+                const oroomCoords = Game.intToCoords(oroomINT);
+                const oroom = Game.getRoom(oroomINT);
                 try {
-                    if (room['R'][doorRelative] != undefined) continue;
+                    if (Game.db['L'+room]['R'][doorRelative] != undefined) continue;
                 } catch (e) { }
-                let randomDoor = Game.ranDoor(room);
+
+                let randomDoor
+                if (oroom['checked']) {
+                    randomDoor = Game.ranDoor(room);
+                } else {
+                    randomDoor = Game.ranDoor(oroom);
+                }
+
                 log(`Door ${doorRelative} for ${roomINT} : ${randomDoor}`);
                 if (randomDoor) {
-                    Game.setDoor(doorRelative, Game.intToCoords(roomINT), randomDoor);
-                    Game.setDoor(-doorRelative, Game.intToCoords(roomINT + doorRelative), randomDoor);
+                    Game.setDoor(doorRelative, roomCoords, randomDoor);
+                    Game.setDoor(-doorRelative, oroomCoords, randomDoor);
                 }
             }
+        }
+    },
+
+    addPlacesRequired() {
+        let minRoom = Game.roomsPriority.length - 1;
+        let minChange = true;
+        let roomSelected = undefined;
+
+        let allRooms = [...Game.roomsPriority];
+        const lenStandartPlaces = Game.rooms[0].length;
+        for (let i = 0; i < lenStandartPlaces; i++) {
+            allRooms.push('0'+i);
+        }
+
+        let asBeenAdded = [];
+        Game.rooms.forEach((row) => {
+            row.forEach((room) => {
+                if (room) asBeenAdded.push(room);
+            })
+        })
+
+        for (let i = toBeAdded.length - 1; i > 0; i--) {
+            let element = toBeAdded[i];
+            if (element > 999) {
+                minRoom = element - 1000;
+                minChange = true;
+                continue;
+            }
+            if (Game.placesAdded.includes(element)) {
+                continue;
+            }
+            if (minChange) {
+                roomSelected = allRooms.slice(minRoom);
+                minChange = false;
+            }
+            getARandomItem(roomSelected, (roomINT) => {
+                let roomARR = Game.intToCoords(roomINT);
+                let room = Game.rooms[roomARR[0]][roomARR[1]];
+
+                // Vérification que la place est libre pour l'élément
+                if (room) {
+                    return;
+                }
+
+                room = element;
+                Game.rooms[roomARR[0]][roomARR[1]] = room;
+                // Ajout de l'élément à la liste des éléments ajoutés
+                asBeenAdded.push(element);
+                return true;
+            });
+            // log('Added to', my_room, ':[' + i + ']', element);
         }
     }
 

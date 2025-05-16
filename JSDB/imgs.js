@@ -1,33 +1,20 @@
 
 
 var Imgs = {
-    NumImgsLoaded:0,
-    NumImgsToLoad:0,
     images: {},
 
-    ImagesLoaded: () => {
-        return NumImgsLoaded >= NumImgsLoaded;
-    },
-
-    isToLoad: (img) => {
-        return img.Num < NumImgsLoaded - 2;
-    },
 
     create: (path) => {
         const img = new Image();
         img.src = path;
-        Imgs.NumImgsToLoad += 1;
-        img.Num = NumImgsToLoad;
         img.isLoading = true;
         img.onload = () => {
             img.isLoaded = true;
             img.isLoading = false;
-            Imgs.NumImgsLoaded += 1;
         };
         img.onerror = function () {
             img.isLoaded = false;
             img.isLoading = false;
-            Imgs.NumImgsLoaded += 1;
         };
     },
 
@@ -47,6 +34,10 @@ var Imgs = {
 
     isLoaded: (name) => {
         return wait(Imgs.images[name].isLoaded);
+    },
+
+    isLoading: (name) => {
+        return wait(Imgs.images[name].isLoading);
     }
 
 

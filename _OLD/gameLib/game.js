@@ -1090,7 +1090,7 @@ function initSelectRoom() {
     });
 }
 
-
+// REI
 function updateCanvasSize() {
     const canvas = document.getElementById("room-canvas");
     const container = document.querySelector(".canvas-container");
