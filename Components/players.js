@@ -119,14 +119,14 @@ var PlayersJS = {
     PlayersJS.updateSelects();
 
     PlayersJS.PlayersChoiced = true;
-    log("Game start !");
+    console.log("Game start !");
 
     await wait(() => libLoaded('Loading'));
     Loading.changeMode(1);
   },
 
   initSubmit: () => {
-    log('Players:initSubmit')
+    console.log('Players:initSubmit')
     document.getElementById("players-form").addEventListener("submit", function (e) {
       e.preventDefault();
 

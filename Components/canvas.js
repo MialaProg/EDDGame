@@ -5,6 +5,8 @@
 // var [imgToLoad, imgLoaded] = [0, 0];
 
 class CanvasLib {
+    static canvasList = [];
+
     /**
      * Crée une instance liée à un canvas
      * @param {string} canvasID - ID du canvas HTML
@@ -17,27 +19,30 @@ class CanvasLib {
         this.ctx = this.canvas.getContext('2d');
         this.defaultFill = defaultFill;
         this.defaultStroke = defaultStroke;
-        this.update = ()=>{};
-        window.addEventListener("load", this.updateCanvasSize);
-        window.addEventListener("resize", this.updateCanvasSize);
+        this.update = () => { };
+        CanvasLib.canvasList.push(this);
+        CanvasLib.updateCanvasSize();
+        window.addEventListener("resize", CanvasLib.updateCanvasSize);
     }
 
-    updateCanvasSize() {
-    
-        // Calcul dynamique de la taille
-        const maxWidth = window.innerWidth;
-        const maxHeight = window.innerHeight;
-        
-        // Met à jour les attributs du canvas avec haute résolution
-        // const scale = window.devicePixelRatio || 1; // Gestion de la rétine
-        this.canvas.width = maxWidth;//* scale;
-        this.canvas.height = maxHeight;
-        
-        // Configuration de la qualité d'image
-        this.ctx.imageSmoothingEnabled = true;
-        this.ctx.imageSmoothingQuality = "high";
-    
-        this.update();
+    static updateCanvasSize() {
+        CanvasLib.canvasList.forEach(obj => {
+
+            // Calcul dynamique de la taille
+            const maxWidth = window.innerWidth;
+            const maxHeight = window.innerHeight;
+
+            // Met à jour les attributs du canvas avec haute résolution
+            // const scale = window.devicePixelRatio || 1; // Gestion de la rétine
+            obj.canvas.width = maxWidth;//* scale;
+            obj.canvas.height = maxHeight;
+
+            // Configuration de la qualité d'image
+            obj.ctx.imageSmoothingEnabled = true;
+            obj.ctx.imageSmoothingQuality = "high";
+
+            obj.update();
+        });
     }
 
     /**
@@ -69,8 +74,8 @@ class CanvasLib {
         this._restoreStyles();
     }
 
-    numImgsPrinted = 0;
-    numImgsToPrint = 0;
+    static numImgsPrinted = 0;
+    static numImgsToPrint = 0;
 
     /**
      * Dessine une image centrée (chemin ou objet Image)
@@ -85,14 +90,15 @@ class CanvasLib {
     drawImage(x, y, w, h, image, rounded = true, fillColor) {
         if (typeof image === 'string') {
             const img = Imgs.get(image);
-            const num = numImgsToPrint;
-            numImgsToPrint += 1;
-            Imgs.isLoading(image).then(()=>{
-                wait(this.numImgsPrinted > num).then(()=>{
+            const num = CanvasLib.numImgsToPrint;
+            CanvasLib.numImgsToPrint += 1;
+            Imgs.isAvaible(image).then(() => {
+                wait(()=>CanvasLib.numImgsPrinted >= num).then(() => {
                     if (img.isLoaded) this.drawImage(x, y, w, h, img, rounded, fillColor);
-                    this.numImgsPrinted += 1;
+                    CanvasLib.numImgsPrinted += 1;
                 })
             });
+            return;
         }
 
         this._saveStyles();

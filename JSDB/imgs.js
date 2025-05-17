@@ -16,6 +16,7 @@ var Imgs = {
             img.isLoaded = false;
             img.isLoading = false;
         };
+        return img;
     },
 
     get: (name) => {
@@ -33,11 +34,11 @@ var Imgs = {
     },
 
     isLoaded: (name) => {
-        return wait(Imgs.images[name].isLoaded);
+        return wait(()=>Imgs.images[name].isLoaded);
     },
 
-    isLoading: (name) => {
-        return wait(Imgs.images[name].isLoading);
+    isAvaible: (name) => {
+        return wait(()=>!Imgs.images[name].isLoading);
     }
 
 

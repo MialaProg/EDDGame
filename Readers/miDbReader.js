@@ -41,14 +41,14 @@ var miDb = {
             //         if (roomSelect) {
             //             roomSelect.innerHTML = currentRoom_HTML;
             //             roomSelect.value = 'OFF';
-            //             log('Starting room:', starting_room);
+            //             console.log('Starting room:', starting_room);
             //             initSelectRoom();
             //         } else {
             //             console.error("Room select element not found.");
             //         }
             //         miDb.constNb += 1;
             //     });
-            //     log("Rooms created !")
+            //     console.log("Rooms created !")
             //     continue;
             // }
 
@@ -63,14 +63,14 @@ var miDb = {
             });
         }
         miDb.constNb += 1;
-        log("GameConst initied");
+        console.log("GameConst initied");
     }
 };
 
 
 // Avaible vars - Variables disponibles
 miDb.constNum = ['NB_DOORS', 'LOC_DOORS', 'LOC_PERSO', 'LOC_PLACES'];
-miDb.constVars = ['IMGS_PATH'].concat(miDb.constNum);
+miDb.constVars = ['IMGS_PATH', 'START_ROOM', 'ROOMS_DEFAULT', 'ROOMS_LETTERS', 'ROOMS_UNLOCKED'].concat(miDb.constNum);
 /* ['PLACES_LOC', 'DOORS_LOC', 'PERSO_LOC', 'OBJ_LOC', 'LOADING_LOC'],
 constVars: ['ALPHABET'].concat(miDb.constNum), */
 

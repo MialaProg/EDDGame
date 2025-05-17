@@ -22,9 +22,10 @@ var Game = {
     logPath: [],
 
     placesToBeAdded: [],
-    placesAdded: [],
+    // placesAdded: [... Game.rooms[0]], See below
     numPlaces: 2, // Len & > 
     toBeRestored: ['db', 'placesToBeAdded', 'placesAdded', 'logPath', 'numPlaces'],
+    isGenerate: false,
 
     /**
      * Set and save change
@@ -45,7 +46,7 @@ var Game = {
             val = `'${val}'`;
         }
 
-        log(false, idx, val, arr, history);
+        // console.log(false, idx, val, arr, history);
         eval(`
         ${history}.push(["${idx}", JSON.stringify(${arr}${idx})]);
         if (Array.isArray(${arr}${idx})) {
@@ -63,7 +64,7 @@ var Game = {
         if (!eval(history)) {
             eval(history + '= [];');
         }
-        log('Restore: ', arr, 'to', toLen);
+        console.log('Restore: ', arr, 'to', toLen);
         for (let i = eval(history).length; i > toLen; i--) {
             const e = eval(history)[i - 1];
             eval(`
@@ -141,10 +142,15 @@ var Game = {
  * Set in places the door of the room to val
  */
     setDoor: (door, roomARR, val) => {
-        let place = Game.db['L'+Game.rooms[roomARR[0]][roomARR[1]]];
+        let idx = 'L' + Game.rooms[roomARR[0]][roomARR[1]];
+        let place = Game.db[idx];
+        if (!place) {
+            Game.db[idx] = {};
+            place = Game.db[idx];
+        }
         if (!place['R']) { place['R'] = {}; }
         place['R'][door] = val;
-        
+
         // let room = Game.rooms[roomARR[0]][roomARR[1]];
         // if (!room) { room = {}; }
         // if (!room['R']) { room['R'] = {}; }
@@ -210,7 +216,7 @@ var Game = {
                 if (!(e instanceof TypeError)) throw e;
             }
 
-            Game.setArr('', Game.numPlaces+1, 'Game.numPlaces');
+            Game.setArr('', Game.numPlaces + 1, 'Game.numPlaces');
             Game.setArr('', placeID, 'Game.placesToBeAdded');
             return true;
         });
@@ -281,7 +287,7 @@ var Game = {
 
 
                 Game.setArr('', cacheObject[0], 'Game.logPath');
-                log(Game.logPath.join('>'));
+                console.log(Game.logPath.join('>'));
                 try {
                     if (Game.db[cacheObject[0]]['exists']) {
                         if (cacheObject[2] == '1') {
@@ -325,7 +331,7 @@ var Game = {
                         }
 
                         Game.setDbItem(loc[0], object, cacheObject[0]);
-                        Game.setArr('', Game.numPlaces+1, 'Game.numPlaces');
+                        Game.setArr('', Game.numPlaces + 1, 'Game.numPlaces');
                         Game.setArr('', loc[0].slice(1), 'Game.placesToBeAdded');
                         return true;
                     });
@@ -350,13 +356,13 @@ var Game = {
         return Game.getARandomItemAndRestore(allDoors, (doorID) => {
             let [idx, cacheDoor] = findInArr(miDb.lib, miDb.LOC_DOORS[0], miDb.LOC_DOORS[1], item => item[0] == 'R' + doorID);
             if (!cacheDoor) {
-                log('No cacheDoor for', doorID);
+                console.log('No cacheDoor for', doorID);
                 return;
             }
             Game.setArr('', cacheDoor[0], 'Game.logPath');
             // ### Check if door already used
             if (Game.searchIn(cacheDoor[0], 'open')[0]) {
-                log('DRA:', doorID);
+                console.log('DRA:', doorID);
                 return;
             }
 
@@ -367,7 +373,7 @@ var Game = {
                 if (!placesRequired.includes(room['L'].toString())) return;
             } else {
                 let place = Game.resolvePlace(cacheDoor[3].split(','), 'R');
-                log('RPl:', doorID, place);
+                console.log('RPl:', doorID, place);
                 if (!place) return;
                 room['L'] = place;
                 Game.setArr('', place, 'Game.placesAdded');
@@ -375,7 +381,7 @@ var Game = {
 
             // ### Check for objects required
             let objectID = Game.resolveObjects(Game.objectsReqFormat(cacheDoor[4]));
-            log('ROb', doorID, objectID);
+            console.log('ROb', doorID, objectID);
             if (!objectID) return;
 
 
@@ -405,7 +411,7 @@ var Game = {
                 const oroomCoords = Game.intToCoords(oroomINT);
                 const oroom = Game.getRoom(oroomINT);
                 try {
-                    if (Game.db['L'+room]['R'][doorRelative] != undefined) continue;
+                    if (Game.db['L' + room]['R'][doorRelative] != undefined) continue;
                 } catch (e) { }
 
                 let randomDoor
@@ -415,13 +421,15 @@ var Game = {
                     randomDoor = Game.ranDoor(oroom);
                 }
 
-                log(`Door ${doorRelative} for ${roomINT} : ${randomDoor}`);
+                console.log(`Door ${doorRelative} for ${roomINT} : ${randomDoor}`);
                 if (randomDoor) {
                     Game.setDoor(doorRelative, roomCoords, randomDoor);
                     Game.setDoor(-doorRelative, oroomCoords, randomDoor);
                 }
             }
         }
+        Game.addPlacesRequired();
+        Game.isGenerate = true;
     },
 
     addPlacesRequired() {
@@ -432,18 +440,19 @@ var Game = {
         let allRooms = [...Game.roomsPriority];
         const lenStandartPlaces = Game.rooms[0].length;
         for (let i = 0; i < lenStandartPlaces; i++) {
-            allRooms.push('0'+i);
+            allRooms.push('0' + i);
         }
 
-        let asBeenAdded = [];
-        Game.rooms.forEach((row) => {
-            row.forEach((room) => {
-                if (room) asBeenAdded.push(room);
-            })
-        })
+        // let asBeenAdded = [];
+        // Game.rooms.forEach((row) => {
+        //     row.forEach((room) => {
+        //         if (room) asBeenAdded.push(room);
+        //     });
+        // });
+        // console.log(asBeenAdded);
 
-        for (let i = toBeAdded.length - 1; i > 0; i--) {
-            let element = toBeAdded[i];
+        for (let i = Game.placesToBeAdded.length - 1; i > 0; i--) {
+            let element = Game.placesToBeAdded[i];
             if (element > 999) {
                 minRoom = element - 1000;
                 minChange = true;
@@ -468,14 +477,15 @@ var Game = {
                 room = element;
                 Game.rooms[roomARR[0]][roomARR[1]] = room;
                 // Ajout de l'élément à la liste des éléments ajoutés
-                asBeenAdded.push(element);
+                Game.placesAdded.push(element);
                 return true;
             });
-            // log('Added to', my_room, ':[' + i + ']', element);
+            // console.log('Added to', my_room, ':[' + i + ']', element);
         }
     }
 
 }
 
+Game.placesAdded = [... Game.rooms[0]];
 
 var GameJSLoaded = true;
