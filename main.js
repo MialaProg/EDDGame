@@ -98,18 +98,19 @@ async function initMain() {
         Loading.setTitle('Affichage de la pièce...');
         showRoom(miDb.START_ROOM[0]);
 
-        canvasObj.update = ()=>{showRoom(Game.actualRoom);};
-        setTimeout(()=>{
-        Loading.setTitle('Votre connexion semble trop lente.<br>Absorption de trombones...');
+        canvasObj.update = () => { showRoom(Game.actualRoom); };
+        setTimeout(() => {
+            if (Imgs.get(miDb.PRELOAD_IMG).isLoading) Loading.setTitle('Votre connexion semble trop lente.<br>Absorption de trombones...');
         }, 60000);
     });
 
     // Preload hall image
-    console.log('Preload HALL:', Imgs.get('L97'));
+    console.log('Preload HALL:', Imgs.get(miDb.PRELOAD_IMG));
 
 
     await wait(() => libLoaded('Buttons'));
     // Buttons init
+    RoomSelect.init();
     await wait(() => libLoaded('Modal') && libLoaded('MiBasicReader'));
     // Init all
 
@@ -130,31 +131,50 @@ function showRoom(roomINT) {
 
     let roomARR = Game.intToCoords(roomINT)
     let placeID = Game.rooms[roomARR[0]][roomARR[1]];
+    let place;
     if (!placeID) {
         console.error('Nothing here...');
-    }
-    Game.actualItems.push('L' + placeID);
-    canvasObj.drawImage(40, 40, 40, 40, 'L' + placeID);
+    } else {
+        Game.actualItems.push('L' + placeID);
+        canvasObj.drawImage(40, 40, 40, 40, 'L' + placeID);
 
-    console.log('DrawChar',Game.db['L' + placeID]);
+        console.log('DrawChar', Game.db['L' + placeID]);
 
-    let place = Game.db['L' + placeID];
-    if (place) {
-        let persoID = place['P'];
-        if (persoID) {
-            Game.actualItems.push('P' + persoID);
-            canvasObj.drawImage(20, 85, 39, 29, 'P' + persoID);
-            canvasObj.drawRect(20, 85, 41, 31, undefined, 'black');
+        place = Game.db['L' + placeID];
+        if (place) {
+            let persoID = place['P'];
+            if (persoID) {
+                Game.actualItems.push('P' + persoID);
+                canvasObj.drawImage(20, 85, 39, 29, 'P' + persoID);
+                canvasObj.drawRect(20, 85, 41, 31, undefined, 'black');
+            }
+        }
+
+        // Rename the option
+        const optionSelected = RoomSelect.HTMLE ? Array.from(RoomSelect.HTMLE.options).find(option => option.value === roomINT.toString()) : undefined;
+        console.log('Option selected: ', optionSelected);
+        if (optionSelected && !optionSelected.textContent) {
+            optionSelected.textContent = optionSelected.innerHTML + '';
+        }
+        if (optionSelected && optionSelected.textContent.length < 5) {
+            const placeLine = findInArr(miDb.lib, miDb.LOC_PLACES[0], miDb.LOC_PLACES[1], item => item[0] == 'L' + placeID); //Returns [key, val]
+            if (placeLine) {
+                let placeName = placeLine[1][1];
+                console.log('Place:L' + placeName);
+                if (roomARR[0] != 0) {
+                    placeName = optionSelected.textContent + ' : ' + placeName;
+                }
+                optionSelected.textContent = placeName;
+            }
         }
     }
-
-    // const roomSelect = document.getElementById("current-room");
 
     console.log('Draw doors');
 
     // Gestion des portes
-    if (place && roomARR[0] != 0) {
-        let doorIDs = place['R'];
+    if (roomARR[0] != 0) {
+        let doorIDs;
+        if (place) doorIDs = place['R'];
         let arr = Game.getRoomDoors(roomINT);
         for (let index = 0; index < arr.length; index++) {
             const doorKey = arr[index];
@@ -172,37 +192,19 @@ function showRoom(roomINT) {
                 } else {
                     canvasObj.drawArrow(60, 50 + 40 * doorKey, 10, 15, doorKey > 0 ? 'down' : 'up');
                 }
-                // const nextRoom = (roomINT + doorKey).toString();
-                // const [x, y] = [parseInt(nextRoom[0]), parseInt(nextRoom[1])];
-                // const optionValue = `${x};${y}`;
-                // if (!Array.from(roomSelect.options).some(option => option.value === optionValue)) {
-                //     const option = document.createElement("option");
-                //     option.value = optionValue;
-                //     option.textContent = `${alphabet[x - 1]}${y + 1}`;
-                //     roomSelect.appendChild(option);
-                // }
+                const nextRoom = (parseInt(roomINT) + doorKey).toString();
+                console.log('Test add :', nextRoom, roomINT, doorKey);
+                if (RoomSelect.HTMLE && !Array.from(RoomSelect.HTMLE.options).some(option => option.value === nextRoom)) {
+                    const option = document.createElement("option");
+                    option.value = nextRoom;
+                    option.textContent = `${miDb.ROOMS_LETTERS[parseInt(nextRoom[0]) - 1]}${parseInt(nextRoom[1]) + 1}`;
+                    RoomSelect.HTMLE.appendChild(option);
+                }
             }
         }
     }
 
-    // Rename the option
-    // const optionSelected = Array.from(roomSelect.options).find(option => option.value === `${roomARR[0]};${roomARR[1]}`);
-    // log('Option selected: ', optionSelected);
-    // if (optionSelected && !optionSelected.textContent) {
-    //     optionSelected.textContent = optionSelected.innerHTML + '';
-    //     log('Txt content:' + optionSelected.textContent);
-    // }
-    // if (optionSelected && placeID && optionSelected.textContent.length < 5) {
-    //     const placeLine = findInArr(db, PLACES_LOC[0], PLACES_LOC[1], item => item[0] == 'L' && item[1] == placeID); //Returns [key, val]
-    //     if (placeLine) {
-    //         let placeName = placeLine[1][2];
-    //         log('Place:L' + placeName);
-    //         if (roomARR[0] != 0) {
-    //             placeName = optionSelected.textContent + ' : ' + placeName;
-    //         }
-    //         optionSelected.textContent = placeName;
-    //     }
-    // }
+
 
     // Fin du chargement
     console.log('End SR');
