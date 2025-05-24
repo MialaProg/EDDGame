@@ -23,6 +23,10 @@ Rooms: Each case of the board
 ## gameConst.miDb
 (#)Var\ndata
 
+## Game
+rooms: {L;R}
+db: {L:{P;O}}
+
 Variables disponibles: cf. miDbReader
 
 # Warning

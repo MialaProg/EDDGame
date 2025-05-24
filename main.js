@@ -92,7 +92,7 @@ async function initMain() {
     wait(() => PlayersJS.PlayersChoiced).then(async () => {
         Loading.setTitle('Création de la partie...');
         Loading.setProgressBar(10);
-        Game.generate();
+        await Game.generate();
         Loading.setProgressBar(50);
 
         Loading.setTitle('Affichage de la pièce...');
@@ -129,12 +129,10 @@ function showRoom(roomINT) {
 
     canvasObj.setBackground();
 
-    let roomARR = Game.intToCoords(roomINT)
-    let placeID = Game.rooms[roomARR[0]][roomARR[1]];
-    let place;
-    if (!placeID) {
-        console.error('Nothing here...');
-    } else {
+    const roomARR = Game.intToCoords(roomINT);
+    const room = Game.getRoom(roomARR);
+    const placeID = room['L'];
+    if (placeID){
         Game.actualItems.push('L' + placeID);
         canvasObj.drawImage(40, 40, 40, 40, 'L' + placeID);
 
@@ -173,8 +171,7 @@ function showRoom(roomINT) {
 
     // Gestion des portes
     if (roomARR[0] != 0) {
-        let doorIDs;
-        if (place) doorIDs = place['R'];
+        const doorIDs = room['R'];
         let arr = Game.getRoomDoors(roomINT);
         for (let index = 0; index < arr.length; index++) {
             const doorKey = arr[index];
@@ -197,7 +194,7 @@ function showRoom(roomINT) {
                 if (RoomSelect.HTMLE && !Array.from(RoomSelect.HTMLE.options).some(option => option.value === nextRoom)) {
                     const option = document.createElement("option");
                     option.value = nextRoom;
-                    option.textContent = `${miDb.ROOMS_LETTERS[parseInt(nextRoom[0]) - 1]}${parseInt(nextRoom[1]) + 1}`;
+                    option.textContent = RoomSelect.roomIntToID(nextRoom);
                     RoomSelect.HTMLE.appendChild(option);
                 }
             }

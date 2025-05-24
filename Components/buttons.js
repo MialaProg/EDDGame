@@ -16,7 +16,8 @@ var RoomSelect = {
 
     roomIntToID: (roomINT)=>{
         roomINT = roomINT.toString();
-        return miDb.ROOMS_LETTERS[parseInt(roomINT[0]) - 1] + roomINT.slice(1);
+        // return miDb.ROOMS_LETTERS[parseInt(roomINT[0]) - 1] + roomINT.slice(1);
+        return `${miDb.ROOMS_LETTERS[parseInt(roomINT[0]) - 1]}${parseInt(roomINT[1]) + 1}`
     },
 
     setDefault: () => {

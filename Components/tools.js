@@ -1,6 +1,51 @@
-var UNIQUEID = Math.floor(Date.now() / (10000)) - 174000000;
+var UNIQUEID = Math.floor(Date.now() / (10000)) - 170000000;
 
 function nothing() { }
+
+var logs = [];
+var logsIdx = '';
+
+function logOpen(catName) {
+    // log ('-----------');
+    logsIdx += '[' + (eval('logs' + logsIdx).push([catName]) - 1) + ']';
+    // console.log(logsIdx);
+}
+
+function log(...args) {
+    if (args.length === 1) {
+        args = args[0];
+    } else {
+        args.push('(val)');
+    }
+    eval('logs' + logsIdx).push(args);
+}
+
+function logClose() {
+    let parts = logsIdx.split('[');
+    parts.pop();
+    logsIdx = parts.join('[');
+    // console.log(logsIdx);
+}
+
+/**
+ * Attend un nombre de secondes spécifié avant de résoudre la promesse
+ * @param {number} waitMs - Nombre de milisecondes à attendre
+ * @returns {Promise<void>} Promesse résolue après le délai
+ * @throws {Error} Si le timeout est atteint (en cas d'intervalle/timeout modifiés)
+ * 
+ * @example
+ * // Attendre 5 secondes
+ * await waitTime(5000);
+ */
+function waitTime(waitMs) {
+    const startTime = Date.now();
+    const interval = 10;
+    return wait(
+        () => Date.now() - startTime >= waitMs,
+        interval,
+        waitMs + interval // Timeout légèrement supérieur pour éviter les conflits
+    );
+}
 
 // ## INT
 
@@ -73,8 +118,13 @@ function getIndex(item, arr, min = 0, max = undefined) {
 function getARandomItem(arr, conditions, restoration = () => { }) {
     let usable = [...arr];
     let result = undefined;
+    let first = true;
     while (!result && usable.length > 0) {
-        restoration();
+        if (first) {
+            first = false;
+        } else {
+            restoration();
+        }
         let item = ranAndDel(usable);
         if (conditions(item)) {
             result = item;

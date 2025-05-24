@@ -1,0 +1,2389 @@
+[
+  [
+    "Room",
+    30,
+    [
+      1,
+      -10
+    ],
+    "(val)"
+  ],
+  [
+    "Check door",
+    1,
+    "for",
+    30,
+    "to",
+    31,
+    null,
+    "(val)"
+  ],
+  "Search for door: 9",
+  [
+    "RP: Place",
+    "18",
+    9,
+    "(val)"
+  ],
+  [
+    "RP: Obj",
+    "31",
+    9,
+    "(val)"
+  ],
+  "OK",
+  [
+    "Set door",
+    1,
+    "to",
+    9,
+    "in",
+    "Lundefined",
+    "(val)"
+  ],
+  {
+    "1": 9,
+    "10": 2,
+    "-10": 6
+  },
+  [
+    "Set door",
+    -1,
+    "to",
+    9,
+    "in",
+    "L18",
+    "(val)"
+  ],
+  {
+    "1": 9,
+    "-1": 9,
+    "-10": 16
+  },
+  [
+    "Check door",
+    -10,
+    "for",
+    30,
+    "to",
+    20,
+    {
+      "R": {
+        "1": 9,
+        "10": 2,
+        "-10": 6
+      }
+    },
+    "(val)"
+  ],
+  "Search for door: 6",
+  [
+    "RP: Place",
+    "15",
+    6,
+    "(val)"
+  ],
+  [
+    "RP: Obj",
+    "10",
+    6,
+    "(val)"
+  ],
+  "OK",
+  [
+    "Set door",
+    -10,
+    "to",
+    6,
+    "in",
+    "Lundefined",
+    "(val)"
+  ],
+  {
+    "1": 9,
+    "10": 2,
+    "-10": 6
+  },
+  [
+    "Set door",
+    10,
+    "to",
+    6,
+    "in",
+    "L15",
+    "(val)"
+  ],
+  {
+    "10": 6,
+    "-10": 7
+  },
+  [
+    "Room",
+    20,
+    [
+      -10,
+      10
+    ],
+    "(val)"
+  ],
+  [
+    "Check door",
+    -10,
+    "for",
+    20,
+    "to",
+    10,
+    {
+      "R": {
+        "10": 6,
+        "-10": 7
+      }
+    },
+    "(val)"
+  ],
+  "Search for door: 18",
+  [
+    "ERR: No cacheDoor for",
+    18,
+    "(val)"
+  ],
+  "Search for door: 7",
+  [
+    "RP: Place",
+    "2",
+    7,
+    "(val)"
+  ],
+  [
+    "RP: Obj",
+    "3",
+    7,
+    "(val)"
+  ],
+  "OK",
+  [
+    "Set door",
+    -10,
+    "to",
+    7,
+    "in",
+    "L15",
+    "(val)"
+  ],
+  {
+    "10": 6,
+    "-10": 7
+  },
+  [
+    "Set door",
+    10,
+    "to",
+    7,
+    "in",
+    "L2",
+    "(val)"
+  ],
+  {
+    "1": 9,
+    "10": 7
+  },
+  [
+    "Check door",
+    10,
+    "for",
+    20,
+    "to",
+    30,
+    {
+      "R": {
+        "10": 6,
+        "-10": 7
+      }
+    },
+    "(val)"
+  ],
+  [
+    "Room",
+    21,
+    [
+      10
+    ],
+    "(val)"
+  ],
+  [
+    "Check door",
+    10,
+    "for",
+    21,
+    "to",
+    31,
+    {
+      "R": {
+        "1": 9,
+        "10": 2,
+        "-10": 6
+      }
+    },
+    "(val)"
+  ],
+  "Search for door: 5",
+  "Search for door: 2",
+  "Search for door: 3",
+  "Search for door: 8",
+  [
+    "RP: Obj",
+    null,
+    8,
+    "(val)"
+  ],
+  "Search for door: 1",
+  [
+    "RP: Obj",
+    null,
+    1,
+    "(val)"
+  ],
+  "Search for door: 16",
+  [
+    "RP: Obj",
+    "20",
+    16,
+    "(val)"
+  ],
+  "OK",
+  [
+    "Set door",
+    10,
+    "to",
+    16,
+    "in",
+    "Lundefined",
+    "(val)"
+  ],
+  {
+    "1": 9,
+    "10": 2,
+    "-10": 6
+  },
+  [
+    "Set door",
+    -10,
+    "to",
+    16,
+    "in",
+    "L18",
+    "(val)"
+  ],
+  {
+    "1": 9,
+    "-1": 9,
+    "-10": 16
+  },
+  [
+    "Room",
+    10,
+    [
+      1,
+      10
+    ],
+    "(val)"
+  ],
+  [
+    "Check door",
+    1,
+    "for",
+    10,
+    "to",
+    11,
+    {
+      "R": {
+        "1": 9,
+        "10": 7
+      }
+    },
+    "(val)"
+  ],
+  "Search for door: 9",
+  [
+    "RP: Place",
+    "6",
+    9,
+    "(val)"
+  ],
+  [
+    "RP: Obj",
+    "31",
+    9,
+    "(val)"
+  ],
+  "OK",
+  [
+    "Set door",
+    1,
+    "to",
+    9,
+    "in",
+    "L2",
+    "(val)"
+  ],
+  {
+    "1": 9,
+    "10": 7
+  },
+  [
+    "Set door",
+    -1,
+    "to",
+    9,
+    "in",
+    "L6",
+    "(val)"
+  ],
+  {
+    "-1": 9
+  },
+  [
+    "Check door",
+    10,
+    "for",
+    10,
+    "to",
+    20,
+    {
+      "R": {
+        "1": 9,
+        "10": 7
+      }
+    },
+    "(val)"
+  ],
+  [
+    "Room",
+    31,
+    [
+      -1,
+      -10,
+      1
+    ],
+    "(val)"
+  ],
+  [
+    "Check door",
+    -1,
+    "for",
+    31,
+    "to",
+    30,
+    {
+      "R": {
+        "1": 9,
+        "-1": 9,
+        "-10": 16
+      }
+    },
+    "(val)"
+  ],
+  [
+    "Check door",
+    -10,
+    "for",
+    31,
+    "to",
+    21,
+    {
+      "R": {
+        "1": 9,
+        "-1": 9,
+        "-10": 16
+      }
+    },
+    "(val)"
+  ],
+  [
+    "Check door",
+    1,
+    "for",
+    31,
+    "to",
+    32,
+    {
+      "R": {
+        "1": 9,
+        "-1": 9,
+        "-10": 16
+      }
+    },
+    "(val)"
+  ],
+  "Search for door: 13",
+  [
+    "ERR: No cacheDoor for",
+    13,
+    "(val)"
+  ],
+  "Search for door: 7",
+  [
+    "RP: Place",
+    null,
+    7,
+    "(val)"
+  ],
+  "Search for door: 9",
+  [
+    "RP: Place",
+    "4",
+    9,
+    "(val)"
+  ],
+  [
+    "RP: Obj",
+    "31",
+    9,
+    "(val)"
+  ],
+  "OK",
+  [
+    "Set door",
+    1,
+    "to",
+    9,
+    "in",
+    "L18",
+    "(val)"
+  ],
+  {
+    "1": 9,
+    "-1": 9,
+    "-10": 16
+  },
+  [
+    "Set door",
+    -1,
+    "to",
+    9,
+    "in",
+    "L4",
+    "(val)"
+  ],
+  {
+    "-1": 9,
+    "-10": 2
+  },
+  [
+    "Room",
+    22,
+    [
+      10
+    ],
+    "(val)"
+  ],
+  [
+    "Check door",
+    10,
+    "for",
+    22,
+    "to",
+    32,
+    {
+      "R": {
+        "1": 9,
+        "10": 2,
+        "-10": 6
+      }
+    },
+    "(val)"
+  ],
+  [
+    "Room",
+    11,
+    [
+      -1,
+      1
+    ],
+    "(val)"
+  ],
+  [
+    "Check door",
+    -1,
+    "for",
+    11,
+    "to",
+    10,
+    {
+      "R": {
+        "-1": 9
+      }
+    },
+    "(val)"
+  ],
+  [
+    "Check door",
+    1,
+    "for",
+    11,
+    "to",
+    12,
+    {
+      "R": {
+        "-1": 9
+      }
+    },
+    "(val)"
+  ],
+  "Search for door: 3",
+  [
+    "RP: Place",
+    null,
+    3,
+    "(val)"
+  ],
+  "Search for door: 9",
+  [
+    "RP: Place",
+    null,
+    9,
+    "(val)"
+  ],
+  "Search for door: 12",
+  [
+    "RP: Place",
+    null,
+    12,
+    "(val)"
+  ],
+  "Search for door: 6",
+  [
+    "RP: Place",
+    null,
+    6,
+    "(val)"
+  ],
+  "Search for door: 5",
+  [
+    "RP: Place",
+    null,
+    5,
+    "(val)"
+  ],
+  "Search for door: 14",
+  [
+    "ERR: No cacheDoor for",
+    14,
+    "(val)"
+  ],
+  "Search for door: 17",
+  [
+    "ERR: No cacheDoor for",
+    17,
+    "(val)"
+  ],
+  "Search for door: 13",
+  [
+    "ERR: No cacheDoor for",
+    13,
+    "(val)"
+  ],
+  "Search for door: 8",
+  [
+    "RP: Place",
+    null,
+    8,
+    "(val)"
+  ],
+  "Search for door: 7",
+  [
+    "RP: Place",
+    null,
+    7,
+    "(val)"
+  ],
+  "Search for door: 4",
+  [
+    "RP: Place",
+    null,
+    4,
+    "(val)"
+  ],
+  "Search for door: 15",
+  [
+    "ERR: No cacheDoor for",
+    15,
+    "(val)"
+  ],
+  "Search for door: 1",
+  [
+    "RP: Place",
+    null,
+    1,
+    "(val)"
+  ],
+  "Search for door: 2",
+  [
+    "RP: Place",
+    null,
+    2,
+    "(val)"
+  ],
+  "Search for door: 10",
+  [
+    "RP: Place",
+    null,
+    10,
+    "(val)"
+  ],
+  "Search for door: 16",
+  [
+    "RP: Place",
+    null,
+    16,
+    "(val)"
+  ],
+  "Search for door: 11",
+  [
+    "RP: Place",
+    null,
+    11,
+    "(val)"
+  ],
+  "Search for door: 18",
+  [
+    "ERR: No cacheDoor for",
+    18,
+    "(val)"
+  ],
+  [
+    "Room",
+    32,
+    [
+      1,
+      -1,
+      -10
+    ],
+    "(val)"
+  ],
+  [
+    "Check door",
+    1,
+    "for",
+    32,
+    "to",
+    33,
+    {
+      "O30": "O5",
+      "P": "3",
+      "R": {
+        "-1": 9,
+        "-10": 2
+      }
+    },
+    "(val)"
+  ],
+  "Search for door: 15",
+  [
+    "ERR: No cacheDoor for",
+    15,
+    "(val)"
+  ],
+  "Search for door: 17",
+  [
+    "ERR: No cacheDoor for",
+    17,
+    "(val)"
+  ],
+  "Search for door: 11",
+  [
+    "RP: Place",
+    null,
+    11,
+    "(val)"
+  ],
+  "Search for door: 13",
+  [
+    "ERR: No cacheDoor for",
+    13,
+    "(val)"
+  ],
+  "Search for door: 10",
+  [
+    "RP: Place",
+    null,
+    10,
+    "(val)"
+  ],
+  "Search for door: 16",
+  [
+    "RP: Place",
+    null,
+    16,
+    "(val)"
+  ],
+  "Search for door: 9",
+  [
+    "RP: Place",
+    null,
+    9,
+    "(val)"
+  ],
+  "Search for door: 3",
+  [
+    "RP: Place",
+    null,
+    3,
+    "(val)"
+  ],
+  "Search for door: 4",
+  [
+    "RP: Place",
+    null,
+    4,
+    "(val)"
+  ],
+  "Search for door: 7",
+  [
+    "RP: Place",
+    null,
+    7,
+    "(val)"
+  ],
+  "Search for door: 2",
+  [
+    "RP: Place",
+    null,
+    2,
+    "(val)"
+  ],
+  "Search for door: 5",
+  [
+    "RP: Place",
+    null,
+    5,
+    "(val)"
+  ],
+  "Search for door: 14",
+  [
+    "ERR: No cacheDoor for",
+    14,
+    "(val)"
+  ],
+  "Search for door: 18",
+  [
+    "ERR: No cacheDoor for",
+    18,
+    "(val)"
+  ],
+  "Search for door: 1",
+  [
+    "RP: Place",
+    null,
+    1,
+    "(val)"
+  ],
+  "Search for door: 6",
+  [
+    "RP: Place",
+    null,
+    6,
+    "(val)"
+  ],
+  "Search for door: 8",
+  [
+    "RP: Place",
+    null,
+    8,
+    "(val)"
+  ],
+  "Search for door: 12",
+  [
+    "RP: Place",
+    null,
+    12,
+    "(val)"
+  ],
+  [
+    "Check door",
+    -1,
+    "for",
+    32,
+    "to",
+    31,
+    {
+      "O30": "O5",
+      "P": "3",
+      "R": {
+        "-1": 9,
+        "-10": 2
+      }
+    },
+    "(val)"
+  ],
+  [
+    "Check door",
+    -10,
+    "for",
+    32,
+    "to",
+    22,
+    {
+      "O30": "O5",
+      "P": "3",
+      "R": {
+        "-1": 9,
+        "-10": 2
+      }
+    },
+    "(val)"
+  ],
+  "Search for door: 10",
+  [
+    "RP: Obj",
+    null,
+    10,
+    "(val)"
+  ],
+  "Search for door: 18",
+  [
+    "ERR: No cacheDoor for",
+    18,
+    "(val)"
+  ],
+  "Search for door: 1",
+  "Search for door: 2",
+  [
+    "RP: Obj",
+    "22",
+    2,
+    "(val)"
+  ],
+  "OK",
+  [
+    "Set door",
+    -10,
+    "to",
+    2,
+    "in",
+    "L4",
+    "(val)"
+  ],
+  {
+    "-1": 9,
+    "-10": 2
+  },
+  [
+    "Set door",
+    10,
+    "to",
+    2,
+    "in",
+    "Lundefined",
+    "(val)"
+  ],
+  {
+    "1": 9,
+    "10": 2,
+    "-10": 6
+  },
+  [
+    "Room",
+    12,
+    [
+      -1,
+      1
+    ],
+    "(val)"
+  ],
+  [
+    "Check door",
+    -1,
+    "for",
+    12,
+    "to",
+    11,
+    {
+      "R": {
+        "1": 9,
+        "10": 2,
+        "-10": 6
+      }
+    },
+    "(val)"
+  ],
+  "Search for door: 12",
+  [
+    "RP: Place",
+    null,
+    12,
+    "(val)"
+  ],
+  "Search for door: 8",
+  [
+    "RP: Place",
+    null,
+    8,
+    "(val)"
+  ],
+  "Search for door: 5",
+  [
+    "RP: Place",
+    null,
+    5,
+    "(val)"
+  ],
+  "Search for door: 4",
+  [
+    "RP: Place",
+    null,
+    4,
+    "(val)"
+  ],
+  "Search for door: 17",
+  [
+    "ERR: No cacheDoor for",
+    17,
+    "(val)"
+  ],
+  "Search for door: 18",
+  [
+    "ERR: No cacheDoor for",
+    18,
+    "(val)"
+  ],
+  "Search for door: 10",
+  [
+    "RP: Place",
+    null,
+    10,
+    "(val)"
+  ],
+  "Search for door: 9",
+  [
+    "RP: Place",
+    null,
+    9,
+    "(val)"
+  ],
+  "Search for door: 16",
+  [
+    "RP: Place",
+    null,
+    16,
+    "(val)"
+  ],
+  "Search for door: 15",
+  [
+    "ERR: No cacheDoor for",
+    15,
+    "(val)"
+  ],
+  "Search for door: 2",
+  [
+    "RP: Place",
+    null,
+    2,
+    "(val)"
+  ],
+  "Search for door: 6",
+  [
+    "RP: Place",
+    null,
+    6,
+    "(val)"
+  ],
+  "Search for door: 7",
+  [
+    "RP: Place",
+    null,
+    7,
+    "(val)"
+  ],
+  "Search for door: 14",
+  [
+    "ERR: No cacheDoor for",
+    14,
+    "(val)"
+  ],
+  "Search for door: 13",
+  [
+    "ERR: No cacheDoor for",
+    13,
+    "(val)"
+  ],
+  "Search for door: 1",
+  [
+    "RP: Place",
+    null,
+    1,
+    "(val)"
+  ],
+  "Search for door: 11",
+  [
+    "RP: Place",
+    null,
+    11,
+    "(val)"
+  ],
+  "Search for door: 3",
+  [
+    "RP: Place",
+    null,
+    3,
+    "(val)"
+  ],
+  [
+    "Check door",
+    1,
+    "for",
+    12,
+    "to",
+    13,
+    {
+      "R": {
+        "1": 9,
+        "10": 2,
+        "-10": 6
+      }
+    },
+    "(val)"
+  ],
+  [
+    "Room",
+    33,
+    [
+      -1,
+      1
+    ],
+    "(val)"
+  ],
+  [
+    "Check door",
+    -1,
+    "for",
+    33,
+    "to",
+    32,
+    {
+      "R": {
+        "1": 9,
+        "10": 2,
+        "-10": 6
+      }
+    },
+    "(val)"
+  ],
+  "Search for door: 1",
+  [
+    "RP: Place",
+    null,
+    1,
+    "(val)"
+  ],
+  "Search for door: 8",
+  [
+    "RP: Place",
+    null,
+    8,
+    "(val)"
+  ],
+  "Search for door: 2",
+  [
+    "RP: Place",
+    null,
+    2,
+    "(val)"
+  ],
+  "Search for door: 17",
+  [
+    "ERR: No cacheDoor for",
+    17,
+    "(val)"
+  ],
+  "Search for door: 3",
+  [
+    "RP: Place",
+    null,
+    3,
+    "(val)"
+  ],
+  "Search for door: 11",
+  [
+    "RP: Place",
+    null,
+    11,
+    "(val)"
+  ],
+  "Search for door: 12",
+  [
+    "RP: Place",
+    null,
+    12,
+    "(val)"
+  ],
+  "Search for door: 7",
+  [
+    "RP: Place",
+    null,
+    7,
+    "(val)"
+  ],
+  "Search for door: 9",
+  [
+    "RP: Place",
+    null,
+    9,
+    "(val)"
+  ],
+  "Search for door: 16",
+  [
+    "RP: Place",
+    null,
+    16,
+    "(val)"
+  ],
+  "Search for door: 5",
+  [
+    "RP: Place",
+    null,
+    5,
+    "(val)"
+  ],
+  "Search for door: 4",
+  [
+    "RP: Place",
+    null,
+    4,
+    "(val)"
+  ],
+  "Search for door: 14",
+  [
+    "ERR: No cacheDoor for",
+    14,
+    "(val)"
+  ],
+  "Search for door: 10",
+  [
+    "RP: Place",
+    null,
+    10,
+    "(val)"
+  ],
+  "Search for door: 6",
+  [
+    "RP: Place",
+    null,
+    6,
+    "(val)"
+  ],
+  "Search for door: 18",
+  [
+    "ERR: No cacheDoor for",
+    18,
+    "(val)"
+  ],
+  "Search for door: 15",
+  [
+    "ERR: No cacheDoor for",
+    15,
+    "(val)"
+  ],
+  "Search for door: 13",
+  [
+    "ERR: No cacheDoor for",
+    13,
+    "(val)"
+  ],
+  [
+    "Check door",
+    1,
+    "for",
+    33,
+    "to",
+    34,
+    {
+      "R": {
+        "1": 9,
+        "10": 2,
+        "-10": 6
+      }
+    },
+    "(val)"
+  ],
+  [
+    "Room",
+    24,
+    [
+      -1
+    ],
+    "(val)"
+  ],
+  [
+    "Check door",
+    -1,
+    "for",
+    24,
+    "to",
+    23,
+    {
+      "R": {
+        "1": 9,
+        "10": 2,
+        "-10": 6
+      }
+    },
+    "(val)"
+  ],
+  "Search for door: 7",
+  [
+    "RP: Place",
+    null,
+    7,
+    "(val)"
+  ],
+  "Search for door: 15",
+  [
+    "ERR: No cacheDoor for",
+    15,
+    "(val)"
+  ],
+  "Search for door: 8",
+  [
+    "RP: Place",
+    null,
+    8,
+    "(val)"
+  ],
+  "Search for door: 16",
+  [
+    "RP: Place",
+    null,
+    16,
+    "(val)"
+  ],
+  "Search for door: 12",
+  [
+    "RP: Place",
+    null,
+    12,
+    "(val)"
+  ],
+  "Search for door: 3",
+  [
+    "RP: Place",
+    null,
+    3,
+    "(val)"
+  ],
+  "Search for door: 18",
+  [
+    "ERR: No cacheDoor for",
+    18,
+    "(val)"
+  ],
+  "Search for door: 5",
+  [
+    "RP: Place",
+    null,
+    5,
+    "(val)"
+  ],
+  "Search for door: 1",
+  [
+    "RP: Place",
+    null,
+    1,
+    "(val)"
+  ],
+  "Search for door: 10",
+  [
+    "RP: Place",
+    null,
+    10,
+    "(val)"
+  ],
+  "Search for door: 2",
+  [
+    "RP: Place",
+    null,
+    2,
+    "(val)"
+  ],
+  "Search for door: 6",
+  [
+    "RP: Place",
+    null,
+    6,
+    "(val)"
+  ],
+  "Search for door: 4",
+  [
+    "RP: Place",
+    null,
+    4,
+    "(val)"
+  ],
+  "Search for door: 13",
+  [
+    "ERR: No cacheDoor for",
+    13,
+    "(val)"
+  ],
+  "Search for door: 14",
+  [
+    "ERR: No cacheDoor for",
+    14,
+    "(val)"
+  ],
+  "Search for door: 17",
+  [
+    "ERR: No cacheDoor for",
+    17,
+    "(val)"
+  ],
+  "Search for door: 11",
+  [
+    "RP: Place",
+    null,
+    11,
+    "(val)"
+  ],
+  "Search for door: 9",
+  [
+    "RP: Place",
+    null,
+    9,
+    "(val)"
+  ],
+  [
+    "Room",
+    34,
+    [
+      1,
+      -1
+    ],
+    "(val)"
+  ],
+  [
+    "Check door",
+    1,
+    "for",
+    34,
+    "to",
+    35,
+    {
+      "R": {
+        "1": 9,
+        "10": 2,
+        "-10": 6
+      }
+    },
+    "(val)"
+  ],
+  [
+    "Check door",
+    -1,
+    "for",
+    34,
+    "to",
+    33,
+    {
+      "R": {
+        "1": 9,
+        "10": 2,
+        "-10": 6
+      }
+    },
+    "(val)"
+  ],
+  "Search for door: 14",
+  [
+    "ERR: No cacheDoor for",
+    14,
+    "(val)"
+  ],
+  "Search for door: 16",
+  [
+    "RP: Place",
+    null,
+    16,
+    "(val)"
+  ],
+  "Search for door: 1",
+  [
+    "RP: Place",
+    null,
+    1,
+    "(val)"
+  ],
+  "Search for door: 8",
+  [
+    "RP: Place",
+    null,
+    8,
+    "(val)"
+  ],
+  "Search for door: 11",
+  [
+    "RP: Place",
+    null,
+    11,
+    "(val)"
+  ],
+  "Search for door: 2",
+  [
+    "RP: Place",
+    null,
+    2,
+    "(val)"
+  ],
+  "Search for door: 9",
+  [
+    "RP: Place",
+    null,
+    9,
+    "(val)"
+  ],
+  "Search for door: 6",
+  [
+    "RP: Place",
+    null,
+    6,
+    "(val)"
+  ],
+  "Search for door: 13",
+  [
+    "ERR: No cacheDoor for",
+    13,
+    "(val)"
+  ],
+  "Search for door: 7",
+  [
+    "RP: Place",
+    null,
+    7,
+    "(val)"
+  ],
+  "Search for door: 12",
+  [
+    "RP: Place",
+    null,
+    12,
+    "(val)"
+  ],
+  "Search for door: 10",
+  [
+    "RP: Place",
+    null,
+    10,
+    "(val)"
+  ],
+  "Search for door: 18",
+  [
+    "ERR: No cacheDoor for",
+    18,
+    "(val)"
+  ],
+  "Search for door: 15",
+  [
+    "ERR: No cacheDoor for",
+    15,
+    "(val)"
+  ],
+  "Search for door: 3",
+  [
+    "RP: Place",
+    null,
+    3,
+    "(val)"
+  ],
+  "Search for door: 4",
+  [
+    "RP: Place",
+    null,
+    4,
+    "(val)"
+  ],
+  "Search for door: 5",
+  [
+    "RP: Place",
+    null,
+    5,
+    "(val)"
+  ],
+  "Search for door: 17",
+  [
+    "ERR: No cacheDoor for",
+    17,
+    "(val)"
+  ],
+  [
+    "Room",
+    35,
+    [
+      -10,
+      -1
+    ],
+    "(val)"
+  ],
+  [
+    "Check door",
+    -10,
+    "for",
+    35,
+    "to",
+    25,
+    {
+      "R": {
+        "1": 9,
+        "10": 2,
+        "-10": 6
+      }
+    },
+    "(val)"
+  ],
+  [
+    "Check door",
+    -1,
+    "for",
+    35,
+    "to",
+    34,
+    {
+      "R": {
+        "1": 9,
+        "10": 2,
+        "-10": 6
+      }
+    },
+    "(val)"
+  ],
+  "Search for door: 13",
+  [
+    "ERR: No cacheDoor for",
+    13,
+    "(val)"
+  ],
+  "Search for door: 5",
+  [
+    "RP: Place",
+    null,
+    5,
+    "(val)"
+  ],
+  "Search for door: 6",
+  [
+    "RP: Place",
+    null,
+    6,
+    "(val)"
+  ],
+  "Search for door: 15",
+  [
+    "ERR: No cacheDoor for",
+    15,
+    "(val)"
+  ],
+  "Search for door: 16",
+  [
+    "RP: Place",
+    null,
+    16,
+    "(val)"
+  ],
+  "Search for door: 7",
+  [
+    "RP: Place",
+    null,
+    7,
+    "(val)"
+  ],
+  "Search for door: 1",
+  [
+    "RP: Place",
+    null,
+    1,
+    "(val)"
+  ],
+  "Search for door: 18",
+  [
+    "ERR: No cacheDoor for",
+    18,
+    "(val)"
+  ],
+  "Search for door: 3",
+  [
+    "RP: Place",
+    null,
+    3,
+    "(val)"
+  ],
+  "Search for door: 11",
+  [
+    "RP: Place",
+    null,
+    11,
+    "(val)"
+  ],
+  "Search for door: 4",
+  [
+    "RP: Place",
+    null,
+    4,
+    "(val)"
+  ],
+  "Search for door: 8",
+  [
+    "RP: Place",
+    null,
+    8,
+    "(val)"
+  ],
+  "Search for door: 14",
+  [
+    "ERR: No cacheDoor for",
+    14,
+    "(val)"
+  ],
+  "Search for door: 2",
+  [
+    "RP: Place",
+    null,
+    2,
+    "(val)"
+  ],
+  "Search for door: 10",
+  [
+    "RP: Place",
+    null,
+    10,
+    "(val)"
+  ],
+  "Search for door: 9",
+  [
+    "RP: Place",
+    null,
+    9,
+    "(val)"
+  ],
+  "Search for door: 17",
+  [
+    "ERR: No cacheDoor for",
+    17,
+    "(val)"
+  ],
+  "Search for door: 12",
+  [
+    "RP: Place",
+    null,
+    12,
+    "(val)"
+  ],
+  [
+    "Room",
+    25,
+    [
+      -10,
+      10
+    ],
+    "(val)"
+  ],
+  [
+    "Check door",
+    -10,
+    "for",
+    25,
+    "to",
+    15,
+    {
+      "R": {
+        "1": 9,
+        "10": 2,
+        "-10": 6
+      }
+    },
+    "(val)"
+  ],
+  [
+    "Check door",
+    10,
+    "for",
+    25,
+    "to",
+    35,
+    {
+      "R": {
+        "1": 9,
+        "10": 2,
+        "-10": 6
+      }
+    },
+    "(val)"
+  ],
+  [
+    "Room",
+    15,
+    [
+      -1,
+      10
+    ],
+    "(val)"
+  ],
+  [
+    "Check door",
+    -1,
+    "for",
+    15,
+    "to",
+    14,
+    {
+      "R": {
+        "1": 9,
+        "10": 2,
+        "-10": 6
+      }
+    },
+    "(val)"
+  ],
+  "Search for door: 7",
+  [
+    "RP: Place",
+    null,
+    7,
+    "(val)"
+  ],
+  "Search for door: 18",
+  [
+    "ERR: No cacheDoor for",
+    18,
+    "(val)"
+  ],
+  "Search for door: 4",
+  [
+    "RP: Place",
+    null,
+    4,
+    "(val)"
+  ],
+  "Search for door: 11",
+  [
+    "RP: Place",
+    null,
+    11,
+    "(val)"
+  ],
+  "Search for door: 6",
+  [
+    "RP: Place",
+    null,
+    6,
+    "(val)"
+  ],
+  "Search for door: 14",
+  [
+    "ERR: No cacheDoor for",
+    14,
+    "(val)"
+  ],
+  "Search for door: 5",
+  [
+    "RP: Place",
+    null,
+    5,
+    "(val)"
+  ],
+  "Search for door: 2",
+  [
+    "RP: Place",
+    null,
+    2,
+    "(val)"
+  ],
+  "Search for door: 17",
+  [
+    "ERR: No cacheDoor for",
+    17,
+    "(val)"
+  ],
+  "Search for door: 15",
+  [
+    "ERR: No cacheDoor for",
+    15,
+    "(val)"
+  ],
+  "Search for door: 12",
+  [
+    "RP: Place",
+    null,
+    12,
+    "(val)"
+  ],
+  "Search for door: 10",
+  [
+    "RP: Place",
+    null,
+    10,
+    "(val)"
+  ],
+  "Search for door: 3",
+  [
+    "RP: Place",
+    null,
+    3,
+    "(val)"
+  ],
+  "Search for door: 13",
+  [
+    "ERR: No cacheDoor for",
+    13,
+    "(val)"
+  ],
+  "Search for door: 8",
+  [
+    "RP: Place",
+    null,
+    8,
+    "(val)"
+  ],
+  "Search for door: 16",
+  [
+    "RP: Place",
+    null,
+    16,
+    "(val)"
+  ],
+  "Search for door: 9",
+  [
+    "RP: Place",
+    null,
+    9,
+    "(val)"
+  ],
+  "Search for door: 1",
+  [
+    "RP: Place",
+    null,
+    1,
+    "(val)"
+  ],
+  [
+    "Check door",
+    10,
+    "for",
+    15,
+    "to",
+    25,
+    {
+      "R": {
+        "1": 9,
+        "10": 2,
+        "-10": 6
+      }
+    },
+    "(val)"
+  ],
+  [
+    "Room",
+    23,
+    [
+      -10,
+      1
+    ],
+    "(val)"
+  ],
+  [
+    "Check door",
+    -10,
+    "for",
+    23,
+    "to",
+    13,
+    {
+      "R": {
+        "1": 9,
+        "10": 2,
+        "-10": 6
+      }
+    },
+    "(val)"
+  ],
+  [
+    "Check door",
+    1,
+    "for",
+    23,
+    "to",
+    24,
+    {
+      "R": {
+        "1": 9,
+        "10": 2,
+        "-10": 6
+      }
+    },
+    "(val)"
+  ],
+  [
+    "Room",
+    14,
+    [
+      -1,
+      1
+    ],
+    "(val)"
+  ],
+  [
+    "Check door",
+    -1,
+    "for",
+    14,
+    "to",
+    13,
+    {
+      "R": {
+        "1": 9,
+        "10": 2,
+        "-10": 6
+      }
+    },
+    "(val)"
+  ],
+  "Search for door: 5",
+  [
+    "RP: Place",
+    null,
+    5,
+    "(val)"
+  ],
+  "Search for door: 9",
+  [
+    "RP: Place",
+    null,
+    9,
+    "(val)"
+  ],
+  "Search for door: 15",
+  [
+    "ERR: No cacheDoor for",
+    15,
+    "(val)"
+  ],
+  "Search for door: 4",
+  [
+    "RP: Place",
+    null,
+    4,
+    "(val)"
+  ],
+  "Search for door: 6",
+  [
+    "RP: Place",
+    null,
+    6,
+    "(val)"
+  ],
+  "Search for door: 14",
+  [
+    "ERR: No cacheDoor for",
+    14,
+    "(val)"
+  ],
+  "Search for door: 18",
+  [
+    "ERR: No cacheDoor for",
+    18,
+    "(val)"
+  ],
+  "Search for door: 1",
+  [
+    "RP: Place",
+    null,
+    1,
+    "(val)"
+  ],
+  "Search for door: 13",
+  [
+    "ERR: No cacheDoor for",
+    13,
+    "(val)"
+  ],
+  "Search for door: 7",
+  [
+    "RP: Place",
+    null,
+    7,
+    "(val)"
+  ],
+  "Search for door: 12",
+  [
+    "RP: Place",
+    null,
+    12,
+    "(val)"
+  ],
+  "Search for door: 10",
+  [
+    "RP: Place",
+    null,
+    10,
+    "(val)"
+  ],
+  "Search for door: 8",
+  [
+    "RP: Place",
+    null,
+    8,
+    "(val)"
+  ],
+  "Search for door: 2",
+  [
+    "RP: Place",
+    null,
+    2,
+    "(val)"
+  ],
+  "Search for door: 3",
+  [
+    "RP: Place",
+    null,
+    3,
+    "(val)"
+  ],
+  "Search for door: 16",
+  [
+    "RP: Place",
+    null,
+    16,
+    "(val)"
+  ],
+  "Search for door: 17",
+  [
+    "ERR: No cacheDoor for",
+    17,
+    "(val)"
+  ],
+  "Search for door: 11",
+  [
+    "RP: Place",
+    null,
+    11,
+    "(val)"
+  ],
+  [
+    "Check door",
+    1,
+    "for",
+    14,
+    "to",
+    15,
+    {
+      "R": {
+        "1": 9,
+        "10": 2,
+        "-10": 6
+      }
+    },
+    "(val)"
+  ],
+  [
+    "Room",
+    13,
+    [
+      10,
+      1,
+      -1
+    ],
+    "(val)"
+  ],
+  [
+    "Check door",
+    10,
+    "for",
+    13,
+    "to",
+    23,
+    {
+      "R": {
+        "1": 9,
+        "10": 2,
+        "-10": 6
+      }
+    },
+    "(val)"
+  ],
+  [
+    "Check door",
+    1,
+    "for",
+    13,
+    "to",
+    14,
+    {
+      "R": {
+        "1": 9,
+        "10": 2,
+        "-10": 6
+      }
+    },
+    "(val)"
+  ],
+  [
+    "Check door",
+    -1,
+    "for",
+    13,
+    "to",
+    12,
+    {
+      "R": {
+        "1": 9,
+        "10": 2,
+        "-10": 6
+      }
+    },
+    "(val)"
+  ],
+  "Search for door: 10",
+  [
+    "RP: Place",
+    null,
+    10,
+    "(val)"
+  ],
+  "Search for door: 5",
+  [
+    "RP: Place",
+    null,
+    5,
+    "(val)"
+  ],
+  "Search for door: 14",
+  [
+    "ERR: No cacheDoor for",
+    14,
+    "(val)"
+  ],
+  "Search for door: 2",
+  [
+    "RP: Place",
+    null,
+    2,
+    "(val)"
+  ],
+  "Search for door: 15",
+  [
+    "ERR: No cacheDoor for",
+    15,
+    "(val)"
+  ],
+  "Search for door: 1",
+  [
+    "RP: Place",
+    null,
+    1,
+    "(val)"
+  ],
+  "Search for door: 8",
+  [
+    "RP: Place",
+    null,
+    8,
+    "(val)"
+  ],
+  "Search for door: 7",
+  [
+    "RP: Place",
+    null,
+    7,
+    "(val)"
+  ],
+  "Search for door: 16",
+  [
+    "RP: Place",
+    null,
+    16,
+    "(val)"
+  ],
+  "Search for door: 6",
+  [
+    "RP: Place",
+    null,
+    6,
+    "(val)"
+  ],
+  "Search for door: 12",
+  [
+    "RP: Place",
+    null,
+    12,
+    "(val)"
+  ],
+  "Search for door: 11",
+  [
+    "RP: Place",
+    null,
+    11,
+    "(val)"
+  ],
+  "Search for door: 13",
+  [
+    "ERR: No cacheDoor for",
+    13,
+    "(val)"
+  ],
+  "Search for door: 3",
+  [
+    "RP: Place",
+    null,
+    3,
+    "(val)"
+  ],
+  "Search for door: 17",
+  [
+    "ERR: No cacheDoor for",
+    17,
+    "(val)"
+  ],
+  "Search for door: 4",
+  [
+    "RP: Place",
+    null,
+    4,
+    "(val)"
+  ],
+  "Search for door: 18",
+  [
+    "ERR: No cacheDoor for",
+    18,
+    "(val)"
+  ],
+  "Search for door: 9",
+  [
+    "RP: Place",
+    null,
+    9,
+    "(val)"
+  ],
+  [
+    "addPlaces..."
+  ],
+  [
+    "Try adding place: 1017"
+  ],
+  [
+    "Try adding place: 1016"
+  ],
+  [
+    "Try adding place: 1015"
+  ],
+  [
+    "Try adding place: 1014"
+  ],
+  [
+    "Try adding place: 1013"
+  ],
+  [
+    "Try adding place: 1012"
+  ],
+  [
+    "Try adding place: 1011"
+  ],
+  [
+    "Try adding place: 1010"
+  ],
+  [
+    "Try adding place: 1009"
+  ],
+  [
+    "Try adding place: 1008"
+  ],
+  [
+    "Try adding place: 88",
+    "Already Added."
+  ],
+  [
+    "Try adding place: 1007"
+  ],
+  [
+    "Try adding place: 1006"
+  ],
+  [
+    "Try adding place: 1005"
+  ],
+  [
+    "Try adding place: 8",
+    13
+  ],
+  [
+    "Try adding place: 14",
+    23
+  ],
+  [
+    "Try adding place: 4",
+    "Already Added."
+  ],
+  [
+    "Try adding place: 1004"
+  ],
+  [
+    "Try adding place: 8",
+    "Already Added."
+  ],
+  [
+    "Try adding place: 14",
+    "Already Added."
+  ],
+  [
+    "Try adding place: 6",
+    "Already Added."
+  ],
+  [
+    "Try adding place: 1003"
+  ],
+  [
+    "Try adding place: 9",
+    33
+  ],
+  [
+    "Try adding place: 1002"
+  ],
+  [
+    "Try adding place: 85",
+    "Already Added."
+  ],
+  [
+    "Try adding place: 2",
+    "Already Added."
+  ],
+  [
+    "Try adding place: 1001"
+  ],
+  [
+    "Try adding place: 4",
+    "Already Added."
+  ],
+  [
+    "Try adding place: 4",
+    "Already Added."
+  ],
+  [
+    "Try adding place: 92",
+    "Already Added."
+  ],
+  [
+    "Try adding place: 14",
+    "Already Added."
+  ],
+  [
+    "Try adding place: 15",
+    "Already Added."
+  ],
+  [
+    "Try adding place: 8",
+    "Already Added."
+  ],
+  [
+    "Try adding place: 14",
+    "Already Added."
+  ],
+  [
+    "Try adding place: 18",
+    "Already Added."
+  ]
+]
