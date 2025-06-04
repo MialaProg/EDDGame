@@ -20,3 +20,5 @@ E;F;G
 L97
 #MSG_No_UseSpchSrch
 Tu ne peux rien utiliser actuellement.;Il n'y a personne...;Tu ne trouvera rien ici.
+#MIB_SCRIPT_PATH
+./DB/txt.miBasic

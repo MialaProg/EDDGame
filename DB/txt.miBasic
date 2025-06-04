@@ -1,0 +1,58 @@
+# Commandes miBasic
+
+# Example of a simple game script using miBasic commands
+
+# Set initial variables
+#set:doorStatus:closed
+#set:keyObtained:false
+
+# Start of the game
+:start
+Welcome to the game! Your goal is to open the door and escape.
+
+# Choice to explore or quit
+#:xchoice
+    explore:explore
+    quit:stop
+#
+
+# Exploration section
+:explore
+You find yourself in a room with a locked door. What do you do?
+
+# Choice to get the key or check the door
+#:xexploreChoice
+    getKey:getKey
+    checkDoor:checkDoor
+#
+
+:getKey
+You found a key!
+#set:keyObtained:true
+#goto:explore
+
+:checkDoor
+#if:doorStatus=closed:doorClosed
+#if:doorStatus=open:doorOpen
+
+:doorClosed
+The door is locked. You need a key to open it.
+#goto:explore
+
+:doorOpen
+Congratulations! The door is open, and you escape the room!
+#stop
+
+# Open the door if the key is obtained
+:openDoor
+#if:keyObtained=true:unlockDoor
+#if:keyObtained=false:noKey
+
+:unlockDoor
+You use the key to unlock the door.
+#set:doorStatus:open
+#goto:checkDoor
+
+:noKey
+You don't have the key to open the door.
+#goto:explore

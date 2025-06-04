@@ -114,7 +114,9 @@ async function initMain() {
     await wait(() => libLoaded('Modal') && libLoaded('MiBasicReader'));
     // Init all
     Modal.init();
+    miBasic.init();
 
+    await wait(() => Modal.isLoaded && miBasic.isLoaded);
 
     console.log('All initied !');
 
@@ -137,7 +139,7 @@ function showRoom(roomINT) {
     const roomARR = Game.intToCoords(roomINT);
     const room = Game.getRoom(roomARR);
     const placeID = room['L'];
-    if (placeID){
+    if (placeID) {
         Game.actualItems.push('L' + placeID);
         canvasObj.drawImage(40, 40, 40, 40, 'L' + placeID);
 
