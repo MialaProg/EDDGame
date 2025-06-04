@@ -26,8 +26,14 @@ Rooms: Each case of the board
 ## Game
 rooms: {L;R}
 db: {L:{P;O}}
+    for objects: nb (0~)
+    for doors: opened (bool)
 
 Variables disponibles: cf. miDbReader
 
 # Warning
-L97 & P3 are in reality a .jpg XD
+- IDs in placeAdded & tobe: type numbers
+- L97 & P3 are in reality a .jpg XD
+
+# TODO
+Multiple same place bugfix

@@ -39,11 +39,11 @@ function logClose() {
  */
 function waitTime(waitMs) {
     const startTime = Date.now();
-    const interval = 10;
+    const interval = Math.floor(waitMs / 3) + 1;
     return wait(
         () => Date.now() - startTime >= waitMs,
         interval,
-        waitMs + interval // Timeout légèrement supérieur pour éviter les conflits
+        5000 + waitMs * 3 // Timeout légèrement supérieur pour éviter les conflits
     );
 }
 
@@ -134,6 +134,11 @@ function getARandomItem(arr, conditions, restoration = () => { }) {
         restoration();
     }
     return result;
+}
+
+// ## OBJ
+function copy(obj) {
+    return JSON.parse(JSON.stringify(obj));
 }
 
 // ## FETCH

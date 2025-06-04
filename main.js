@@ -60,7 +60,7 @@ function wait(condition, interval = 100, timeout = 10 ** 7) {
     });
 }
 
-var canvasObj;
+var canvasObj, allJSLoaded;
 // Initialisation of the game.
 async function initMain() {
     await wait(() => libLoaded('Tools') && libLoaded('Players'));
@@ -114,6 +114,7 @@ async function initMain() {
     await wait(() => libLoaded('Modal') && libLoaded('MiBasicReader'));
     // Init all
 
+    allJSLoaded = true;
 }
 
 // Show room: use Canvas, Game, Loading

@@ -60,6 +60,36 @@ var RoomSelect = {
 };
 
 
+var Actions = {
+    propose: (type, prefix) => {
+        let push = (itemID)=>{
+            // Vérification du type
+            if (itemID[0] !== type){
+                if (itemID[0] !== 'R') return;
+                // Verification de la compatibilité
+                if (miBasic.keywords[type + itemID]) return;
+                if (Game.db[itemID].opened) return;
+            }
+            MSelect.options.push({id: itemID, text: findInArr(miDb.lib, 0, undefined, (item) => item[0] === itemID)[1]});
+        };
+        Game.actualItems.forEach((itemID) => {push(itemID)});
+        if (type === 'O') {Object.keys(Game.db).forEach((itemID) => {
+            if (itemID[0] !== type) return;
+            if (Game.db[itemID].nb) push(itemID);
+        })};
+    },
+
+    use: ()=>{
+        Actions.propose('O', 'U');
+    },
+    speach: ()=>{
+        Actions.propose('P', 'P');
+    },
+    search: ()=>{
+
+    },
+};
+
 
 
 

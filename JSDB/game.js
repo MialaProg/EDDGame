@@ -30,6 +30,8 @@ var Game = {
     toBeRestored: ['db', 'placesToBeAdded', 'placesAdded', 'logPath', 'numPlaces'],
     isGenerate: false,
 
+    myItems: [],
+
     /**
      * Set and save change
      * @param {string} idx 
@@ -212,11 +214,13 @@ var Game = {
     },
 
     placeChecks: (placeID) => {
+        placeID = parseInt(placeID);
         // Check if already added
         if (Game.placesAdded.includes(placeID)) return;
 
         // Check if it can be used
-        if (!Game.placesToBeAdded.includes(placeID) && Game.numPlaces > Game.roomsPriority.length) return;
+        // Game.placesToBeAdded.includes(placeID)
+        if (Game.numPlaces > Game.roomsPriority.length) return;
 
         return true;
     },
@@ -372,7 +376,7 @@ var Game = {
 
     ranDoor: (roomIDX) => {
         let allDoors = Array.from({ length: miDb.NB_DOORS }, (_, i) => i + 1);
-        let iniRoom = { ...Game.getRoom(roomIDX) };
+        let iniRoom = copy(Game.getRoom(roomIDX));
         return Game.getARandomItemAndRestore(allDoors, (doorID) => {
             let [idx, cacheDoor] = findInArr(miDb.lib, miDb.LOC_DOORS[0], miDb.LOC_DOORS[1], item => item[0] == 'R' + doorID);
             log('Search for door: ' + doorID);
@@ -396,7 +400,7 @@ var Game = {
             if (place) {
                 if (!placesRequired.includes(place.toString())) return;
             } else {
-                place = Game.resolvePlace(cacheDoor[3].split(','), 'R');
+                place = parseInt(Game.resolvePlace(cacheDoor[3].split(','), 'R'));
                 log('RP: Place', place, doorID);
                 if (!place) return;
                 room['L'] = place;
@@ -413,7 +417,7 @@ var Game = {
             log('OK');
             Game.setDbItem(cacheDoor[0], 'O' + objectID, 'OPEN');
             return true;
-        }, () => { Game.setRoom(roomIDX, iniRoom); });
+        }, () => { Game.setRoom(roomIDX, copy(iniRoom)); log('Reset room to',iniRoom); });
     },
 
     generate: async () => {
@@ -422,7 +426,7 @@ var Game = {
         for (let i = 0; i < len; i++) {
             Loading.setProgressBar(10 + (i / len) * 30);
 
-            await waitTime(50);
+            await waitTime(10);
 
             Game.placesToBeAdded.push(1000 + i);
             const roomINT = Game.roomsPriority[i];
@@ -451,7 +455,7 @@ var Game = {
                     randomDoor = Game.ranDoor(oroomCoords);
                 }
 
-                console.log(`Door ${doorRelative} for ${roomINT} : ${randomDoor}`);
+                log(`OK? Door ${doorRelative} for ${roomINT} : ${randomDoor}`);
                 if (randomDoor) {
                     Game.setDoor(doorRelative, roomCoords, randomDoor);
                     Game.setDoor(-doorRelative, oroomCoords, randomDoor);
@@ -486,7 +490,7 @@ var Game = {
             logClose();
             let element = Game.placesToBeAdded[i];
             logOpen('Try adding place: ' + element);
-            if (element > 999) {
+            if (typeof element == "number" && element > 999) {
                 minRoom = element - 1000;
                 minChange = true;
                 continue;
