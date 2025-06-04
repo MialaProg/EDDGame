@@ -113,6 +113,10 @@ async function initMain() {
     RoomSelect.init();
     await wait(() => libLoaded('Modal') && libLoaded('MiBasicReader'));
     // Init all
+    Modal.init();
+
+
+    console.log('All initied !');
 
     allJSLoaded = true;
 }
