@@ -22,3 +22,9 @@ L97
 Tu ne peux rien utiliser actuellement.;Il n'y a personne...;Tu ne trouvera rien ici.
 #MIB_SCRIPT_PATH
 ./DB/txt.miBasic
+#SELECT_TXT_OBJ
+*Vous utilisez: 
+#SELECT_TXT_ON
+*Vous utilisez cet objet sur: 
+#TXT_GET
+*Tu obtiens: 

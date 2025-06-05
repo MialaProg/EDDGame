@@ -38,13 +38,14 @@ function logClose() {
  * await waitTime(5000);
  */
 function waitTime(waitMs) {
-    const startTime = Date.now();
-    const interval = Math.floor(waitMs / 3) + 1;
-    return wait(
-        () => Date.now() - startTime >= waitMs,
-        interval,
-        5000 + waitMs * 3 // Timeout légèrement supérieur pour éviter les conflits
-    );
+    // const startTime = Date.now();
+    // const interval = Math.floor(waitMs / 3) + 1;
+    // return wait(
+    //     () => Date.now() - startTime >= waitMs,
+    //     interval,
+    //     5000 + waitMs * 3 // Timeout légèrement supérieur pour éviter les conflits
+    // );
+    return new Promise(resolve => setTimeout(resolve, waitMs))
 }
 
 // ## INT

@@ -58,7 +58,59 @@ var MSelect = {
 };
 
 var MChat = {
+    last: undefined,
+    ans: undefined,
 
+    addText: async (text, from = 'npc', timeWait = 100) => {
+        const isItalic = text.trim().startsWith('*');
+        if (isItalic) text = text.substring(1);
+        const len = text.length;
+        let actualText = '';
+        let HTMLE;
+        if (from === MChat.last) {
+            let lastMsg = document.getElementsByClassName(`${from}-message`);
+            HTMLE = lastMsg[lastMsg.length - 1].childNodes[0];
+            actualText = HTMLE.innerHTML + '<br>';
+        } else {
+            const msg = document.createElement('div');
+            msg.className = `message ${from}-message`;
+            HTMLE = document.createElement('div');
+            HTMLE.className = 'message-body';
+            
+            msg.appendChild(HTMLE);  
+            Modal.getHTMLE('Messages').appendChild(msg);
+            MChat.last = from;
+        }
+        for (let i = 0; i < len; i++) {
+            actualText += text[i];
+            HTMLE.innerHTML = isItalic ? `<i>${actualText}</i>` : actualText;
+            Modal.getHTMLE('Messages').scrollTop = Modal.getHTMLE('Messages').scrollHeight;
+            await waitTime(timeWait);
+        }
+    },
+
+    addAnswer: (id, text, selectTxt) => {
+        MChat.ans = undefined;
+        const btn = document.createElement('button');
+        btn.className = 'button is-small mr-2';
+        btn.textContent = text;
+        btn.onclick = () => {
+            MChat.addText(selectTxt?selectTxt+text:text, 'user');
+            MChat.clearAns();
+            MChat.ans = id;
+        };
+        Modal.getHTMLE('Answers').appendChild(btn);
+    },
+
+    clearConv: () => {
+        Modal.getHTMLE('Messages').innerHTML = '';
+        Modal.getHTMLE('Answers').innerHTML = '';
+        MChat.last = undefined;
+    },
+
+    clearAns: () => {
+        Modal.getHTMLE('Answers').innerHTML = '';
+    },
 };
 
 

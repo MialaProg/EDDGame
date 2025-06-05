@@ -115,12 +115,29 @@ async function initMain() {
     // Init all
     Modal.init();
     miBasic.init();
+    initMiBasicFunc();
 
     await wait(() => Modal.isLoaded && miBasic.isLoaded);
 
     console.log('All initied !');
 
     allJSLoaded = true;
+}
+
+function initMiBasicFunc() {
+    miBasic.showTxt = MChat.addText;
+    miBasic.choice = async (type, options) => {
+        type = type.toUpperCase();
+        let selectText = eval('miDb.SELECT_TXT_'+type);
+        if (selectText) selectText = selectText[0];
+        options.forEach(option => {
+            MChat.addAnswer(option[0], option[1], selectText);
+        });
+        await wait(() => MChat.ans !== undefined, 200);
+        return MChat.ans;
+    };
+    miBasic.openDoor = (door) => { };
+    miBasic.getObject = (obj) => { MChat.addText(miDb.TXT_GET + obj, undefined, 0) };
 }
 
 // Show room: use Canvas, Game, Loading

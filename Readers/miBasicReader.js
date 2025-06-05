@@ -3,13 +3,13 @@ var miBasic = {
     keywords: {},
     location: 0,
     vars: {},
-    showTxt: async () => { },
+    showTxt: async (text) => { },
     choice: async (type, options) => { return 0; },
     openDoor: (door) => { },
     getObject: (obj) => { },
 
-    init: async () => {
-        let script = await getDb(miDb.MIB_SCRIPT_PATH);
+    init: async (path = miDb.MIB_SCRIPT_PATH) => {
+        let script = await getDb(path);
 
         script = script.split('\n');
         script.unshift(':STOP');
