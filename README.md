@@ -38,16 +38,16 @@ Go to keyword: '#goto:x'
 Stop: '#stop'   
 Open door: '#open:x'   
 Get object: '#get:x'   
-Set variable: '#set:xvar:xval'   
+Set variable: '#set:xvar:xval'   (val true by default) 
 Access variable: '#var-xvar'   
 Execute JS: '#js-xcode'   
 Choice between options: '#:xtype   
         ID:GOTO   
         ID:GOTO   
         #'   
-Condition: '#if:xconde:xgoto'
+Condition: '#if:xconde:val:xgoto' (par def: val=true)
 
-Ex: #if:#var-WAZO:#js-'E'+(5*7) (If var 'WAZO', go to 'E35')
+Ex: #if:#var-WAZO::#js-'E'+(5*7) (If var 'WAZO', go to 'E35')
    
    
 # Warning   

@@ -11,7 +11,11 @@ var miBasic = {
     init: async () => {
         let script = await getDb(miDb.MIB_SCRIPT_PATH);
 
-        miBasic.script = script.split('\n').unshift(':STOP').unshift('#STOP');
+        script = script.split('\n');
+        script.unshift(':STOP');
+        script.unshift('#STOP');
+
+        miBasic.script = script;
         miBasic._scanScript();
 
         miBasic.isLoaded = true
@@ -30,9 +34,9 @@ var miBasic = {
     },
 
     goTo: (key) => {
-        let lineNum = this.keywords[miBasic._getVal(key)];
+        let lineNum = miBasic.keywords[miBasic._getVal(key)];
         if (lineNum) {
-            this.location = lineNum;
+            miBasic.location = lineNum;
         }
     },
 
@@ -43,11 +47,14 @@ var miBasic = {
     },
 
     _getVal: (code) => {
+        code = code.toString().trim();
         if (code.startsWith('#')) {
             let [parts, cmd] = miBasic._splitLine(code, '-');
             switch (cmd) {
                 case 'var':
-                    return miBasic.vars[parts[1]];
+                    let val =  miBasic.vars[parts[1]];
+                    if (isNaN(parseInt(val))) return val;
+                    return parseInt(val);
                 case 'js':
                     return eval(parts[1]);
             }
@@ -57,7 +64,9 @@ var miBasic = {
 
     _readLine: () => {
         miBasic.location++;
-        return miBasic.script[miBasic.location].trim();
+        let line = miBasic.script[miBasic.location].trim();
+        // console.log(line);
+        return line;
     },
 
     run: async (from = miBasic.location) => {
@@ -95,7 +104,8 @@ var miBasic = {
                             options.push(line);
                             line = miBasic._readLine();
                         }
-                        let resultID = await this.choice(type, options);
+                        let resultID = await miBasic.choice(type, options);
+                        console.log('Item choiced:',resultID);
                         miBasic.goTo(resultID);
                         break;
                     case 'stop':
@@ -108,19 +118,23 @@ var miBasic = {
                         miBasic.getObject(miBasic._getVal(parts[1]));
                         break;
                     case 'set':
-                        miBasic.vars[parts[1]] = miBasic._getVal(parts[2]);
+                        let val = miBasic._getVal(parts[2]);
+                        if (val == '') val = true; // Default to true if empty
+                        miBasic.vars[parts[1]] = val;
                         break;
                     case 'if':
-                        let condition = parts[1];
-                        let goTo = parts[2];
-                        if (miBasic._getVal(condition)) miBasic.goTo(goTo);
+                        let var1 = parts[1];
+                        let var2 = parts[2];
+                        if (var2 == '') miBasic._getVal(var2) = true;
+                        let goTo = parts[3];
+                        if (miBasic._getVal(var1) == var2) miBasic.goTo(goTo);
                         break;
                     case 'goto':
                         let label = parts[1];
                         miBasic.goTo(label);
                         break;
                     default:
-                        console.log(`miB: ${miBasic._getVal('#'+command)}`);
+                        console.log(`miB: ${miBasic._getVal('#' + command)}`);
 
                 }
                 continue;
@@ -128,14 +142,14 @@ var miBasic = {
             }
 
             // If we reach here, it's a normal text output
-            await miDb.showTxt(line);
+            await miBasic.showTxt(line);
 
         }
     }
 }
 
 var r;
-var miBexemple = ()=>{
+var miBexemple = () => {
     miBasic.showTxt = async (text) => {
         console.log(`Text: ${text}`);
     };
@@ -146,7 +160,7 @@ var miBexemple = ()=>{
         options.forEach((option) => {
             console.log(`${option[0]}: ${option[1]}`);
         });
-        
+
         r = undefined;
         console.log('r=(your choice here)');
         await wait(() => r !== undefined, 1000);
@@ -162,8 +176,6 @@ var miBexemple = ()=>{
     };
 
     miBasic.run(':START');
-    miBasic.goTo('STOP');
-    miBasic.run();
 };
 
 
