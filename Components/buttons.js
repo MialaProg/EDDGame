@@ -62,16 +62,17 @@ var RoomSelect = {
 
 var Actions = {
     propose: (type, prefix) => {
+        MChat.clearConv();
         MSelect.options = [];
         let push = (itemID) => {
-            // Vérification du type
+            console.log('Vérification du type');
             if (itemID[0] !== type) {
                 if (itemID[0] !== 'R') return;
-                // Verification de la compatibilité
-                if (miBasic.keywords[type + itemID]) return;
+                console.log('Verification de la compatibilité', miBasic.keywords[prefix + itemID]);
+                if (!miBasic.keywords[prefix + itemID]) return;
                 if (Game.db[itemID].opened) return;
             }
-            MSelect.options.push({ id: itemID, text: findInArr(miDb.lib, 0, undefined, (item) => item[0] === itemID)[1] })[1];
+            MSelect.options.push({ id: (itemID[0] == 'R' ? prefix : '') + itemID, text: findInArr(miDb.lib, 0, undefined, (item) => item[0] === itemID)[1][1] });
         };
         Game.actualItems.forEach((itemID) => { push(itemID) });
         if (type === 'O') {
@@ -82,22 +83,32 @@ var Actions = {
         };
     },
 
+    showOptions: async (id) => {
+        MSelect.empty = miDb.MSG_No_UseSpchSrch[id];
+        MSelect.select = (sid) => {
+            console.log(sid);
+            Modal.switch('chat');
+            miBasic.run(sid);
+        };
+        MSelect.create();
+    },
+
     use: () => {
         Actions.propose('O', 'U');
-        MSelect.empty = miDb.MSG_No_UseSpchSrch[0];
-        MSelect.create();
+        Actions.showOptions(0);
     },
     speach: () => {
         Actions.propose('P', 'P');
-        MSelect.empty = miDb.MSG_No_UseSpchSrch[1];
-        MSelect.create();
+        Actions.showOptions(1);
     },
     search: () => {
         console.log('Seaching..');
+        MChat.clearConv();
         MSelect.options = [];
         MSelect.empty = miDb.MSG_No_UseSpchSrch[2];
+        let actualPlaceObjs;
         try {
-            let actualPlaceObjs = Game.db[
+            actualPlaceObjs = Game.db[
                 findInArr(Game.actualItems, 0, undefined, item => item[0] == 'L')[1]
             ];
             Object.keys(actualPlaceObjs).forEach((key) => {
@@ -113,17 +124,14 @@ var Actions = {
             console.log('Location error for search:', e);
         }
         MSelect.create();
-        // if (!chatChoices.length) {
-        //     log('Nothing to see here');
-        //     chat.switch('msg');
-        //     chat.addMessage('*Vous ne trouvez rien.');
-        //     chat.show();
-        // } else {
-        //     log('Founded');
-        //     populateChoices();
-        //     chat.switch('choice');
-        //     chat.show();
-        // }
+        MSelect.select = (sid, stxt) => {
+            if (!actualPlaceObjs) return;
+            console.log('Choiced: ' + sid);
+            delete actualPlaceObjs[Object.keys(actualPlaceObjs).find(key => actualPlaceObjs[key] === sid)];
+            Game.getObject(sid);
+            Modal.switch('chat');
+            MChat.addText(miDb.TXT_GET[1] + stxt);
+        };
     },
 };
 

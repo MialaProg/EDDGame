@@ -125,7 +125,7 @@ var miBasic = {
                     case 'if':
                         let var1 = parts[1];
                         let var2 = parts[2];
-                        if (var2 == '') miBasic._getVal(var2) = true;
+                        var2 = (var2 == '') ? true : miBasic._getVal(var2);
                         let goTo = parts[3];
                         if (miBasic._getVal(var1) == var2) miBasic.goTo(goTo);
                         break;

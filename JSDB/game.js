@@ -417,7 +417,7 @@ var Game = {
             log('OK');
             Game.setDbItem(cacheDoor[0], 'O' + objectID, 'OPEN');
             return true;
-        }, () => { Game.setRoom(roomIDX, copy(iniRoom)); log('Reset room to',iniRoom); });
+        }, () => { Game.setRoom(roomIDX, copy(iniRoom)); log('Reset room to', iniRoom); });
     },
 
     generate: async () => {
@@ -519,6 +519,12 @@ var Game = {
             // console.log('Added to', my_room, ':[' + i + ']', element);
         }
         logClose();
+    },
+
+    getObject: (obj) => {
+        if (!Game.db[obj]) Game.db[obj] = {};
+        if (!Game.db[obj].nb) Game.db[obj].nb = 0;
+        Game.db[obj].nb += 1;
     }
 
 }

@@ -6,7 +6,7 @@ var Modal = {
     },
 
     open: () => Modal.getHTMLE().classList.add('is-active'),
-    close: () => Modal.getHTMLE().classList.remove('is-active'),
+    close: () => {Modal.getHTMLE().classList.remove('is-active'); miBasic.running = false; console.log('close');},
 
     init: () => {
         Modal.close();
@@ -31,6 +31,8 @@ var MSelect = {
     options: [], // [{id: text:} ...]
     empty: 'Aucune option n\'est disponible.',
 
+    select: (sid, stxt) => {},
+
     show: () => {
         Modal.switch('select');
         Modal.open();
@@ -46,7 +48,7 @@ var MSelect = {
                 const li = document.createElement('li');
                 li.innerHTML = `
             <a class="choice-item is-rounded" 
-               onclick="MSelect.select('${choice.id}')">
+               onclick="MSelect.select('${choice.id}', \`${choice.text}\`)">
                 ${choice.text}
             </a>
         `;
@@ -61,16 +63,17 @@ var MChat = {
     last: undefined,
     ans: undefined,
 
-    addText: async (text, from = 'npc', timeWait = 100) => {
+    addText: async (text, from = 'npc', timeWait = 70) => {
         const isItalic = text.trim().startsWith('*');
         if (isItalic) text = text.substring(1);
         const len = text.length;
+        let oldText = '';
         let actualText = '';
         let HTMLE;
         if (from === MChat.last) {
             let lastMsg = document.getElementsByClassName(`${from}-message`);
             HTMLE = lastMsg[lastMsg.length - 1].childNodes[0];
-            actualText = HTMLE.innerHTML + '<br>';
+            oldText = HTMLE.innerHTML + '<br>';
         } else {
             const msg = document.createElement('div');
             msg.className = `message ${from}-message`;
@@ -83,7 +86,7 @@ var MChat = {
         }
         for (let i = 0; i < len; i++) {
             actualText += text[i];
-            HTMLE.innerHTML = isItalic ? `<i>${actualText}</i>` : actualText;
+            HTMLE.innerHTML = oldText + (isItalic ? `<i>${actualText}</i>` : actualText);
             Modal.getHTMLE('Messages').scrollTop = Modal.getHTMLE('Messages').scrollHeight;
             await waitTime(timeWait);
         }
@@ -94,9 +97,9 @@ var MChat = {
         const btn = document.createElement('button');
         btn.className = 'button is-small mr-2';
         btn.textContent = text;
-        btn.onclick = () => {
-            MChat.addText(selectTxt?selectTxt+text:text, 'user');
+        btn.onclick = async () => {
             MChat.clearAns();
+            await MChat.addText(selectTxt?selectTxt+text:text, 'user', 10);
             MChat.ans = id;
         };
         Modal.getHTMLE('Answers').appendChild(btn);

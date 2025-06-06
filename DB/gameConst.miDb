@@ -6,6 +6,8 @@
 50;70
 #LOC_PLACES
 15;60
+#LOC_OBJS
+60;105
 #IMGS_PATH
 ./Images/Items/;.png
 #START_ROOM
@@ -27,4 +29,4 @@ Tu ne peux rien utiliser actuellement.;Il n'y a personne...;Tu ne trouvera rien 
 #SELECT_TXT_ON
 *Vous utilisez cet objet sur: 
 #TXT_GET
-*Tu obtiens: 
+*Tu obtiens: ;*Tu trouve: 

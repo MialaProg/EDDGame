@@ -138,21 +138,40 @@ if (checkIfUrlContains("Mimi50")){
 function initMiBasicFunc() {
     miBasic.showTxt = MChat.addText;
     miBasic.choice = async (type, options) => {
+        MChat.ans = undefined;
         type = type.toUpperCase();
         let selectText = eval('miDb.SELECT_TXT_'+type);
         if (selectText) selectText = selectText[0];
         options.forEach(option => {
-            MChat.addAnswer(option[0], option[1], selectText);
+            let txt = option[0];
+            if (type == 'OBJ'){
+                const obj = Game.db[txt];
+                if (!obj || obj.nb <= 0) return;
+                txt = findInArr(miDb.lib, miDb.LOC_OBJS[0], miDb.LOC_OBJS[1], item => item[0] == txt)[1][1];
+            }
+            if (type == 'ON'){
+                if( !Game.actualItems.includes(txt)) return;
+                txt = findInArr(miDb.lib, 0, undefined, item => item[0] == txt)[1][1];
+            }
+            MChat.addAnswer(option[1], txt, selectText);
         });
         await wait(() => MChat.ans !== undefined, 200);
+        if (type == 'OBJ' && '0'!=findInArr(miDb.lib, miDb.LOC_OBJS[0], miDb.LOC_OBJS[1], item => item[0] == MChat.ans)[1][2]) Game.db[MChat.ans].nb -= 1;
         return MChat.ans;
     };
-    miBasic.openDoor = (door) => { };
-    miBasic.getObject = (obj) => { MChat.addText(miDb.TXT_GET + obj, undefined, 0) };
+    miBasic.openDoor = (door) => {
+        console.log('Open door:', door);
+        Game.db[door].opened = true;
+        showRoom();
+    };
+    miBasic.getObject = (obj) => { 
+        MChat.addText(miDb.TXT_GET[0] + findInArr(miDb.lib, miDb.LOC_OBJS[0], miDb.LOC_OBJS[1], item => item[0] == obj)[1][1], undefined, 10);
+        Game.getObject(obj);
+    };
 }
 
 // Show room: use Canvas, Game, Loading
-function showRoom(roomINT) {
+function showRoom(roomINT = Game.actualRoom) {
     Game.actualRoom = roomINT;
     Game.actualItems = [];
 
