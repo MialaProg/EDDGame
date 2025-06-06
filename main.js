@@ -126,7 +126,8 @@ async function initMain() {
 if (checkIfUrlContains("Mimi50")){
   Modal.open();
   Modal.switch('chat');
-  
+  await miBasic.init('./DB/mimi.app');
+  miBasic.run();
 }
 
 
