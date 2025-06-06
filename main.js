@@ -122,6 +122,16 @@ async function initMain() {
     console.log('All initied !');
 
     allJSLoaded = true;
+
+if (checkIfUrlContains("Mimi50")){
+  Modal.open();
+  Modal.switch('chat');
+  
+}
+
+
+
+
 }
 
 function initMiBasicFunc() {
