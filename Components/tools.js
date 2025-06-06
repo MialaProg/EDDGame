@@ -158,7 +158,15 @@ async function getDb(path) {
 }
 
 
-
+// ## URL
+function checkIfUrlContains(keyword) {
+  const currentUrl = window.location.href; // Récupère l'URL actuelle du navigateur
+  if (currentUrl.includes(keyword)) {
+    return true; // Retourne vrai si le mot-clé est trouvé
+  } else {
+    return false; // Retourne faux si le mot-clé n'est pas trouvé
+  }
+}
 
 
 
