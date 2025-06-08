@@ -8,6 +8,7 @@ var Loading = {
     },
 
     setProgressBar: (val) => {
+        // console.log('SetPrgss', val);
         if (!Loading.progress) {
             return;
         }

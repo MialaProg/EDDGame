@@ -127,7 +127,7 @@ function getARandomItem(arr, conditions, restoration = () => { }) {
             restoration();
         }
         let item = ranAndDel(usable);
-        if (conditions(item)) {
+        if (conditions(item, usable)) {
             result = item;
         }
     }

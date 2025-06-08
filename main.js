@@ -140,7 +140,8 @@ function initMiBasicFunc() {
     miBasic.choice = async (type, options) => {
         MChat.ans = undefined;
         type = type.toUpperCase();
-        let selectText = eval('miDb.SELECT_TXT_'+type);
+        let selectText;
+        try {selectText = eval('miDb.SELECT_TXT_'+type)}catch(e){};
         if (selectText) selectText = selectText[0];
         options.forEach(option => {
             let txt = option[0];
