@@ -38,11 +38,8 @@ var RoomSelect = {
     setEvents: () => {
         RoomSelect.HTMLE.addEventListener("change", function () {
             if (this.value != "OFF") {
+                PlayersJS.next();
                 //TODO
-                // nbActions += 1;
-                // nbTours += 1;
-                // actualPlayer = players[(nbTours - 1) % nbPlayers];
-                // document.getElementById('loadingTitle').innerHTML = findInArr(miDb.lib, LOADING_LOC[0], undefined, (item) => item[1] === actualPlayer)[1][2];
                 showRoom(RoomSelect.getVal());
                 // showRoom(this.value.split(";").map(Number));
                 wait(() => !RoomSelect.isMouseOver, 200, 10 ** 9).then(() => { wait(() => RoomSelect.isMouseOver, 200, 10 ** 9).then(() => RoomSelect.setVal("OFF")) });
@@ -61,6 +58,8 @@ var RoomSelect = {
 
 
 var Actions = {
+    isToggleInit: false,
+
     propose: (type, prefix) => {
         MChat.clearConv();
         MSelect.options = [];
@@ -93,13 +92,29 @@ var Actions = {
         MSelect.create();
     },
 
+    toggle: (id, OnOff) => {
+        console.log('Toggle', OnOff);
+        if (!Actions.isToggleInit) {
+            Actions.isToggleInit = true;
+            PlayersJS.change.push(() => {
+                Actions.toggle('', true);
+            });
+        }
+        document.querySelectorAll('.actionBtn').forEach((el) => {
+            el.disabled = !OnOff;
+        });
+        // document.getElementById('action' + id).setAttribute('disabled', !OnOff);
+    },
+
     use: () => {
         Actions.propose('O', 'U');
         Actions.showOptions(0);
+        Actions.toggle('Use', false);
     },
     speach: () => {
         Actions.propose('P', 'P');
         Actions.showOptions(1);
+        Actions.toggle('Speach', false);
     },
     search: () => {
         console.log('Seaching..');
@@ -132,6 +147,8 @@ var Actions = {
             Modal.switch('chat');
             MChat.addText(miDb.TXT_GET[1] + stxt);
         };
+
+        Actions.toggle('Search', false);
     },
 };
 

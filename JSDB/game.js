@@ -9,9 +9,9 @@ var Game = {
 
     roomsPriority: [
         30, 20, 21, 10, 31, 22, 11, 32, 12, 33, 24, 34, 35, 25, 15, 23, 14, 13
-    ]
+    ],
 
-    , doors: {
+    doors: {
         10: [1, 10], 11: [1], 12: [1], 13: [1, 10], 14: [1], 15: [10],
         20: [10], 21: [10], 22: [10], 23: [1], 24: [], 25: [10],
         30: [1], 31: [1], 32: [1], 33: [1], 34: [1], 35: []
@@ -49,7 +49,7 @@ var Game = {
             eval('nothing(' + val + ');');
         } catch (e) {
             if (!(e instanceof ReferenceError || e instanceof SyntaxError)) throw e;
-            val = `'${val}'`;
+            val = JSON.stringify(val);
         }
 
         // console.log(false, idx, val, arr, history);
@@ -86,7 +86,7 @@ var Game = {
     },
 
     // For logging
-    stopChain: (err) => {Game.logs.push(err + ' '.repeat(25 - err.length) + Game.logPath.join('<'));}
+    stopChain: (err) => { Game.logs.push(err + ' '.repeat(25 - err.length) + Game.logPath.join('<')); }
 
     , setDbItem: (ItemID, Prop, val) => {
         if (!Game.db[ItemID]) {
@@ -98,7 +98,7 @@ var Game = {
     getARandomItemAndRestore: (arr, conditions, restorate = () => { }) => {
         const initLen = []
         Game.toBeRestored.forEach((v) => {
-            eval(`initLen.push(Game.${v}History ? Game.${v}History.length : 0);`);
+            initLen.push(Game[`${v}History`] ? Game[`${v}History`].length : 0);
         });
 
         // log('Get random in ', arr);
@@ -138,7 +138,7 @@ var Game = {
     },
 
     coordsToInt: (arr) => {
-        if (arr.length) {
+        if (arr.length != 2) {
             throw new Error("Array must have exactly two elements.");
         }
         return parseInt(arr[0].toString() + arr[1].toString());
@@ -308,7 +308,7 @@ var Game = {
     resolveObjects: (objReq, toGet = 'open') => {
         return Game.getARandomItemAndRestore(Object.keys(objReq), (e) => {
             // Check if it gives the toGet
-            if (!objReq[e].find((gives)=>gives.split('&').includes(toGet))) return;
+            if (!objReq[e].find((gives) => gives.split('&').includes(toGet))) return;
             // if (!objReq[e].split('&').includes(toGet)) return;
 
             objectIDs = e.split('&');
@@ -401,14 +401,14 @@ var Game = {
 
             // ### Check if door already used
             if (Game.searchIn(cacheDoor[0], 'OPEN')[0] !== undefined) return Game.stopChain('Already use');
-            
+
             // ### Check if places avaible
             let placesRequired = cacheDoor[3].split(",");
             // ## Check if actual place is compatible with the door
             const room = Game.getRoom(roomIDX);
             let place = Game.getRoom(roomIDX)['L'];
-            if (place) { 
-                if (!placesRequired.includes(place.toString())) return Game.stopChain('R-Incompatible L'+place);
+            if (place) {
+                if (!placesRequired.includes(place.toString())) return Game.stopChain('R-Incompatible L' + place);
             } else {
                 place = parseInt(Game.resolvePlace(cacheDoor[3].split(','), 'R', true));
                 if (!place) return Game.stopChain('R-No Place');
@@ -431,9 +431,8 @@ var Game = {
         const len = Game.roomsPriority.length;
         const roomChecked = [];
         for (let i = 0; i < len; i++) {
-            Loading.setProgressBar(10 + (i / len) * 30);
-
-            // await waitTime(10);
+            Loading.setProgressBar(10 + (i / len) * 30, false);
+            await waitUIupdate();
 
             Game.placesToBeAdded.push(1000 + i);
             const roomINT = Game.roomsPriority[i];
@@ -455,7 +454,7 @@ var Game = {
                     if (Game.db['L' + room]['R'][doorRelative] != undefined) continue;
                 } catch (e) { }
 
-                Game.logs.push('----- Check door ' + doorRelative+ ' for '+ roomINT + ' to '+ oroomINT);
+                Game.logs.push('----- Check door ' + doorRelative + ' for ' + roomINT + ' to ' + oroomINT);
                 Game.logPath = [];
 
                 let randomDoor;

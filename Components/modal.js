@@ -6,7 +6,7 @@ var Modal = {
     },
 
     open: () => Modal.getHTMLE().classList.add('is-active'),
-    close: () => {Modal.getHTMLE().classList.remove('is-active'); miBasic.running = false; console.log('close');},
+    close: () => { Modal.getHTMLE().classList.remove('is-active'); miBasic.running = false; console.log('close'); },
 
     init: () => {
         Modal.close();
@@ -31,7 +31,7 @@ var MSelect = {
     options: [], // [{id: text:} ...]
     empty: 'Aucune option n\'est disponible.',
 
-    select: (sid, stxt) => {},
+    select: (sid, stxt) => { },
 
     show: () => {
         Modal.switch('select');
@@ -79,15 +79,16 @@ var MChat = {
             msg.className = `message ${from}-message`;
             HTMLE = document.createElement('div');
             HTMLE.className = 'message-body';
-            
-            msg.appendChild(HTMLE);  
+
+            msg.appendChild(HTMLE);
             Modal.getHTMLE('Messages').appendChild(msg);
             MChat.last = from;
         }
         for (let i = 0; i < len; i++) {
             actualText += text[i];
             HTMLE.innerHTML = oldText + (isItalic ? `<i>${actualText}</i>` : actualText);
-            Modal.getHTMLE('Messages').scrollTop = Modal.getHTMLE('Messages').scrollHeight;
+            // Modal.getHTMLE('Messages').scrollTop = Modal.getHTMLE('Messages').scrollHeight;
+            scrollToInContainer(HTMLE, 1000, 'bottom', Modal.getHTMLE('Content'));
             await waitTime(timeWait);
         }
     },
@@ -99,7 +100,7 @@ var MChat = {
         btn.textContent = text;
         btn.onclick = async () => {
             MChat.clearAns();
-            await MChat.addText(selectTxt?selectTxt+text:text, 'user', 10);
+            await MChat.addText(selectTxt ? selectTxt + text : text, 'user', 10);
             MChat.ans = id;
         };
         Modal.getHTMLE('Answers').appendChild(btn);

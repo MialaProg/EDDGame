@@ -324,7 +324,6 @@ Merci beaucoup !
 Salut ! Moi c'est Efelant !
 J'suis le plus fort de l'école !
 *C'est faux
-#TODO
 #IF:#js-actualPlayer==='DN'::EFDN
 #IF:#js-actualPlayer==='DA'::EFDA
 #IF:#js-actualPlayer==='P'::EFP
@@ -387,8 +386,7 @@ Il y en a plus...
 #GOTO:EFTA
 *
 :EFBA
-#TODO
-#IF:#js-myItems['P1']['0']:EFOK
+#IF:#js-Game.db['P1']['0']:EFOK
 #IF:#var-EFOK::EFDeja
 D'accord, mais donne moi d'abord des médocs !
 #:OBJ
@@ -423,7 +421,7 @@ ssseya aayaa ssss seyythaa ssssaytha  saahthay ayaeeh aayaa hathehh à esseytha 
 -------------------
 
 to add: 
-searchInMyItems(obj, value)
+Game.searchIn(obj, value)
 let entry = Object.entries(myItems[obj]).find(([key, val]) => val === value)
 if !
 return [undef,undef]
@@ -457,13 +455,12 @@ Tu rêves.
 #GOTO:P3.Ask
 :P3.4
 *Plouf-Ori:
-#TODO
-#IF:#js-searchInMyItems("P3", "O4")[0]:P3.4Ex
+#IF:#js-Game.searchIn("P3", "O4")[0]:P3.4Ex
 Non... Il me semble pas...
 #GOTO:P3.Ask
 :P3.4Ex
 Oui, celle-là.
-#IF:#js-searchInMyItems("P3", "O4")[0] == "0":P3.Ok
+#IF:#js-Game.searchIn("P3", "O4")[0] == "0":P3.Ok
 Mais elle sera pas gratuite hein !
 #:OBJ
 O5:P3.Ok
@@ -481,8 +478,7 @@ Tiens !
 :P3.10
 *Plouf-Kalamaki:
 Oui, bien sûr !
-#TODO
-#IF:#js-!searchInMyItems("P3", "O10") || searchInMyItems("P3", "O10")[0] == "0":#P3.O10.Ok
+#IF:#js-!Game.searchIn("P3", "O10") || Game.searchIn("P3", "O10")[0] == "0":#P3.O10.Ok
 *Plouf-Ori:
 Mais ce ne sera pas gratuit hein.
 #:OBJ
@@ -496,8 +492,7 @@ O5:#P3.O10.Ok
 :P3.7
 *Plouf-Kalamaki:
 Oui, bien sûr !
-#TODO
-#IF:#js-!searchInMyItems("P3", "O7") || searchInMyItems("P3", "O7")[0] == "0":#P3.O7.Ok
+#IF:#js-!Game.searchIn("P3", "O7") || Game.searchIn("P3", "O7")[0] == "0":#P3.O7.Ok
 *Plouf-Ori:
 Mais ce ne sera pas gratuit hein.
 #:OBJ

@@ -8,6 +8,8 @@
 15;60
 #LOC_OBJS
 60;105
+#LOC_LOADING
+100
 #IMGS_PATH
 ./Images/Items/;.png
 #START_ROOM

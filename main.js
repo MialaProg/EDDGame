@@ -123,12 +123,12 @@ async function initMain() {
 
     allJSLoaded = true;
 
-if (checkIfUrlContains("Mimi50")){
-  Modal.open();
-  Modal.switch('chat');
-  await miBasic.init('./DB/mimi.app');
-  miBasic.run();
-}
+    if (checkIfUrlContains("Mimi50")) {
+        Modal.open();
+        Modal.switch('chat');
+        await miBasic.init('./DB/mimi.app');
+        miBasic.run();
+    }
 
 
 
@@ -141,23 +141,23 @@ function initMiBasicFunc() {
         MChat.ans = undefined;
         type = type.toUpperCase();
         let selectText;
-        try {selectText = eval('miDb.SELECT_TXT_'+type)}catch(e){};
+        try { selectText = eval('miDb.SELECT_TXT_' + type) } catch (e) { };
         if (selectText) selectText = selectText[0];
         options.forEach(option => {
             let txt = option[0];
-            if (type == 'OBJ'){
+            if (type == 'OBJ') {
                 const obj = Game.db[txt];
                 if (!obj || obj.nb <= 0) return;
                 txt = findInArr(miDb.lib, miDb.LOC_OBJS[0], miDb.LOC_OBJS[1], item => item[0] == txt)[1][1];
             }
-            if (type == 'ON'){
-                if( !Game.actualItems.includes(txt)) return;
+            if (type == 'ON') {
+                if (!Game.actualItems.includes(txt)) return;
                 txt = findInArr(miDb.lib, 0, undefined, item => item[0] == txt)[1][1];
             }
             MChat.addAnswer(option[1], txt, selectText);
         });
         await wait(() => MChat.ans !== undefined, 200);
-        if (type == 'OBJ' && '0'!=findInArr(miDb.lib, miDb.LOC_OBJS[0], miDb.LOC_OBJS[1], item => item[0] == MChat.ans)[1][2]) Game.db[MChat.ans].nb -= 1;
+        if (type == 'OBJ' && '0' != findInArr(miDb.lib, miDb.LOC_OBJS[0], miDb.LOC_OBJS[1], item => item[0] == MChat.ans)[1][2]) Game.db[MChat.ans].nb -= 1;
         return MChat.ans;
     };
     miBasic.openDoor = (door) => {
@@ -165,7 +165,7 @@ function initMiBasicFunc() {
         Game.db[door].opened = true;
         showRoom();
     };
-    miBasic.getObject = (obj) => { 
+    miBasic.getObject = (obj) => {
         MChat.addText(miDb.TXT_GET[0] + findInArr(miDb.lib, miDb.LOC_OBJS[0], miDb.LOC_OBJS[1], item => item[0] == obj)[1][1], undefined, 10);
         Game.getObject(obj);
     };

@@ -3,6 +3,7 @@ var miDb = {
     initLib: async () => {
         let data = await getDb("./DB/items.miDb");
         miDb.lib = data.trim().split("\n").map(row => row.split(";"));
+        miDb.libLoaded = true;
     },
 
     constNb: 0,
@@ -69,7 +70,7 @@ var miDb = {
 
 
 // Avaible vars - Variables disponibles
-miDb.constNum = ['NB_DOORS', 'LOC_DOORS', 'LOC_PERSO', 'LOC_PLACES', 'LOC_OBJS'];
+miDb.constNum = ['NB_DOORS', 'LOC_DOORS', 'LOC_PERSO', 'LOC_PLACES', 'LOC_OBJS', 'LOC_LOADING'];
 miDb.constVars = ['IMGS_PATH', 'START_ROOM', 'ROOMS_DEFAULT', 'ROOMS_LETTERS', 'ROOMS_UNLOCKED',
     'PRELOAD_IMG','MSG_No_UseSpchSrch','MIB_SCRIPT_PATH','SELECT_TXT_OBJ','SELECT_TXT_ON', 'TXT_GET'
 ].concat(miDb.constNum);

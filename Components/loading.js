@@ -5,15 +5,20 @@ var Loading = {
         Loading.title = document.getElementById('loadingTitle');
         Loading.progress = document.getElementById('loadingProgress');
         // PlayersJS.playBtn.addEventListener('click', () => {Loading.changeMode(1)});
+        PlayersJS.change.push(() => { Loading.setTitle(findInArr(miDb.lib, miDb.LOC_LOADING[0], undefined, (item) => item[1] === actualPlayer)[1][2]); })
     },
 
-    setProgressBar: (val) => {
+    setProgressBar: (val, animated = true) => {
         // console.log('SetPrgss', val);
         if (!Loading.progress) {
             return;
         }
         if (Loading.progressInterval) {
             clearInterval(Loading.progressInterval);
+        }
+        if (!animated){
+            Loading.progress.value = val;
+            return;
         }
         if (val == 0) {
             Loading.progress.value = 0;
@@ -47,7 +52,7 @@ var Loading = {
  * @param {number|HTMLElement} to - Target scroll position or DOM element
  * @param {Function} [callback] - Optional callback to execute after scroll completion
  * @returns {Promise<void>} Promise that resolves when scroll is complete
- */
+ 
     scrollPage: async (from, to, callback) => {
         const duration = 500;
 
@@ -87,19 +92,24 @@ var Loading = {
 
             requestAnimationFrame(animate);
         });
-    },
+    },*/
+
+
+
 
     changeMode: (mode) => {
         let modes = ["pregame", "loadinggame", "ingame"];
 
-        if (typeof mode == 'number'){
+        if (typeof mode == 'number') {
             mode = modes[mode];
         }
 
         let new_mode_element = document.getElementById(mode + "-interface");
         new_mode_element.classList.remove("is-hidden");
 
-        Loading.scrollPage(document.getElementById(pageMode + "-interface"), new_mode_element).then(() => {
+        // Loading.scrollPage(document.getElementById(pageMode + "-interface"), new_mode_element).then(() => {
+        scrollToInContainer(document.getElementById(pageMode + "-interface"), 0);
+        scrollToInContainer(new_mode_element).then(() => {
             modes.forEach((m) => {
                 document.getElementById(m + "-interface").classList.toggle('is-hidden', m != mode);
             })

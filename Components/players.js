@@ -1,9 +1,18 @@
 var players = [];
 var playersNb = 0;
+var actualPlayer;
+var timer = 0;
 
 var PlayersJS = {
   playBtnChecks: [false, false], // LoadingLoaded, NbPlayers > 0
   PlayersChoiced: false,
+  actualIdx: 0,
+  change: [()=>{
+    timer += 1;
+    PlayersJS.actualIdx += 1;
+    if (PlayersJS.actualIdx >= playersNb) PlayersJS.actualIdx = 0;
+    actualPlayer = players[PlayersJS.actualIdx];
+  }],
 
   init: () => {
     PlayersJS.playBtn = document.getElementById('playBtn');
@@ -16,6 +25,7 @@ var PlayersJS = {
       setTimeout(() => {
 
         document.getElementById('player1').value = 'T';
+        document.getElementById('player2').value = 'DN';
         PlayersJS.submit();
       }, 1000);
     }
@@ -118,6 +128,9 @@ var PlayersJS = {
   submit: async () => {
     PlayersJS.updateSelects();
 
+    PlayersJS.actualIdx = randint(1, playersNb) - 1;
+    actualPlayer = players[PlayersJS.actualIdx];
+
     PlayersJS.PlayersChoiced = true;
     console.log("Game start !");
 
@@ -132,6 +145,10 @@ var PlayersJS = {
 
       PlayersJS.submit();
     });
+  },
+
+  next: () => {
+    PlayersJS.change.forEach((func) => {try{func();} catch (e) {console.error(e);}});
   }
 }
 

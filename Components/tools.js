@@ -142,6 +142,42 @@ function copy(obj) {
     return JSON.parse(JSON.stringify(obj));
 }
 
+// ## RESOLUTION UI UPDATE
+function waitUIupdate() {
+    return new Promise(resolve => {
+      // Double raf pour s'assurer que le navigateur a fait son rendu
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          resolve();
+        });
+      });
+    });
+  }
+
+function runWithUIupdate(func) {
+    return new Promise((resolve, reject) => {
+      const execute = () => {
+        try {
+          // Exécute la fonction et récupère le résultat
+          const result = func();
+          
+          // Utilise requestAnimationFrame pour la résolution
+          requestAnimationFrame(() => {
+            resolve(result);
+          });
+        } catch (error) {
+          // Gère les erreurs avec requestAnimationFrame
+          requestAnimationFrame(() => {
+            reject(error);
+          });
+        }
+      };
+  
+      // Lance l'exécution dans la file d'attente des tâches lourdes
+      setTimeout(execute, 0);
+    });
+  }
+
 // ## FETCH
 
 async function getDb(path) {
@@ -160,17 +196,84 @@ async function getDb(path) {
 
 // ## URL
 function checkIfUrlContains(keyword) {
-  const currentUrl = window.location.href; // Récupère l'URL actuelle du navigateur
-  if (currentUrl.includes(keyword)) {
-    return true; // Retourne vrai si le mot-clé est trouvé
-  } else {
-    return false; // Retourne faux si le mot-clé n'est pas trouvé
-  }
+    const currentUrl = window.location.href; // Récupère l'URL actuelle du navigateur
+    if (currentUrl.includes(keyword)) {
+        return true; // Retourne vrai si le mot-clé est trouvé
+    } else {
+        return false; // Retourne faux si le mot-clé n'est pas trouvé
+    }
 }
 
 
+// ## PAGE
+function scrollToInContainer(element, duration = 500, align = 'top', container = document.documentElement) {
+    return new Promise((resolve) => {
+        // Déterminer le conteneur de défilement (window ou élément DOM)
+        const isWindowContainer = (
+            container === document.documentElement || 
+            container === document.body
+        );
+        
+        // Calculer les dimensions et positions
+        const containerHeight = isWindowContainer 
+            ? window.innerHeight 
+            : container.clientHeight;
+        
+        const elementRect = element.getBoundingClientRect();
+        const containerRect = isWindowContainer
+            ? { top: 0, bottom: window.innerHeight }
+            : container.getBoundingClientRect();
+        
+        // Calculer la position cible
+        let targetPosition;
+        if (align === 'top') {
+            targetPosition = elementRect.top - containerRect.top;
+        } else if (align === 'bottom') {
+            targetPosition = elementRect.bottom - containerRect.bottom + containerHeight;
+        } else {
+            throw new Error("L'alignement doit être 'top' ou 'bottom'");
+        }
+        
+        // Ajouter le défilement actuel
+        const currentScroll = isWindowContainer
+            ? window.pageYOffset || document.documentElement.scrollTop
+            : container.scrollTop;
+        
+        targetPosition += currentScroll;
+        
+        // Animation avec easing
+        const startTime = performance.now();
+        
+        function animate(time) {
+            const elapsed = time - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            const ease = easeInOutQuad(progress);
+            
+            const newPosition = currentScroll + (targetPosition - currentScroll) * ease;
+            
+            // Appliquer le défilement
+            if (isWindowContainer) {
+                window.scrollTo(0, newPosition);
+            } else {
+                container.scrollTop = newPosition;
+            }
+            
+            // Continuer ou terminer l'animation
+            if (progress < 1) {
+                requestAnimationFrame(animate);
+            } else {
+                resolve();
+            }
+        }
+        
+        requestAnimationFrame(animate);
+    });
+}
 
-
+// Fonction d'easing pour animation fluide
+function easeInOutQuad(t) {
+    return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+}
 
 
 
