@@ -13,8 +13,8 @@ R10;Plouf-Anouk;0;4,6,15,16,6,5,18;5|8>open
 R11;Chris;0;3,7;9>open
 R12;Chenille;0;3,7,13;11>open
 #R13
-#R14s
-#R15
+R14;Porte en hauteur;1,2,3,4,5,6,8,11,14,17;17|18>open
+R15;Sphinx;11;17|18>open
 R16;Tagada et Storish;0;3,6,7,9,15,16,17,18;20>open
 #R17
 #R18
@@ -34,15 +34,15 @@ L97;HALL
 L99;Réserve
 L1;Pharmacie;-;-;0|21>2
 L2;Ruines
-L3;Jardin;0;-;0>8|9
+L3;Jardin;0;-;0>8|9|25
 L4;Piscine;0;-;30>32|5
 L5;Laboratoire d'analyse;0;-;0>11
-L6;Marché;0;-;0|21>13|15
+L6;Marché;0;-;0|21>13|15|25
 L7;Foret;0;-;0>19
 L8;Cybercafé;0;-;21>14|31
 L9;Montagnes;0;-;0>20
 L10;Orage
-#L11
+L11;Musée égyptien
 L12;Volcan
 L13;Campignons
 L14;Banque;0;-;0|23>21
@@ -62,6 +62,8 @@ P7;Baboum;0;-;13>16
 #P9
 #P10
 P11;Musique;0;*;0>22
+P17;Bobi;0;*;25>17
+P18;Suika & Citrouille;0;3,6;0>18
 ###############
 O0;none;0
 O1;Bon d'achat;1
@@ -80,8 +82,8 @@ O13;Banane;1
 O14;Oreille droite;1
 O15;Viande cuite;1
 O16
-O17
-O18
+O17;Bobi enthousiaste;0
+O18;Suika & Citrouille;1
 O19;Noisettes;2
 O20;Cailloux;2
 O21;Sous;2
