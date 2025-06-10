@@ -4,6 +4,9 @@ var RoomSelect = {
         RoomSelect.HTMLE = document.getElementById("current-room");
         RoomSelect.setEvents();
         RoomSelect.setDefault();
+        PlayersJS.change.push(()=>{
+            document.getElementById('timerOption').innerHTML = 'Il est ' + Math.round(timer / miDb.TIMER[0]) + 'h';
+        });
     },
 
     getVal: () => {
@@ -22,7 +25,7 @@ var RoomSelect = {
 
     setDefault: () => {
 
-        let currentRoom_HTML = '<option value="OFF">Destinations possibles:</option>';
+        let currentRoom_HTML = '<option value="OFF" id="timerOption">Destinations possibles:</option>';
         for (let j = 0; j < miDb.ROOMS_DEFAULT.length; j++) {
             const element = miDb.ROOMS_DEFAULT[j];
             currentRoom_HTML += `<option value="0${j}">${element}</option>`;

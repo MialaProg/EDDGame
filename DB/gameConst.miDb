@@ -23,7 +23,7 @@ E;F;G
 #PRELOAD_IMG
 L97
 #MSG_No_UseSpchSrch
-Tu ne peux rien utiliser actuellement.;Il n'y a personne...;Tu ne trouvera rien ici.
+Tu ne peux rien utiliser actuellement.;Il n'y a personne...;Tu ne trouvera  rien ici.
 #MIB_SCRIPT_PATH
 ./DB/txt.miBasic
 #SELECT_TXT_OBJ
@@ -31,4 +31,6 @@ Tu ne peux rien utiliser actuellement.;Il n'y a personne...;Tu ne trouvera rien 
 #SELECT_TXT_ON
 *Vous utilisez cet objet sur: 
 #TXT_GET
-*Tu obtiens: ;*Tu trouve: 
+*Tu obtiens: ;*Tu trouves: 
+#TIMER
+10
