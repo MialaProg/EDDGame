@@ -124,6 +124,10 @@ var Game = {
         return entry;
     },
 
+    getObjForIn: (obj, val) => {
+        return Game.searchIn(obj, val)[0];
+    },
+
     intToCoords: (num) => {
         num = num.toString();
         if (num.length < 2) {
@@ -265,6 +269,10 @@ var Game = {
                 return;
             }
             Game.setArr('', perso[0], 'Game.logPath');
+
+            if (perso[0] == 'P1' && players.includes('E')){
+                return Game.stopChain('P-Efelant is in the tree');
+            }
 
             // Check if it is already used
             try {
@@ -535,6 +543,46 @@ var Game = {
         if (!Game.db[obj]) Game.db[obj] = {};
         if (!Game.db[obj].nb) Game.db[obj].nb = 0;
         Game.db[obj].nb += 1;
+    },
+
+
+    // Sauvegarde (JSON + compression)
+    save: async () => {
+        let toDownload = await compress(JSON.stringify(Game));
+        const blob = new Blob([toDownload], { type: 'application/octet-stream' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'EDDGameSave.gz.db.mi';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    },
+
+    // Chargement (décompression + JSON)
+    load: async () => {
+        let uploadedStr;
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = '.mi,.db,.gz,.miDb';
+        console.log('Wait input');
+        input.onchange = async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            console.log('Wait reader')
+            reader.onload = async (event) => {
+                uploadedStr = event.target.result;
+                console.log('Wait uncompress');
+                let Gamebis = JSON.parse(await decompress(uploadedStr));
+                alert('Game loaded successfully!');
+                Object.assign(Game, Gamebis);
+                console.log('Game ready');
+            };
+            reader.readAsText(file);
+        };
+        input.click();
     }
 
 }

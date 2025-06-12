@@ -332,12 +332,13 @@ J'suis le plus fort de l'école !
 :EFDN
 Oh ! Mais tu es Doudou Noisette en fait !
 J'ai tellement l'habitude...
-:EFDNA
 Tu veux quoi ?
 #:REP
 Des noisettes.:EFGN
 Un bon d'achat.:EFBA
 #
+:EFDNA
+#STOP
 :EFGN
 Oops !
 Il y en a plus...
@@ -421,7 +422,7 @@ ssseya aayaa ssss seyythaa ssssaytha  saahthay ayaeeh aayaa hathehh à esseytha 
 -------------------
 
 to add: 
-Game.searchIn(obj, value)
+Game.getObjForIn(obj, value)
 let entry = Object.entries(myItems[obj]).find(([key, val]) => val === value)
 if !
 return [undef,undef]
@@ -455,12 +456,12 @@ Tu rêves.
 #GOTO:P3.Ask
 :P3.4
 *Plouf-Ori:
-#IF:#js-Game.searchIn("P3", "O4")[0]:P3.4Ex
+#IF:#js-Game.getObjForIn("P3", "O4")[0]:P3.4Ex
 Non... Il me semble pas...
 #GOTO:P3.Ask
 :P3.4Ex
 Oui, celle-là.
-#IF:#js-Game.searchIn("P3", "O4")[0] == "0":P3.Ok
+#IF:#js-Game.getObjForIn("P3", "O4")[0] == "0":P3.Ok
 Mais elle sera pas gratuite hein !
 #:OBJ
 O5:P3.Ok
@@ -478,7 +479,7 @@ Tiens !
 :P3.10
 *Plouf-Kalamaki:
 Oui, bien sûr !
-#IF:#js-!Game.searchIn("P3", "O10") || Game.searchIn("P3", "O10")[0] == "0":#P3.O10.Ok
+#IF:#js-!Game.getObjForIn("P3", "O10") || Game.getObjForIn("P3", "O10")[0] == "0":#P3.O10.Ok
 *Plouf-Ori:
 Mais ce ne sera pas gratuit hein.
 #:OBJ
@@ -492,7 +493,7 @@ O5:#P3.O10.Ok
 :P3.7
 *Plouf-Kalamaki:
 Oui, bien sûr !
-#IF:#js-!Game.searchIn("P3", "O7") || Game.searchIn("P3", "O7")[0] == "0":#P3.O7.Ok
+#IF:#js-!Game.getObjForIn("P3", "O7") || Game.getObjForIn("P3", "O7")[0] == "0":#P3.O7.Ok
 *Plouf-Ori:
 Mais ce ne sera pas gratuit hein.
 #:OBJ

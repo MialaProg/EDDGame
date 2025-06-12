@@ -153,6 +153,23 @@ var Actions = {
 
         Actions.toggle('Search', false);
     },
+
+    save: () => {
+        console.log('Saving..');
+        MChat.clearConv();
+        MSelect.options = [
+            { id: 'save', text: 'Sauvegarder' },
+            { id: 'load', text: 'Charger' }
+        ];
+        MSelect.create();
+        MSelect.select = (sid) => {
+            if (sid === 'save') {
+                Game.save();
+            } else if (sid === 'load') {
+                Game.load();
+            }
+        };
+    }
 };
 
 

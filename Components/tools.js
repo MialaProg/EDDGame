@@ -59,6 +59,37 @@ function randint(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+// ## STRING
+
+// Fonction de compression native (utilisant l'API Compression Streams)
+async function compress(str) {
+  const byteArray = new TextEncoder().encode(str);
+  const cs = new CompressionStream('gzip');
+  const writer = cs.writable.getWriter();
+  writer.write(byteArray);
+  writer.close();
+  const compressed = await new Response(cs.readable).arrayBuffer();
+  return String.fromCharCode(...new Uint8Array(compressed));
+}
+
+// Fonction de décompression native
+async function decompress(compressedStr) {
+  if (typeof compressedStr !== 'string') {
+    throw new TypeError('compressedStr must be a string');
+  }
+  const bytes = new Uint8Array(Array.from(compressedStr).map(c => c.charCodeAt(0)));
+  const stream = new ReadableStream({
+    start(controller) {
+      controller.enqueue(bytes);
+      controller.close();
+    }
+  });
+  const ds = new DecompressionStream('gzip');
+  const decompressedStream = stream.pipeThrough(ds);
+  const decompressed = await new Response(decompressedStream).arrayBuffer();
+  return new TextDecoder().decode(decompressed);
+}
+
 // ## ARRAY
 
 /**
