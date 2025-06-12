@@ -453,6 +453,8 @@ var Game = {
             // OK: roomDoors shuffle
             shuffleArray(roomDoors);
             for (let j = 0; j < roomDoors.length; j++) {
+                if (!randint(0, 5)) continue; // 20% chance to skip door
+
                 const doorRelative = roomDoors[j];
                 const oroomINT = roomINT + doorRelative;
                 const oroomCoords = Game.intToCoords(oroomINT);
@@ -536,6 +538,25 @@ var Game = {
             }));
             // console.log('Added to', my_room, ':[' + i + ']', element);
         }
+
+        for (let i = 1; i < 4; i++) {
+            for (let j = 0; j < 6; j++) {
+                const room = Game.getRoom([i, j]);
+                if (!room['L']) {
+                    Game.getARandomItemAndRestore(miDb.lib.slice(miDb.LOC_PLACES[0], miDb.LOC_PLACES[1]), (loc) => {
+                        let locID = parseInt(loc[0].slice(1));
+                        if (Game.placesAdded.includes(locID)) {
+                            return;
+                        }
+                        Game.placesAdded.push(locID);
+                        room['L'] = locID;
+                        return true;
+                    });
+                }
+            }
+            
+        }
+
         logClose();
     },
 
