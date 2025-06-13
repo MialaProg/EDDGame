@@ -1,0 +1,106 @@
+#0:Type;Num;Nom;n°O ness(1,2,3...);Don (ça,et ça|ou juste ça);5:n°Lieu possibles
+#(6:Used?)
+R;1;Piège de Doudou Noisette;19;open;3,6,7,13,18
+R;2;Polisson;21,22;open;2,3,4,6,7,9,10,12,17
+R;3;Porte bloquée;23;open;2,3,5,8,14,17
+R;4;Rex;16,7;open;1,3,4,6,7,8,9,13,14,15,16,17,18
+R;5;Serrure;4;open;1,2,3,4,5,8,14,17
+R;6;Porte sous-marine;10;open;4,15,16
+R;7;Runes fourchelangues;3;open;2
+R;8;Doudou Monstre;16;open;1,3,4,6,7,8,9,13,14,15,16,17,18
+R;9;Quinou;14,31;open;4,6,15,16,18
+R;10;Plouf-Anouk;5,8;open;4,6,15,16,6,5,18
+R;11;Chris;9;open;3,7
+R;12;Chenille;11;open;3,7,13
+#R;13
+#R;14
+#R;15
+R;16;Tagada et Storish;20;open;3,6,7,9,15,16,17,18
+#R;17
+#R;18;Empty;0;open;1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18
+L;85;C1: Classe;0;0;used
+L;86;C2: Classe;0;0;used
+L;87;C3: Classe;0;0;used
+L;88;D1: Dortoir;0;0;used
+L;89;D2: Dortoir;0;0;used
+L;90;R1: Réfectoire;0;0;used
+L;91;R2: Aire de pique-nique;0;0;used
+L;92;R3: Magasin;1,21,0;23,30;used
+L;93;A1: Aire de Récréation;0;0;used
+L;94;A2: Aire de Récréation;0;0;used
+L;95;TR: Garre de Transports;0;0;used
+L;96;WC: Toilettes;0;0;used
+L;97;HALL;0;0;used
+L;99;Réserve;0;0;used
+L;1;Pharmacie;0,21;2
+L;2;Ruines
+L;3;Jardin;0;8,9
+L;4;Piscine;30;32,5
+L;5;Laboratoire d'analyse;0;11
+L;6;Marché;21;13
+L;7;Foret;0;19
+L;8;Cybercafé;21;14,31
+L;9;Montagnes;0;20
+L;10;Orage
+#L;11
+L;12;Volcan
+L;13;Campignons
+L;14;Banque;0,23;21
+L;15;Rivière;30;32,5
+L;16;Cascade
+L;17;Parc d'attraction
+L;18;Plage
+#Type;Num;Nom;n°O ness(1,2,3...);Don (ça,ou ça&et juste ça);n°Lieu possibles
+P;1;Efelant;2,0;1;89,90,91,92,94,97,3,6,13,17
+P;2;Athena & Neila;0;3;85,86,87,88,89,93,94,97
+P;3;Le Gang des Pieuvres;0,5;4,7,10;*
+P;4;Riri;0;0;*
+P;5;Neige & Dragounet;0;0;*
+#P;6
+P;7;Baboum;13;16;*
+#P;8
+#P;9
+#P;10
+P;11;Musique;0;22;*
+#Type;Num;Nom(;Used)
+O;0;none
+O;1;Bon d'achat
+O;2;Médoc
+O;3;Dico de Fourchelangue
+O;4;Clef
+O;5;Plancton
+O;6;Stylo
+O;7;Cours de Peur
+O;8;Herbe
+O;9;Fleurs
+O;10;Cours de Plongée
+O;11;Trousse de Secours
+O;12;Marteau à réflèxes
+O;13;Banane
+O;14;Oreille droite
+O;15;Viande cuite
+O;16
+O;17
+O;18
+O;19;Noisettes
+O;20;Cailloux
+O;21;Sous
+O;22;Boite à musique
+O;23;Pied de biche
+O;24
+O;25
+O;26
+O;27
+O;28
+O;29
+O;30;Epuisette
+O;31;Index gauche
+O;32;Poisson
+O;33;Bout de plastique
+O;34
+O;35
+LOADING;T;C'est presque pret, Toutie
+LOADING;DN;Soit patient Doudou Noisette
+LOADING;DA;Calme-toi Doudou Ane
+LOADING;E;Avec un peu de chance tu trouvera des médicaments Efélent
+LOADING;P;Va pas trop vite Peupeuvre !

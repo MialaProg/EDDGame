@@ -1,0 +1,115 @@
+ID;Name;Consomable?;Multiple?;PlacesToBe;Req>Give;Comment
+R1;Piège de Doudou Noisette;0;3,6,7,13,18;19>open
+R2;Polisson;0;2,3,4,6,7,9,10,12,17;21|22>open;
+R3;Porte bloquée;0;2,3,5,8,14,17;23>open
+R4;Rex;0;1,3,4,6,7,8,9,13,14,15,16,17,18;16|7>open
+R5;Serrure;0;1,2,3,4,5,8,14,17;4>open
+R6;Porte sous-marine;0;4,15,16;10>open
+R7;Runes fourchelangues;0;2;3>open
+R8;Doudou Monstre;0;1,3,4,6,7,8,9,13,14,15,16,17,18;16>open
+R9;Quinou;0;4,6,15,16,18;14|31>open
+R10;Plouf-Anouk;0;4,6,15,16,6,5,18;5|8>open
+R11;Chris;0;3,7;9>open
+R12;Chenille;0;3,7,13;11>open
+#R13
+R14;Porte en hauteur;1,2,3,4,5,6,8,11,14,17;17|18>open
+R15;Celui dont on ne doit pas prononcer le nom;*;27>open
+R16;Tagada et Storish;0;3,6,7,9,15,16,17,18;20>open
+#R17
+#R18
+L85;C1: Classe;0
+L86;C2: Classe;0
+L87;C3: Classe;0
+L88;D1: Dortoir;0
+L89;D2: Dortoir;0
+L90;R1: Réfectoire;0
+L91;R2: Aire de pique-nique;0
+L92;R3: Magasin;0;-;1|21|0>23|30
+L93;A1: Aire de Récréation
+L94;A2: Aire de Récréation
+L95;TR: Garre de Transports
+L96;WC: Toilettes
+L97;HALL
+L99;Réserve
+L1;Pharmacie;-;-;0|21>2
+L2;Ruines
+L3;Jardin;0;-;0>8|9|25
+L4;Piscine;0;-;30>32|5
+L5;Laboratoire d'analyse;0;-;0>11&40&12
+L6;Marché;0;-;0|21>13|15|25
+L7;Foret;0;-;0>19
+L8;Cybercafé;0;-;21>14|31
+L9;Montagnes;0;-;0>20
+L10;Orage
+L11;Musée égyptien
+L12;Volcan
+L13;Campignons
+L14;Banque;0;-;0>21,23>21&21&21
+L15;Rivière;0;-;30>32|5
+L16;Cascade
+L17;Parc d'attraction
+L18;Plage
+###########################
+P1;Efelant;0;89,90,91,92,94,97,3,6,13,17;2|0>1
+P2;Athena & Neila;0;85,86,87,88,89,93,94,97;0>3
+P3;Le Gang des Pieuvres;0;*;0|5>4|7|10
+P4;Riri;0;*;0>0
+P5;Neige & Dragounet;0;*;0>0
+#P6
+P7;Baboum;0;-;13>16
+#P8
+#P9
+#P10
+P11;Musique;0;*;0>22
+P17;Bobi;0;*;25>17
+P18;Suika & Citrouille;0;3,6;0>18
+###############
+O0;none;0
+O1;Bon d'achat;1
+O2;Médoc;1
+O3;Dico de Fourchelangue;0
+O4;Clef;1
+O5;Plancton;2
+O6;Stylo;0
+O7;Cours de Peur;0
+O8;Herbe;2
+O9;Fleurs;2
+O10;Cours de Plongée;0
+O11;Trousse de Secours;1
+O12;Marteau à réflèxes;0
+O13;Banane;1
+O14;Oreille droite;1
+O15;Viande crue;2
+O16;Viande cuite;2
+O17;Bobi enthousiaste;0
+O18;Suika & Citrouille;1
+O19;Noisettes;2
+O20;Cailloux;2
+O21;Sous;2
+O22;Boite à musique;0
+O23;Pied de biche;0
+O24
+O25;Salade;2
+O26
+O27;Nez;1
+O28
+O29
+O30;Epuisette;0
+O31;Index gauche;1
+O32;Poisson;2
+O33;Bout de plastique;1
+O34
+O35
+O36
+O37
+O38
+O39
+O40;Hélicoptère;1
+O41;Philo pour les nuls;1
+O42;Jeu d'échecs;1
+O43
+LOADING;T;C'est presque pret, Toutie
+LOADING;DN;Soit patient Doudou Noisette
+LOADING;DA;Calme-toi Doudou Ane
+LOADING;E;Avec un peu de chance tu trouvera des médicaments Efélent
+LOADING;P;Va pas trop vite Peupeuvre !as trop vite Peupeuvre !

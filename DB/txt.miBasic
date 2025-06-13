@@ -76,14 +76,22 @@ R1:O19.2
 #STOP
 -------
 :O23
-C'est un outils pour dévérouiller les portes.
+C'est un outils pour dévérouiller les portes bloquées.
 #:ON
 R3:O23.2
+L14:O23.L14
 #ENDON
 :O23.2
 *Vous débloquez la porte avec le pied de biche.
 #OPEN:R3
 #STOP
+***
+:O23.L14
+Vous cambriolez la banque.
+#get:O21
+#get:O21
+#get:O21
+#stop
 -----------
 :PR4
 Salut !
@@ -677,6 +685,7 @@ On va te suivre partout !
 #ON
 L1:O21xL1
 L6:O21xL6
+L8:O21xL8
 #
 :no21
 Vous ne pouvez rien acheter.
@@ -695,10 +704,47 @@ Une banane:L6Bn
 De la viande:L6Vi
 Une salade:L6Sl
 #
-:noL6
+:ruptureStock
 Ce produit est en rupture de stock.
 #STOP
 :L6Bn
+#if:#js-!Game.db.L6.O21.includes('O13'):ruptureStock
+#use:O21
+#get:O13
+#stop
+:L6Vi
+#if:#js-!Game.db.L6.O21.includes('O15'):ruptureStock
+#use:O21
+#get:O15
+#stop
+:L6Sl
+#if:#js-!Game.db.L6.O21.includes('O25'):ruptureStock
+#use:O21
+#get:O25
+#stop
+***
+:O21xL8
+Que souhaitez-vous commander en ligne ?
+#REP
+Des canards:ruptureStock
+Des trombones:ruptureStock
+Des index gauches (Modèle T):L8pO31
+Des oreilles droites (Modèle M):L8pO14
+Des mouches carnivaures:ruptureStock
+Le nouveau mIphon pro max + ultra 6G:ruptureStock
+Des tracteurs:ruptureStock
+Du reblochon:ruptureStock
+#
+:L8pO31
+#if:#js-!Game.db.L8.O21.includes('O31'):ruptureStock
+#use:O21
+#get:O31
+#stop
+:L8pO14
+#if:#js-!Game.db.L8.O21.includes('O14'):ruptureStock
+#use:O21
+#get:O14
+#stop
 ---------------
 :O30
 Dans quoi souhaitez-vous utiliser cette épuisette ?
@@ -712,5 +758,3 @@ L15:O30xL15
 :O30xL15
 #get:#js-Game.db.L15.O30
 #stop
----------------
-

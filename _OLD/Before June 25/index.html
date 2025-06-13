@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="fr" class="theme-dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="pageTitle">Commencer l'aventure | EDD Game</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="Components/bulma.css">
+    <link rel="stylesheet" type="text/css" href="Components/buttons.css">
+    <link rel="stylesheet" type="text/css" href="Components/disc.css">
+    <link rel="stylesheet" type="text/css" href="Components/divers.css">
+
+    <!-- JS -->
+    <script src="./main.js"></script>
+    <script src="Components/tools.js"></script>
+    <script src="Components/buttons.js"></script>
+    <script src="Components/canvas.js"></script>
+    <script src="Components/loading.js"></script>
+    <script src="Components/modal.js"></script>
+    <script src="Components/players.js"></script>
+    <script src="Readers/miDbReader.js"></script>
+    <script src="Readers/miBasicReader.js"></script>
+    <script src="JSDB/game.js"></script>
+    <script src="JSDB/imgs.js"></script>
+
+    <!-- Service Worker -->
+    <link rel="manifest" href="gameLib/EDDGame.webmanifest">
+    <script>
+      /*
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('gameLib/sw.js')
+                .then(registration => {
+                    console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                })
+                .catch(error => {
+                    console.log('ServiceWorker registration failed: ', error);
+                });
+        }*/
+    </script>
+    </head>
+    <body>
+        <div id='ErrorMessageIfNoCSS'>
+            <style>
+                .error-msg-stop {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100vw;
+                    height: 100vh;
+                    background-color: rgba(128, 48, 1, 0.527);
+                    font-size: 4em;
+                    text-align: center;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
+            </style>
+            <div class="is-hidden error-msg-stop">
+                <p>
+                    Bulma CSS (et autres) n'est pas supporté...
+                    Vérifiez votre connexion internet.
+                </p>
+            </div>
+        </div>
+
+        <div class="block content" id="pregame-interface">
+            <h1>Bienvenue sur le compagnon EDD Game !</h1>
+            <p id='players-p'>Chargement en cours...</p>
+            <form action="#" method="post" id="players-form">
+                <!-- Completed with players.js -->
+
+                <div class="field is-grouped">
+                    <div class="control">
+                        <button class="button is-primary" id="playBtn" disabled>Jouer !</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="block content is-hidden" id="loadinggame-interface">
+            <div class="has-text-centered centered-height">
+                <h1 class="title" id="loadingTitle">Chargement en cours...</h1><br>
+                <progress class="progress is-primary" max="100" id="loadingProgress">50%</progress>
+            </div>
+        </div>
+
+        <div class="content is-hidden" id="ingame-interface">
+            <div class="block buttons top">
+                <div class="control">
+                    <div class="control select">
+                        <select id="current-room" name="current-room">
+                            <option value="0">Chargement en cours...</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="control">
+                    <button id="save" class="button is-info" onclick="Actions.save()">Save</button>
+                </div>
+            </div>
+    
+            <div class="canvas-container">
+                <canvas id="room-canvas"></canvas>
+            </div>
+            <div class="block buttons bottom" oldclass="field is-grouped">
+                <div class="control">
+                    <button id="actionUse" class="button is-info actionBtn" onclick="Actions.use()">Utiliser</button>
+                </div>
+                <div class="control">
+                    <button id="actionSpeach" class="button is-primary actionBtn" onclick="Actions.speach()">Parler</button>
+                </div>
+                <div class="control">
+                    <button id="actionSearch" class="button is-warning actionBtn" onclick="Actions.search()">Chercher</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal" id="gameModal">
+            <div class="modal-background"></div>
+            <div class="modal-card">
+                <header class="modal-card-head">
+                    <p class="modal-card-title">Module d'intéraction</p>
+                    <button class="delete modal-close" aria-label="close"></button>
+                </header>
+                <section class="modal-card-body" id="gameModalContent">
+                    <div id="gameModalMessages"></div>
+                    <ul id="gameModalSelect" class="menu-list is-hidden"></ul>
+                </section>
+                <footer class="modal-card-foot is-flex-wrap-wrap" id="gameModalAnswers"></footer>
+            </div>
+        </div>
+    </body>

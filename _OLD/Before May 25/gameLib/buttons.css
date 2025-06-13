@@ -1,0 +1,16 @@
+/* Barre de boutons V2 */
+.buttons.bottom {
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    z-index: 30; /* Derrière le Modal (40) */
+    margin-bottom: inherit;
+}
+
+.buttons.top {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 30; /* Derrière le Modal (40) */
+    margin-bottom: inherit;
+}
