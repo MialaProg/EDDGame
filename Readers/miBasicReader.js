@@ -56,6 +56,7 @@ var miBasic = {
                     if (isNaN(parseInt(val))) return val;
                     return parseInt(val);
                 case 'js':
+//TODO:TRY else false
                     return eval(parts[1]);
             }
         }
