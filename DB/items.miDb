@@ -14,7 +14,7 @@ R11;Chris;0;3,7;9>open
 R12;Chenille;0;3,7,13;11>open
 #R13
 R14;Porte en hauteur;1,2,3,4,5,6,8,11,14,17;17|18>open
-R15;Sphinx;11;17|18>open
+R15;Celui dont on ne doit pas prononcer le nom;*;27>open
 R16;Tagada et Storish;0;3,6,7,9,15,16,17,18;20>open
 #R17
 #R18
@@ -80,8 +80,8 @@ O11;Trousse de Secours;1
 O12;Marteau à réflèxes;0
 O13;Banane;1
 O14;Oreille droite;1
-O15;Viande cuite;1
-O16
+O15;Viande crue;2
+O16;Viande cuite;2
 O17;Bobi enthousiaste;0
 O18;Suika & Citrouille;1
 O19;Noisettes;2
@@ -90,9 +90,9 @@ O21;Sous;2
 O22;Boite à musique;0
 O23;Pied de biche;0
 O24
-O25
+O25;Salade;2
 O26
-O27
+O27;Nez;1
 O28
 O29
 O30;Epuisette;0
@@ -101,6 +101,14 @@ O32;Poisson;2
 O33;Bout de plastique;1
 O34
 O35
+O36
+O37
+O38
+O39
+O40;Hélicoptère;1
+O41;Philo pour les nuls;1
+O42;Jeu d'échecs;1
+O43
 LOADING;T;C'est presque pret, Toutie
 LOADING;DN;Soit patient Doudou Noisette
 LOADING;DA;Calme-toi Doudou Ane
