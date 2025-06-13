@@ -471,7 +471,7 @@ Tu rêves.
 #GOTO:P3.Ask
 :P3.4
 *Plouf-Ori:
-#IF:#js-Game.getObjForIn("P3", "O4")[0]:P3.4Ex
+#IF:#js-Game.getObjForIn("P3", "O4"):P3.4Ex
 Non... Il me semble pas...
 #GOTO:P3.Ask
 :P3.4Ex
@@ -692,7 +692,7 @@ Vous ne pouvez rien acheter.
 #stop
 ***
 :O21xL1
-#if:#js-Game.db.L1.O21!='O2':no21
+#if:#js-!Game.db.L1.O21.includes('O2'):no21
 #use:O21
 #get:O2
 #stop

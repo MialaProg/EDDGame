@@ -166,9 +166,12 @@ function initMiBasicFunc() {
         Game.db[door].opened = true;
         showRoom();
     };
-    miBasic.getObject = (obj) => {
-        MChat.addText(miDb.TXT_GET[0] + findInArr(miDb.lib, miDb.LOC_OBJS[0], miDb.LOC_OBJS[1], item => item[0] == obj)[1][1], undefined, 10);
-        Game.getObject(obj);
+    miBasic.getObject = (objs) => {
+        if (typeof objs != 'array') objs = [objs];
+        objs.forEach(obj => {
+            MChat.addText(miDb.TXT_GET[0] + findInArr(miDb.lib, miDb.LOC_OBJS[0], miDb.LOC_OBJS[1], item => item[0] == obj)[1][1], undefined, 10);
+            Game.getObject(obj);
+        });
     };
     miBasic.useObject = (obj) => {
         console.log('Use object:', obj);
@@ -208,7 +211,7 @@ function showRoom(roomINT = Game.actualRoom) {
 
         // Rename the option
         const optionSelected = RoomSelect.HTMLE ? Array.from(RoomSelect.HTMLE.options).find(option => option.value === roomINT.toString()) : undefined;
-        
+
         if (optionSelected && !optionSelected.textContent) {
             optionSelected.textContent = optionSelected.innerHTML + '';
         }
@@ -271,7 +274,7 @@ function showRoom(roomINT = Game.actualRoom) {
         Loading.setProgressBar(50 + (CanvasLib.numImgsPrinted / CanvasLib.numImgsToPrint) * 50);
         return CanvasLib.numImgsPrinted >= CanvasLib.numImgsToPrint || Date.now() - noCoTimer > 10000;
     }).then(() => {
-        if (Date.now() - noCoTimer > 10000){
+        if (Date.now() - noCoTimer > 10000) {
             alert('Certaines images n\'ont pas pu être chargées.\nVeuillez vérifier votre connexion internet.');
         }
         Loading.changeMode(2);

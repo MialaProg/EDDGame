@@ -28,7 +28,8 @@ var Game = {
     logPath: [],
     logs: [],
 
-    toBeRestored: ['db', 'placesToBeAdded', 'placesAdded', 'logPath', 'numPlacesAvaible'],
+    toBeRestored: ['db', 'placesToBeAdded', 'placesAdded', 'logPath', 'numPlacesAvaible', ''],
+    History: [],
     isGenerate: false,
 
     myItems: [],
@@ -62,6 +63,19 @@ var Game = {
             ${arr}${idx} = ${val};
         }
     `);
+    },
+
+    setArrBackup: (idx, val) => {
+        val = JSON.stringify(val);
+
+        Game.History.push([idx, JSON.stringify(eval('Game.' + idx))]);
+        eval(`
+        if (Array.isArray(Game.${idx})) {
+            Game.${idx}.push(${val});
+        } else {
+            Game.${idx} = ${val};
+        }
+        `);
     }
 
     , restoreArr: (toLen, arr, history) => {
@@ -88,11 +102,21 @@ var Game = {
     // For logging
     stopChain: (err) => { Game.logs.push(err + ' '.repeat(25 - err.length) + Game.logPath.join('<')); }
 
+    // Set Game.db.item.prop to val and save
     , setDbItem: (ItemID, Prop, val) => {
         if (!Game.db[ItemID]) {
             Game.setArr(`['${ItemID}']`, '{}', 'Game.db');
         }
-        Game.setArr(`['${ItemID}']['${Prop}']`, `"${val}"`, 'Game.db');
+        Game.setArr(`['${ItemID}']['${Prop}']`, JSON.stringify(val), 'Game.db');
+    },
+
+    // Push and save history
+    push: (ItemID, Prop, val) => {
+        let arr;
+        try { arr = Game.db[ItemID][Prop]; } catch (e) { }
+        if (!arr) arr = [val];
+        else arr.push(val);
+        Game.setDbItem(ItemID, Prop, arr);
     },
 
     getARandomItemAndRestore: (arr, conditions, restorate = () => { }) => {
@@ -117,7 +141,7 @@ var Game = {
 
     searchIn: (obj, value) => {
         if (!Game.db[obj]) Game.db[obj] = {};
-        let entry = Object.entries(Game.db[obj]).find(([key, val]) => val === value);
+        let entry = Object.entries(Game.db[obj]).find(([key, val]) => val.includes(value));
         if (!entry) {
             return [undefined, undefined];
         }
@@ -127,6 +151,7 @@ var Game = {
     getObjForIn: (obj, val) => {
         return Game.searchIn(obj, val)[0];
     },
+
 
     intToCoords: (num) => {
         num = num.toString();
@@ -201,7 +226,7 @@ var Game = {
             const getterObj = Game.db[getter];
             for (let j = 0; j < Object.keys(getterObj).length; j++) {
                 const req = Object.keys(getterObj)[j];
-                if (getterObj[req].includes(item)) Game.setArr(`['${getter}']['${req}']`, undefined, 'Game.db');
+                if (getterObj[req].includes(item)) Game.setArr(`['${getter}']['${req}']`, JSON.stringify(getterObj[req].filter(item2 => item !== item2)), 'Game.db');
             }
         }
 
@@ -567,7 +592,7 @@ var Game = {
     },
 
     useObject: (obj) => {
-        if('0' != findInArr(miDb.lib, miDb.LOC_OBJS[0], miDb.LOC_OBJS[1], item => item[0] == MChat.ans)[1][2]) Game.db[obj].nb -= 1;
+        if ('0' != findInArr(miDb.lib, miDb.LOC_OBJS[0], miDb.LOC_OBJS[1], item => item[0] == MChat.ans)[1][2]) Game.db[obj].nb -= 1;
     },
 
 

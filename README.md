@@ -29,6 +29,7 @@ db: {L:{P;O}}
     for objects: nb (0~)   
     for doors: opened (bool)   
     for perso: (isHidden)
+    [xx] = [xx,yy,zz] (&)
    
 Variables disponibles: cf. miDbReader   
    
