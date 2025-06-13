@@ -90,6 +90,7 @@ async function initMain() {
 
     // Game generation: 10% to 50%
     wait(() => PlayersJS.PlayersChoiced).then(async () => {
+        document.getElementById('pageTitle').innerHTML = 'Chargement... | EDDGame';
         Loading.setTitle('Création de la partie...');
         Loading.setProgressBar(10);
         await Game.generate();
@@ -97,6 +98,7 @@ async function initMain() {
 
         Loading.setTitle('Affichage de la pièce...');
         showRoom(miDb.START_ROOM[0]);
+        document.getElementById('pageTitle').innerHTML = 'EDDGame - Board Game Companion';
 
         canvasObj.update = () => { showRoom(Game.actualRoom); };
         setTimeout(() => {
@@ -156,7 +158,8 @@ function initMiBasicFunc() {
             }
             MChat.addAnswer(option[1], txt, selectText);
         });
-        await wait(() => MChat.ans !== undefined, 200);
+        await wait(() => MChat.ans !== undefined, 200)
+        console.log('Debug #8',type, MChat.ans);
         if (type == 'OBJ' && '0' != findInArr(miDb.lib, miDb.LOC_OBJS[0], miDb.LOC_OBJS[1], item => item[0] == MChat.ans)[1][2]) Game.db[MChat.ans].nb -= 1;
         return MChat.ans;
     };
@@ -269,7 +272,7 @@ function showRoom(roomINT = Game.actualRoom) {
         return CanvasLib.numImgsPrinted >= CanvasLib.numImgsToPrint || Date.now() - noCoTimer > 10000;
     }).then(() => {
         if (Date.now() - noCoTimer > 10000){
-            alert('Certaines images n\'ont pas pu être chargées.<br>Veuillez vérifier votre connexion internet.');
+            alert('Certaines images n\'ont pas pu être chargées.\nVeuillez vérifier votre connexion internet.');
         }
         Loading.changeMode(2);
     });
