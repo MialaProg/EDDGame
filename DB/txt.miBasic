@@ -600,7 +600,7 @@ O17:R14op
 O18:R14op
 #
 :R15
-#IF:#js-Game.
+#IF:#js-Game.db['O27'].nb:R15u
 *Il ne vaudrait mieux pas l'approcher...
 
 
