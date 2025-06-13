@@ -421,12 +421,6 @@ ssseya aayaa ssss seyythaa ssssaytha  saahthay ayaeeh aayaa hathehh à esseytha 
 #STOP
 -------------------
 
-to add: 
-Game.getObjForIn(obj, value)
-let entry = Object.entries(myItems[obj]).find(([key, val]) => val === value)
-if !
-return [undef,undef]
-return entry
 ----------
 :P3.Ask
 #STOP
@@ -598,7 +592,16 @@ Tiens, elle joue une très belle mélodie.
 :P11.deja
 Je t'ai déjà donné une boite à musique...
 #STOP
-
+-------------------
+:R14
+Cette porte est trop haute.
+#:OBJ
+O17:R14op
+O18:R14op
+#
+:R15
+#IF:#js-Game.
+*Il ne vaudrait mieux pas l'approcher...
 
 
 
