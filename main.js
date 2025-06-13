@@ -159,8 +159,6 @@ function initMiBasicFunc() {
             MChat.addAnswer(option[1], txt, selectText);
         });
         await wait(() => MChat.ans !== undefined, 200)
-        console.log('Debug #8',type, MChat.ans);
-        if (type == 'OBJ' && '0' != findInArr(miDb.lib, miDb.LOC_OBJS[0], miDb.LOC_OBJS[1], item => item[0] == MChat.ans)[1][2]) Game.db[MChat.ans].nb -= 1;
         return MChat.ans;
     };
     miBasic.openDoor = (door) => {
@@ -171,6 +169,10 @@ function initMiBasicFunc() {
     miBasic.getObject = (obj) => {
         MChat.addText(miDb.TXT_GET[0] + findInArr(miDb.lib, miDb.LOC_OBJS[0], miDb.LOC_OBJS[1], item => item[0] == obj)[1][1], undefined, 10);
         Game.getObject(obj);
+    };
+    miBasic.useObject = (obj) => {
+        console.log('Use object:', obj);
+        Game.useObject(obj);
     };
 }
 
@@ -194,12 +196,10 @@ function showRoom(roomINT = Game.actualRoom) {
         Game.actualItems.push('L' + placeID);
         canvasObj.drawImage(40, 40, 40, 40, 'L' + placeID);
 
-        console.log('DrawChar', Game.db['L' + placeID]);
-
         place = Game.db['L' + placeID];
         if (place) {
             let persoID = place['P'];
-            if (persoID) {
+            if (persoID && !Game.db['P' + persoID].isHidden) {
                 Game.actualItems.push('P' + persoID);
                 canvasObj.drawImage(20, 85, 39, 29, 'P' + persoID);
                 canvasObj.drawRect(20, 85, 41, 31, undefined, 'black');
@@ -208,7 +208,7 @@ function showRoom(roomINT = Game.actualRoom) {
 
         // Rename the option
         const optionSelected = RoomSelect.HTMLE ? Array.from(RoomSelect.HTMLE.options).find(option => option.value === roomINT.toString()) : undefined;
-        console.log('Option selected: ', optionSelected);
+        
         if (optionSelected && !optionSelected.textContent) {
             optionSelected.textContent = optionSelected.innerHTML + '';
         }

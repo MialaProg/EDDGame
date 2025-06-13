@@ -7,6 +7,7 @@ var miBasic = {
     choice: async (type, options) => { return 0; },
     openDoor: (door) => { },
     getObject: (obj) => { },
+    useObject: (obj) => { },
 
     init: async (path = miDb.MIB_SCRIPT_PATH) => {
         let script = await getDb(path);
@@ -52,12 +53,12 @@ var miBasic = {
             let [parts, cmd] = miBasic._splitLine(code, '-');
             switch (cmd) {
                 case 'var':
-                    let val =  miBasic.vars[parts[1]];
+                    let val = miBasic.vars[parts[1]];
                     if (isNaN(parseInt(val))) return val;
                     return parseInt(val);
                 case 'js':
-//TODO:TRY else false
-                    return eval(parts[1]);
+                    try { return eval(parts[1]); }
+                    catch (e) { console.error(e); return false; }
             }
         }
         return code;
@@ -106,7 +107,7 @@ var miBasic = {
                             line = miBasic._readLine();
                         }
                         let resultID = await miBasic.choice(type, options);
-                        console.log('Item choiced:',resultID);
+                        console.log('Item choiced:', resultID);
                         miBasic.goTo(resultID);
                         break;
                     case 'stop':
@@ -117,6 +118,9 @@ var miBasic = {
                         break;
                     case 'get':
                         miBasic.getObject(miBasic._getVal(parts[1]));
+                        break;
+                    case 'use':
+                        miBasic.useObject(miBasic._getVal(parts[1]));
                         break;
                     case 'set':
                         let val = miBasic._getVal(parts[2]);

@@ -9,13 +9,13 @@
 :O10
 C'est votre cours de plongée.
 #:ON
-    R10:UR6+O10
-    R6:UR6xO10
+    R6:UR6+O10
 #ENDOBJ
 ****
 :UR6+O10
 *Grâce à vos cours de plongée, vous parvenez à atteindre la porte.
 *Vous l'ouvrez.
+#USE:O10
 #OPEN:R6
 #STOP
 -------------
@@ -40,6 +40,7 @@ Bon ben tant pis.
 :PR2OPEN
 Bon... D'accord...
 *Polisson vous fait un câlin et vous laisse ainsi passer.
+#USE:O21
 #OPEN:R2
 #STOP
 -------
@@ -60,6 +61,7 @@ R1:O19.2
 #ENDON
 :O19.2
 *Le piège vous laisse donc passer.
+#USE:O19
 #OPEN:R1
 #STOP
 ---------
@@ -74,8 +76,8 @@ R1:O19.2
 #STOP
 -------
 :O23
-#:ON
 C'est un outils pour dévérouiller les portes.
+#:ON
 R3:O23.2
 #ENDON
 :O23.2
@@ -106,6 +108,7 @@ Ouinn je fais pas peur !
 :PR4.6
 Miam miam miam miam !
 Tchu pcheux pchacher.
+#USE:O16
 #OPEN:R4
 #STOP
 :PR4xO7
@@ -129,6 +132,7 @@ R5:UR5xO4
 ****
 :UR5xO4
 *La porte s'ouvre.
+#USE:O4
 #OPEN:R5
 #STOP
 -------------
@@ -182,7 +186,12 @@ Moi je mange de la viande cuite.
 Tu en as?
 #GOTO:DMAsk
 :DMCh
+#:OBJ 
+O16:R8xO16
+#
+:R8xO16
 Merchi !
+#USE:O16
 #OPEN:R8
 #STOP
 -------------
@@ -205,8 +214,8 @@ Ah mince, moi j'ai faim...
 Tu n'aurais pas à manger par hasard ?
 Et je te laisse passer.
 #:OBJ
-O31:QNMiam
-O14:QNMiam
+O31:QNMiam31
+O14:QNMiam14
 O32:QNPwasson
 0:QN0
 #
@@ -215,7 +224,13 @@ Si tu as du poisson, où des bouts bon d'humain, n'hésite pas à me les apporte
 #STOP
 :QNPwasson
 Miam ! Merchi !
+#USE:O32
 #GOTO:QNOpen
+:QNMiam31 
+#USE:O31 
+#GOTO:QNMiam
+:QNMiam14 
+#USE:O14
 :QNMiam
 Miaaam ! Merchi bjeauqchou !
 :QNOpen
@@ -228,14 +243,19 @@ Miaaam ! Merchi bjeauqchou !
 Agaa ! 
 Miam-miam agabo !
 #:OBJ
-O5:PDAMiam
-O8:PDAMiam
+O5:PDAMiam5
+O8:PDAMiam8
 0:PDAz
 #
 :PDAz
 Agabapabo !
 *Elle vous électrocute avec ses antennes.
 #STOP
+:PDAMiam5
+#USE:O5 
+#GOTO:PDAMiam
+:PDAMiam8
+#USE:O8
 :PDAMiam
 Gabo !!!
 *Elle vous laisse passer.
@@ -290,6 +310,7 @@ Oh !
 Mer-
 ci !
 *Il se ddddddéééééécccccaaaaalllllleeee pour vous laisser passer.
+#USE:O9
 #OPEN:R11
 #STOP
 ---------------
@@ -303,6 +324,7 @@ O11:R12Op
 :R12Op
 Merci beaucoup !
 Je vais me reposer.
+#USE:O11
 #OPEN:R12
 #STOP
 ----------------- 
@@ -312,10 +334,11 @@ On a trop mangé, mais on a pas pu digérer:
 il nous manque des cailloux.
 Donnez-nous en et on vous laisse passer.
 #:OBJ:
-O20:R16Op
+O20:R16p
 #
 :R16p
 Merci beaucoup !
+#use:O20
 #OPEN:R16
 #STOP
 ------------
@@ -334,15 +357,15 @@ Oh ! Mais tu es Doudou Noisette en fait !
 J'ai tellement l'habitude...
 Tu veux quoi ?
 #:REP
-Des noisettes.:EFGN
+Des noisettes.:EF_0
 Un bon d'achat.:EFBA
 #
 :EFDNA
 #STOP
-:EFGN
+:EF_0
 Oops !
 Il y en a plus...
-#GOTO:EFDNA
+#STOP
 *
 :EFDA
 Oh ! Mais tu es Doudou Âne en fait !
@@ -350,13 +373,9 @@ J'ai tellement l'habitude...
 :EFDAA
 Tu veux quoi ?
 #:REP
-De l'herbe.:EFGA
+De l'herbe.:EF_0
 Un bon d'achat.:EFBA
 #
-:EFGA
-Oops !
-Il y en a plus...
-#GOTO:EFDAA
 *
 :EFP
 Oh ! Mais tu es Peupeuvre en fait !
@@ -364,13 +383,9 @@ J'ai tellement l'habitude...
 :EFPA
 Tu veux quoi ?
 #:REP
-Du plancton.:EFGP
+Du plancton.:EF_0
 Un bon d'achat.:EFBA
 #
-:EFGP
-Oops !
-Il y en a plus...
-#GOTO:EFPA
 *
 :EFT
 Oh ! Mais tu es Toutie en fait !
@@ -378,24 +393,22 @@ J'ai tellement l'habitude...
 :EFTA
 Tu veux quoi ?
 #:REP
-Des salades.:EFGT
+Des salades.:EF_0
 Un bon d'achat.:EFBA
 #
-:EFGT
-Oops !
-Il y en a plus...
-#GOTO:EFTA
 *
 :EFBA
 #IF:#js-Game.db['P1']['0']:EFOK
 #IF:#var-EFOK::EFDeja
 D'accord, mais donne moi d'abord des médocs !
 #:OBJ
-O2:EFOK
+O2:EFOKxO2
 #
 :EFDeja
 Dis, je t'en ai déjà donné un !
 #STOP
+:EFOKxO2
+#USE:O2
 :EFOK
 Tient !
 #GET:O1
@@ -458,13 +471,15 @@ Oui, celle-là.
 #IF:#js-Game.getObjForIn("P3", "O4")[0] == "0":P3.Ok
 Mais elle sera pas gratuite hein !
 #:OBJ
-O5:P3.Ok
+O5:P3.OkxO5
 0:P3.NoPl
 #
 :P3.NoPl
 *Kro-Chou:
 Kro pas plancton, kro pas kro chou.
 #STOP
+:P3.OkxO5
+#USE:O5
 :P3.Ok
 *Plouf-Kalamaki:
 Tiens !
@@ -477,9 +492,11 @@ Oui, bien sûr !
 *Plouf-Ori:
 Mais ce ne sera pas gratuit hein.
 #:OBJ
-O5:#P3.O10.Ok
+O5:#P3.O10.OkxO5
 0:P3.NoPl
 #
+:P3.O10.OkxO5
+#USE:O5
 :P3.O10.Ok
 *Les pieuvres te font donc un cours de plongée.
 #GET:O10
@@ -491,9 +508,11 @@ Oui, bien sûr !
 *Plouf-Ori:
 Mais ce ne sera pas gratuit hein.
 #:OBJ
-O5:#P3.O7.Ok
+O5:#P3.O7.OkxO5
 0:P3.NoPl
 #
+:P3.O7.OkxO5
+#USE:O5
 :P3.O7.Ok
 *Les pieuvres te font donc un cours de peur.
 #GET:O7
@@ -536,6 +555,7 @@ Tu m'donne une banane, et j'te cuisine c'que tu veux !
 O13:P7.B
 #
 :P7.B
+#USE:O13
 #set:P7B:
 Merchi !
 :P7.C
@@ -549,6 +569,7 @@ Oops, j'ai déjà mangé la banane...
 Si t'as quoi qu'ce soit à cuisiner n'hésite pas !
 #STOP
 :P7.15
+#USE:O15
 #set:P7.15:
 Quelle cuisson ?
 #:REP
@@ -559,7 +580,7 @@ Bien cuite:P7Q
 #
 :P7H
 Ah non moi je fais pas ça !
-#GOTO:P7.15
+#STOP
 :P7Q
 Et voilà !
 #GET:O16
@@ -593,17 +614,77 @@ Tiens, elle joue une très belle mélodie.
 Je t'ai déjà donné une boite à musique...
 #STOP
 -------------------
-:R14
+:UR14
 Cette porte est trop haute.
 #:OBJ
 O17:R14op
-O18:R14op
+O18:R14opx18
 #
-:R15
+:R14opx18 
+*Les deux soeurs:
+On t'aide à grimper et on s'en va !
+#USE:O18
+:R14op
+Vous atteignez la porte.
+#open:R14
+#stop
+------------------
+:PR15
 #IF:#js-Game.db['O27'].nb:R15u
 *Il ne vaudrait mieux pas l'approcher...
-
-
-
-
+:R15u
+#:REP
+J..J'ai quelque chose pour vous...:R15o
+(Fuire):stop
+#
+:R15o
+#:OBJ
+O27:R15op
+#
+:O27
+C'est un nez.
+#ON
+R15:R15op
+#
+:R15op
+*Celui-dont-on-ne-doit-pas-prononcer-le-nom s'échappe.
+#USE:O27
+#OPEN:R15
+#STOP
+---------------------
+:P17
+Tu me donnes une salade ? Parce que je peux meme pas te tuer !
+#OBJ 
+O25:P17xO25
+#
+:P17xO25
+Ouiiiii !!!
+Merci !!!
+Oh miam miam !!!
+Puisque c'est ça je te suis !
+#use:O25
+#get:O17
+#js-Game.db.P17.isHidden = true;
+#stop
+---------------------
+:P18 
+On va te suivre partout !
+#get:O18
+#stop
+---------------
+:O21
+*Sur quoi utilisez-vous vos crédits-Mi ?
+#ON
+L1:O21xL1
+#
+:no21
+Vous ne pouvez rien acheter.
+#stop
+***
+:O21xL1
+#if:#js-Game.db.L1.O21!='O2':no21
+#use:O21
+#get:O2
+#stop
+***
 

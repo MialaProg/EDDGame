@@ -270,7 +270,7 @@ var Game = {
             }
             Game.setArr('', perso[0], 'Game.logPath');
 
-            if (perso[0] == 'P1' && players.includes('E')){
+            if (perso[0] == 'P1' && players.includes('E')) {
                 return Game.stopChain('P-Efelant is in the tree');
             }
 
@@ -554,7 +554,7 @@ var Game = {
                     });
                 }
             }
-            
+
         }
 
         logClose();
@@ -566,11 +566,14 @@ var Game = {
         Game.db[obj].nb += 1;
     },
 
+    useObject: (obj) => {
+        if('0' != findInArr(miDb.lib, miDb.LOC_OBJS[0], miDb.LOC_OBJS[1], item => item[0] == MChat.ans)[1][2]) Game.db[obj].nb -= 1;
+    },
+
 
     // Sauvegarde (JSON + compression)
     save: async () => {
-        let toDownload = await compress(JSON.stringify(Game));
-        const blob = new Blob([toDownload], { type: 'application/octet-stream' });
+        const blob = new Blob([await compress(JSON.stringify(Game))], { type: 'application/octet-stream' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;

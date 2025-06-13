@@ -1,5 +1,4 @@
-ID;Name;Consomable?;Multiple?;PlacesToBe;Req>Give
-TODO:R => R , CpCl
+ID;Name;Consomable?;Multiple?;PlacesToBe;Req>Give;Comment
 R1;Piège de Doudou Noisette;0;3,6,7,13,18;19>open
 R2;Polisson;0;2,3,4,6,7,9,10,12,17;21|22>open;
 R3;Porte bloquée;0;2,3,5,8,14,17;23>open

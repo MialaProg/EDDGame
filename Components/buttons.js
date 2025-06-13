@@ -4,7 +4,7 @@ var RoomSelect = {
         RoomSelect.HTMLE = document.getElementById("current-room");
         RoomSelect.setEvents();
         RoomSelect.setDefault();
-        PlayersJS.change.push(()=>{
+        PlayersJS.change.push(() => {
             document.getElementById('timerOption').innerHTML = 'Il est ' + Math.round(timer / miDb.TIMER[0]) + 'h';
         });
     },
@@ -42,7 +42,6 @@ var RoomSelect = {
         RoomSelect.HTMLE.addEventListener("change", function () {
             if (this.value != "OFF") {
                 PlayersJS.next();
-                //TODO
                 showRoom(RoomSelect.getVal());
                 // showRoom(this.value.split(";").map(Number));
                 wait(() => !RoomSelect.isMouseOver, 200, 10 ** 9).then(() => { wait(() => RoomSelect.isMouseOver, 200, 10 ** 9).then(() => RoomSelect.setVal("OFF")) });
@@ -88,6 +87,7 @@ var Actions = {
     showOptions: async (id) => {
         MSelect.empty = miDb.MSG_No_UseSpchSrch[id];
         MSelect.select = (sid) => {
+            Actions.toggle(false, false);
             console.log(sid);
             Modal.switch('chat');
             miBasic.run(sid);
@@ -96,7 +96,7 @@ var Actions = {
     },
 
     toggle: (id, OnOff) => {
-        console.log('Toggle', OnOff);
+        // console.log('Toggle', OnOff);
         if (!Actions.isToggleInit) {
             Actions.isToggleInit = true;
             PlayersJS.change.push(() => {
@@ -112,12 +112,10 @@ var Actions = {
     use: () => {
         Actions.propose('O', 'U');
         Actions.showOptions(0);
-        Actions.toggle('Use', false);
     },
     speach: () => {
         Actions.propose('P', 'P');
         Actions.showOptions(1);
-        Actions.toggle('Speach', false);
     },
     search: () => {
         console.log('Seaching..');
