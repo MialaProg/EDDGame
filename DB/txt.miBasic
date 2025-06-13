@@ -676,6 +676,7 @@ On va te suivre partout !
 *Sur quoi utilisez-vous vos crédits-Mi ?
 #ON
 L1:O21xL1
+L6:O21xL6
 #
 :no21
 Vous ne pouvez rien acheter.
@@ -687,4 +688,29 @@ Vous ne pouvez rien acheter.
 #get:O2
 #stop
 ***
+:O21xL6
+Que souhaitez-vous acheter ?
+#REP
+Une banane:L6Bn
+De la viande:L6Vi
+Une salade:L6Sl
+#
+:noL6
+Ce produit est en rupture de stock.
+#STOP
+:L6Bn
+---------------
+:O30
+Dans quoi souhaitez-vous utiliser cette épuisette ?
+#ON
+L4:O30xL4
+L15:O30xL15
+#
+:O30xL4
+#get:#js-Game.db.L4.O30
+#stop
+:O30xL15
+#get:#js-Game.db.L15.O30
+#stop
+---------------
 
