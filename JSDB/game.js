@@ -65,6 +65,7 @@ var Game = {
     `);
     },
 
+    // Simplification of setArr
     setArrBackup: (idx, val) => {
         val = JSON.stringify(val);
 
@@ -105,18 +106,19 @@ var Game = {
     // Set Game.db.item.prop to val and save
     , setDbItem: (ItemID, Prop, val) => {
         if (!Game.db[ItemID]) {
-            Game.setArr(`['${ItemID}']`, '{}', 'Game.db');
+            Game.db[ItemID] = {};
         }
-        Game.setArr(`['${ItemID}']['${Prop}']`, JSON.stringify(val), 'Game.db');
+        Game.setArrBackup(`db.${ItemID}.${Prop}`, val);
     },
 
-    // Push and save history
-    push: (ItemID, Prop, val) => {
-        let arr;
-        try { arr = Game.db[ItemID][Prop]; } catch (e) { }
-        if (!arr) arr = [val];
-        else arr.push(val);
-        Game.setDbItem(ItemID, Prop, arr);
+    pushDbItem: (ItemID, Prop, val) => {
+        if (!Game.db[ItemID]) {
+            Game.db[ItemID] = {};
+        }
+        if (!Game.db[ItemID][Prop]) {
+            Game.db[ItemID][Prop] = [];
+        }
+        Game.setArrBackup(`db.${ItemID}.${Prop}`, val);
     },
 
     getARandomItemAndRestore: (arr, conditions, restorate = () => { }) => {
@@ -299,6 +301,10 @@ var Game = {
                 return Game.stopChain('P-Efelant is in the tree');
             }
 
+            if (perso[0] == 'P2' && noError('noSnakeMode')) {
+                return Game.stopChain('P-NoSnakeMode');
+            }
+
             // Check if it is already used
             try {
                 const oldPlace = Game.db[perso[0]]['L'];
@@ -331,7 +337,7 @@ var Game = {
                 object = 'O' + object;
             }
 
-            Game.setDbItem(perso[0], object, _for);
+            Game.pushDbItem(perso[0], object, _for);
             Game.setDbItem(perso[0], 'L', place);
             Game.setDbItem('L' + place, 'P', perso[0].slice(1));
             return true;
@@ -360,7 +366,6 @@ var Game = {
 
 
                 Game.setArr('', cacheObject[0], 'Game.logPath');
-                // console.log(Game.logPath.join('>')); OUTDATED
                 try {
                     if (Game.db[cacheObject[0]]['exists']) {
                         if (cacheObject[2] == '1') {
@@ -399,25 +404,18 @@ var Game = {
                         // Save and return
 
                         // For multiple 0
-                        if (object == '0') {
-                            object += getUniqueID();
-                        } else {
-                            object = 'O' + object;
-                        }
+                        if (object == '0') object += getUniqueID();
+                        else object = 'O' + object;
 
-                        Game.setDbItem(loc[0], object, cacheObject[0]);
+                        Game.pushDbItem(loc[0], object, cacheObject[0]);
                         return true;
                     });
                     if (!loc) {
                         return Game.stopChain('No Loc');
                     }
-                }
+                } // End if !perso
 
-                // Save and return
-                // setDb(`[${idx}]`, 1); 
-
-
-            }
+            } // End for objectIDs
 
             return true;
         });

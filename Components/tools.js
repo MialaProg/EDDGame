@@ -48,6 +48,15 @@ function waitTime(waitMs) {
     return new Promise(resolve => setTimeout(resolve, waitMs))
 }
 
+// ## VARS
+function noError(varName){
+    let Var;
+    try {
+        Var = eval(varName);
+    } catch (e) {}
+    return Var;
+}
+
 // ## INT
 
 function getUniqueID() {

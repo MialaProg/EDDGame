@@ -57,4 +57,3 @@ Ex: #if:#var-WAZO::#js-'E'+(5*7) (If var 'WAZO', go to 'E35')
 - L97 & P3 are in reality a .jpg XD   
    
 # TODO   
-Game.db[QQch] = pls choses
