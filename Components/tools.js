@@ -1,3 +1,5 @@
+// V1.0.EDDG
+
 var UNIQUEID = Math.floor(Date.now() / (10000)) - 170000000;
 
 function nothing() { }
