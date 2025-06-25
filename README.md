@@ -7,7 +7,8 @@ System: Door or perso
 Item: R;L;P or O   
 Places: Story places (L)   
 Rooms: Each case of the board   
-   
+Perso: Character
+
 # Format de variables de chargement   
 *Lib*JSLoaded   
    
@@ -26,10 +27,11 @@ Rooms: Each case of the board
 ## Game   
 rooms: {L;R}   
 db: {L:{P;O}}   
-    for objects: nb (0~)   
-    for doors: opened (bool)   
-    for perso: (isHidden)
+    for objects: nb (0~) ; isUsefull?
+    for doors: opened?   
+    for perso: isHidden? ; isUsefull?
     [xx] = [xx,yy,zz] (&)
+
    
 Variables disponibles: cf. miDbReader   
    
@@ -57,12 +59,13 @@ Ex: #if:#var-WAZO::#js-'E'+(5*7) (If var 'WAZO', go to 'E35')
 - L97 & P3 are in reality a .jpg XD   
    
 # TODO   
-TypeError: val.includes is not a function
-    entry http://192.168.1.21/EDDGame/BoardWebGame/JSDB/game.js:152
-    searchIn http://192.168.1.21/EDDGame/BoardWebGame/JSDB/game.js:152
-    getObjForIn http://192.168.1.21/EDDGame/BoardWebGame/JSDB/game.js:160
-    <anonymous> http://192.168.1.21/EDDGame/BoardWebGame/Readers/miBasicReader.js line 60 > eval:1
-    _getVal http://192.168.1.21/EDDGame/BoardWebGame/Readers/miBasicReader.js:60
-    run http://192.168.1.21/EDDGame/BoardWebGame/Readers/miBasicReader.js:135
-    select http://192.168.1.21/EDDGame/BoardWebGame/Components/buttons.js:93
-    onclick http://192.168.1.21/EDDGame/BoardWebGame/:1
+- Check no error: [#11](https://github.com/MialaProg/EDDGame/issues/11)
+- Verify all text & assets in miBasic: [#7](https://github.com/MialaProg/EDDGame/issues/7)
+
+# Changelog
+## V0.01.0 - 25/06/25
+- We can play a game !
+- Bugfixes: 1 to 11
+- Beta
+## Before
+Consult commits for all history.

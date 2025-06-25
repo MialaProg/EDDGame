@@ -70,7 +70,7 @@ var miDb = {
 
 
 // Avaible vars - Variables disponibles
-miDb.constNum = ['NB_DOORS', 'LOC_DOORS', 'LOC_PERSO', 'LOC_PLACES', 'LOC_OBJS', 'LOC_LOADING', 'TIMER'];
+miDb.constNum = ['NB_DOORS', 'LOC_DOORS', 'LOC_PERSO', 'LOC_PLACES', 'LOC_OBJS', 'LOC_LOADING', 'TIMER', 'END_ROOM'];
 miDb.constVars = ['IMGS_PATH', 'START_ROOM', 'ROOMS_DEFAULT', 'ROOMS_LETTERS', 'ROOMS_UNLOCKED',
     'PRELOAD_IMG','MSG_No_UseSpchSrch','MIB_SCRIPT_PATH','SELECT_TXT_OBJ','SELECT_TXT_ON', 'TXT_GET'
 ].concat(miDb.constNum);

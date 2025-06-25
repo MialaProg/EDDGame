@@ -296,7 +296,7 @@ function showRoom(roomINT = Game.actualRoom) {
 
 
 console.log('Main:init...');
-var devFast = false;
+var devFast = true;
 document.addEventListener("DOMContentLoaded", function () {
     console.log('Doc loaded');
     initMain();

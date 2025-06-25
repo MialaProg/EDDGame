@@ -14,6 +14,9 @@
 ./Images/Items/;.png
 #START_ROOM
 012
+#END_ROOM
+30
+-> The end room as the L99.
 #ROOMS_DEFAULT
 C1;C2;C3;D1;D2;R1;R2;R3;A1;A2;TR;WC;Hall
 #ROOMS_UNLOCKED

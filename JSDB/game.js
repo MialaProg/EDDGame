@@ -1,3 +1,161 @@
+/**
+ * The main Game object containing all game logic, state, and utility functions for the board web game.
+ * /!\ This doc is AI-generated
+ *
+ * @namespace Game
+ * @property {Array<Array<Object>>} rooms - 2D array representing the rooms in the game.
+ * @property {number[]} roomsPriority - Array of room numbers in order of priority.
+ * @property {number[]} uselessRooms - Array of room numbers considered "useless".
+ * @property {Object} doors - Mapping of room numbers to arrays of door identifiers.
+ * @property {Array} placesAdded - List of place IDs that have been added.
+ * @property {Array} placesDefault - List of default place IDs.
+ * @property {Array} placesToBeAdded - List of place IDs to be added.
+ * @property {number} numPlacesAvaible - Number of available places.
+ * @property {Object} db - Main database object for storing game state.
+ * @property {Array} logPath - Array representing the current log path.
+ * @property {Array} logs - Array of log messages.
+ * @property {Array<string>} toBeRestored - List of property names to be restored during state restoration.
+ * @property {Array} History - Array storing the history of changes for undo/restore functionality.
+ * @property {boolean} isGenerate - Flag indicating if the game has been generated.
+ * @property {Array} myItems - Array of items owned by the player.
+ *
+ * @function setArrBackup
+ * @description Simplified version of setArr for backup purposes.
+ * @param {string} idx - The index or property to set.
+ * @param {*} val - The value to set.
+ *
+ * @function restoreArr
+ * @description Restores an array or object property to a previous state using history.
+ * @param {number} toLen - The length to restore to.
+ * @param {string} arr - The array or object to restore.
+ * @param {string} [history] - The history array to use for restoration.
+ *
+ * @function stopChain
+ * @description Stops the current operation and logs an error message.
+ * @param {string} err - The error message.
+ *
+ * @function setDbItem
+ * @description Sets a property of an item in the database and saves the change.
+ * @param {string} ItemID - The item identifier.
+ * @param {string} Prop - The property to set.
+ * @param {*} val - The value to set.
+ *
+ * @function pushDbItem
+ * @description Pushes a value to an array property of an item in the database.
+ * @param {string} ItemID - The item identifier.
+ * @param {string} Prop - The property to push to.
+ * @param {*} val - The value to push.
+ *
+ * @function getARandomItemAndRestore
+ * @description Gets a random item from an array that meets certain conditions, restoring state if not successful.
+ * @param {Array} arr - The array to select from.
+ * @param {Function} conditions - Function to test each item.
+ * @param {Function} [restorate] - Function to call after restoration.
+ * @returns {*} The selected item, or undefined.
+ *
+ * @function searchIn
+ * @description Searches for a value in the database object.
+ * @param {string} obj - The object key to search in.
+ * @param {*} value - The value to search for.
+ * @returns {[string|undefined, *|undefined]} The key and value found, or [undefined, undefined].
+ *
+ * @function getObjForIn
+ * @description Gets the key for a value in the database object.
+ * @param {string} _in - The object key to search in.
+ * @param {*} obj - The value to search for.
+ * @returns {string|undefined} The key found, or undefined.
+ *
+ * @function intToCoords
+ * @description Converts a room number to coordinates.
+ * @param {number|string} num - The room number.
+ * @returns {number[]} The coordinates as [row, column].
+ *
+ * @function coordsToInt
+ * @description Converts coordinates to a room number.
+ * @param {number[]} arr - The coordinates as [row, column].
+ * @returns {number} The room number.
+ *
+ * @function getRoomDoors
+ * @description Gets the doors for a given room number.
+ * @param {number} roomNum - The room number.
+ * @returns {number[]} Array of door identifiers.
+ *
+ * @function setDoor
+ * @description Sets the value of a door in a room.
+ * @param {number} door - The door identifier.
+ * @param {number[]} roomARR - The room coordinates.
+ * @param {*} val - The value to set.
+ *
+ * @function getRoom
+ * @description Gets the room object for given coordinates or room number.
+ * @param {number[]|number} roomIDX - The room coordinates or number.
+ * @returns {Object} The room object.
+ *
+ * @function setRoom
+ * @description Sets the room object for given coordinates or room number.
+ * @param {number[]|number} roomIDX - The room coordinates or number.
+ * @param {Object} val - The value to set.
+ * @returns {Object} The value set.
+ *
+ * @function delItemGetter
+ * @description Removes an item from all getters in the database.
+ * @param {string} item - The item identifier.
+ *
+ * @function placeChecks
+ * @description Checks if a place can be added or used.
+ * @param {number|string} placeID - The place identifier.
+ * @param {boolean} ToAdd - Whether the place is to be added.
+ * @returns {true|undefined} True if checks pass, otherwise stops the chain.
+ *
+ * @function resolvePlace
+ * @description Resolves a place for a given requirement and type.
+ * @param {Array} plReq - Array of place requirements.
+ * @param {string} type - The type of requirement.
+ * @param {boolean} ToAdd - Whether the place is to be added.
+ * @returns {true|undefined} True if resolved, otherwise stops the chain.
+ *
+ * @function resolveGiver
+ * @description Resolves a giver (person) for a given object.
+ * @param {string} _for - The object to resolve a giver for.
+ * @returns {true|undefined} True if resolved, otherwise stops the chain.
+ *
+ * @function resolveObjects
+ * @description Resolves objects required for a given requirement.
+ * @param {Object} objReq - The requirements object.
+ * @param {string} [toGet='open'] - The object to get.
+ * @returns {true|undefined} True if resolved, otherwise stops the chain.
+ *
+ * @function ranDoor
+ * @description Randomly selects a door for a given room.
+ * @param {number[]|number} roomIDX - The room coordinates or number.
+ * @returns {true|undefined} True if successful, otherwise stops the chain.
+ *
+ * @function generate
+ * @description Asynchronously generates the game state, rooms, and doors.
+ * @returns {Promise<void>}
+ *
+ * @function addPlacesRequired
+ * @description Adds required places to the game state.
+ *
+ * @function addUselessThings
+ * @description Adds useless places and objects to fill the game.
+ *
+ * @function getObject
+ * @description Increments the count of an object in the database.
+ * @param {string} obj - The object identifier.
+ *
+ * @function useObject
+ * @description Decrements the count of an object in the database if it is not a "0" object.
+ * @param {string} obj - The object identifier.
+ *
+ * @function save
+ * @description Asynchronously saves the game state to a compressed file.
+ * @returns {Promise<void>}
+ *
+ * @function load
+ * @description Asynchronously loads the game state from a compressed file.
+ * @returns {Promise<void>}
+ */
 var Game = {
 
     rooms: [
@@ -10,6 +168,8 @@ var Game = {
     roomsPriority: [
         30, 20, 21, 10, 31, 22, 11, 32, 12, 33, 24, 34, 35, 25, 15, 23, 14, 13
     ],
+
+    uselessRooms: [21, 22, 23, 24],
 
     doors: {
         10: [1, 10], 11: [1], 12: [1], 13: [1, 10], 14: [1], 15: [10],
@@ -67,11 +227,11 @@ var Game = {
 
     // Simplification of setArr
     setArrBackup: (idx, val) => {
-        try{
-        val = JSON.stringify(val);
+        try {
+            val = JSON.stringify(val);
 
-        Game.History.push([idx, JSON.stringify(eval('Game.' + idx))]);
-        eval(`
+            Game.History.push([idx, JSON.stringify(eval('Game.' + idx))]);
+            eval(`
         if (Array.isArray(Game.${idx})) {
             Game.${idx}.push(${val});
         } else {
@@ -150,9 +310,9 @@ var Game = {
     searchIn: (obj, value) => {
         if (!Game.db[obj]) Game.db[obj] = {};
         let entry = Object.entries(Game.db[obj]).find(([key, val]) => {
-            try{
+            try {
                 return val.includes(value);
-            }catch (e){
+            } catch (e) {
                 return false;
             }
         });
@@ -246,6 +406,27 @@ var Game = {
 
     },
 
+    /**
+     * Parses the object requirements string from a game object and returns a formatted requirements object.
+     *
+     * The requirements string (obj[4]) is expected in the format:
+     *   "req1|req2>objA&objB|objC,req3>objD"
+     * which means:
+     *   - req1 or req2 require objA and objB, or objC
+     *   - req3 requires objD
+     *
+     * The returned object maps each requirement (e.g., req1, req2, req3) to an array of objects they require.
+     *
+     * Example:
+     *   Input: obj[4] = "x&y|z>a&b|c"
+     *   Output: {
+     *     x&y: ["a&b", "c"],
+     *     z: ["a&b", "c"]
+     *   }
+     *
+     * @param {Array} obj - The game object array, where obj[4] is the requirements string.
+     * @returns {Object} An object mapping requirement keys to arrays of objects they require.
+     */
     objectsReqFormat: (obj) => {
         let objReq = obj[4];
         if (!objReq) return {};
@@ -351,6 +532,7 @@ var Game = {
 
             Game.pushDbItem(perso[0], object, _for);
             Game.setDbItem(perso[0], 'L', place);
+            Game.setDbItem(perso[0], 'isUsefull', true);
             Game.setDbItem('L' + place, 'P', perso[0].slice(1));
             return true;
         });
@@ -427,6 +609,8 @@ var Game = {
                     }
                 } // End if !perso
 
+                Game.setDbItem(cacheObject[0], 'isUsefull', true);
+
             } // End for objectIDs
 
             return true;
@@ -471,6 +655,10 @@ var Game = {
     },
 
     generate: async () => {
+        // Setup the end room
+        const end = Game.getRoom(miDb.END_ROOM[0]);
+        end.L = 99;
+
         const len = Game.roomsPriority.length;
         const roomChecked = [];
         for (let i = 0; i < len; i++) {
@@ -488,10 +676,12 @@ var Game = {
             // OK: roomDoors shuffle
             shuffleArray(roomDoors);
             for (let j = 0; j < roomDoors.length; j++) {
-                if (!randint(0, 5)) continue; // 20% chance to skip door
+                if (!randint(0, 5)) continue; // 1/6 chance to skip door 
+                if (Game.uselessRooms.includes(room) && !randint(0, 3)) continue; // Skip useless rooms (Pb#10)
 
                 const doorRelative = roomDoors[j];
                 const oroomINT = roomINT + doorRelative;
+                if (Game.uselessRooms.includes(oroomINT) && !randint(0, 3)) continue; // Skip useless rooms (Pb#10)
                 const oroomCoords = Game.intToCoords(oroomINT);
                 const oroom = Game.getRoom(oroomINT);
                 try {
@@ -518,6 +708,7 @@ var Game = {
             }
         }
         Game.addPlacesRequired();
+        Game.addUselessThings();
         Game.isGenerate = true;
     },
 
@@ -574,25 +765,101 @@ var Game = {
             // console.log('Added to', my_room, ':[' + i + ']', element);
         }
 
-        for (let i = 1; i < 4; i++) {
+        logClose();
+    },
+
+    addUselessThings: () => {
+        var GameAvaiblePersos = [];
+        miDb.lib.slice(miDb.LOC_PERSO[0], miDb.LOC_PERSO[1]).forEach(perso => {
+            if (perso[0][0] == 'P' && !Game.db[perso[0]].isUsefull) {
+                GameAvaiblePersos.push(perso[0]);
+            }
+        })
+
+
+        for (let i = 0; i < 4; i++) {
             for (let j = 0; j < 6; j++) {
                 const room = Game.getRoom([i, j]);
+                // Check for places
                 if (!room['L']) {
                     Game.getARandomItemAndRestore(miDb.lib.slice(miDb.LOC_PLACES[0], miDb.LOC_PLACES[1]), (loc) => {
+                        if (!randint(0, 5)) return; // 16% chance to skip useless place
                         let locID = parseInt(loc[0].slice(1));
                         if (Game.placesAdded.includes(locID)) {
                             return;
                         }
                         Game.placesAdded.push(locID);
                         room['L'] = locID;
+                        Game.logs.push('UlA- Add useless loc', locID, 'to room', i, j);
                         return true;
                     });
                 }
-            }
+                // Check for objects in place
+                if (!room['L']) continue;
+                const locUID = 'L' + room['L'];
+                const loc = findInArr(miDb.lib, miDb.LOC_PLACES[0], miDb.LOC_PLACES[1], item => item[0] == locUID);
+                const objs = Game.objectsReqFormat(loc);
+                Object.entries(objs).forEach(([req, objArr]) => {
+                    if (req[0] == '0') { // If no req
+                        objArr.forEach((objs) => {
+                            objs.forEach((obj) => {
+                                if (!randint(0, 2)) return; // 33% chance to skip useless object
+                                try {
+                                    const id = 'O' + obj;
+                                    if (!Game.db[id].isUsefull) {
+                                        Game.pushDbItem(loc[0], '0', id);
+                                        Game.logs.push('UlA- Add useless object ' + id + ' to ' + loc[0]);
+                                    }
+                                } catch (e) { }
+                            });
+                        });
+                    }
+                });
 
+                // Check for perso 
+                const locObj = Game.db[locUID];
+                if (!locObj) continue;
+                if (!locObj['P']) {
+                    getARandomItem(GameAvaiblePersos, (perso) => {
+                        if (!randint(0, 3)) return; // 25% chance to skip useless perso
+                        // Check places required
+                        let plr = perso[3].split(',');
+                        if (plr.includes(room['L']) || plr[0] == '*') {
+                            // Save and return
+                            Game.setDbItem(perso[0], 'L', room['L']);
+                            Game.pushDbItem(locUID, perso[0], 'P');
+                            Game.logs.push('Add useless perso ' + perso[0] + ' to ' + locUID);
+                            GameAvaiblePersos = GameAvaiblePersos.filter(p => p !== perso[0]);
+                            return true;
+                        }
+                        return;
+                    });
+                }
+
+                // Check for object in perso
+                if (!locObj['P']) continue;
+                const persoUID = 'L' + locObj['P'];
+                const perso = findInArr(miDb.lib, miDb.LOC_PERSO[0], miDb.LOC_PERSO[1], item => item[0] == persoUID);
+                const objsP = Game.objectsReqFormat(perso);
+                Object.entries(objsP).forEach(([req, objArr]) => {
+                    if (req[0] == '0') { // If no req
+                        objArr.forEach((objs) => {
+                            objs.forEach((obj) => {
+                                if (!randint(0, 2)) return; // 33% chance to skip useless object
+                                try {
+                                    const id = 'O' + obj;
+                                    if (!Game.db[id].isUsefull) {
+                                        Game.pushDbItem(perso[0], '0', id);
+                                        Game.logs.push('UlA- Add useless object ' + id + ' to ' + perso[0]);
+                                    }
+                                } catch (e) { }
+                            });
+                        });
+                    }
+                });
+            }
         }
 
-        logClose();
     },
 
     getObject: (obj) => {
