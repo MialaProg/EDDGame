@@ -57,3 +57,12 @@ Ex: #if:#var-WAZO::#js-'E'+(5*7) (If var 'WAZO', go to 'E35')
 - L97 & P3 are in reality a .jpg XD   
    
 # TODO   
+TypeError: val.includes is not a function
+    entry http://192.168.1.21/EDDGame/BoardWebGame/JSDB/game.js:152
+    searchIn http://192.168.1.21/EDDGame/BoardWebGame/JSDB/game.js:152
+    getObjForIn http://192.168.1.21/EDDGame/BoardWebGame/JSDB/game.js:160
+    <anonymous> http://192.168.1.21/EDDGame/BoardWebGame/Readers/miBasicReader.js line 60 > eval:1
+    _getVal http://192.168.1.21/EDDGame/BoardWebGame/Readers/miBasicReader.js:60
+    run http://192.168.1.21/EDDGame/BoardWebGame/Readers/miBasicReader.js:135
+    select http://192.168.1.21/EDDGame/BoardWebGame/Components/buttons.js:93
+    onclick http://192.168.1.21/EDDGame/BoardWebGame/:1

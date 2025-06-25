@@ -406,7 +406,7 @@ Un bon d'achat.:EFBA
 #
 *
 :EFBA
-#IF:#js-Game.db['P1']['0']:EFOK
+#IF:#js-Game.getObjForIn('P1', 'O1')[0]:0:EFOK
 #IF:#var-EFOK::EFDeja
 D'accord, mais donne moi d'abord des médocs !
 #:OBJ
@@ -651,7 +651,7 @@ O27:R15op
 #
 :O27
 C'est un nez.
-#ON
+#:ON
 R15:R15op
 #
 :R15op
@@ -662,7 +662,7 @@ R15:R15op
 ---------------------
 :P17
 Tu me donnes une salade ? Parce que je peux meme pas te tuer !
-#OBJ 
+#:OBJ 
 O25:P17xO25
 #
 :P17xO25
@@ -682,7 +682,7 @@ On va te suivre partout !
 ---------------
 :O21
 *Sur quoi utilisez-vous vos crédits-Mi ?
-#ON
+#:ON
 L1:O21xL1
 L6:O21xL6
 L8:O21xL8
@@ -699,7 +699,7 @@ Vous ne pouvez rien acheter.
 ***
 :O21xL6
 Que souhaitez-vous acheter ?
-#REP
+#:REP
 Une banane:L6Bn
 De la viande:L6Vi
 Une salade:L6Sl
@@ -725,7 +725,7 @@ Ce produit est en rupture de stock.
 ***
 :O21xL8
 Que souhaitez-vous commander en ligne ?
-#REP
+#:REP
 Des canards:ruptureStock
 Des trombones:ruptureStock
 Des index gauches (Modèle T):L8pO31
@@ -748,7 +748,7 @@ Du reblochon:ruptureStock
 ---------------
 :O30
 Dans quoi souhaitez-vous utiliser cette épuisette ?
-#ON
+#:ON
 L4:O30xL4
 L15:O30xL15
 #

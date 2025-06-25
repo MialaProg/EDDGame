@@ -266,17 +266,20 @@ function showRoom(roomINT = Game.actualRoom) {
 
     // Fin du chargement
     console.log('End SR');
-    if (pageMode != 'loadinggame') {
-        return;
-    }
+    // if (pageMode != 'loadinggame') {
+    //     return;
+    // }
     let noCoTimer = Date.now();
     wait(() => {
         Loading.setProgressBar(50 + (CanvasLib.numImgsPrinted / CanvasLib.numImgsToPrint) * 50);
-        return CanvasLib.numImgsPrinted >= CanvasLib.numImgsToPrint || Date.now() - noCoTimer > 10000;
+        return CanvasLib.numImgsPrinted >= CanvasLib.numImgsToPrint || Date.now() - noCoTimer > 7000;
     }).then(() => {
-        if (Date.now() - noCoTimer > 10000) {
+        if (Date.now() - noCoTimer > 7000) {
             alert('Certaines images n\'ont pas pu être chargées.\nVeuillez vérifier votre connexion internet.');
         }
+        console.log('End LG => changeMode');
+        Loading.setProgressBar(100);
+        Loading.setTitle('Fin du chargement...');
         Loading.changeMode(2);
     });
 }

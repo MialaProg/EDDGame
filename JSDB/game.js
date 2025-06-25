@@ -67,6 +67,7 @@ var Game = {
 
     // Simplification of setArr
     setArrBackup: (idx, val) => {
+        try{
         val = JSON.stringify(val);
 
         Game.History.push([idx, JSON.stringify(eval('Game.' + idx))]);
@@ -77,6 +78,11 @@ var Game = {
             Game.${idx} = ${val};
         }
         `);
+        } catch (e) {
+            console.log('Error in setArrBackup:', idx, val);
+            e.code = 'G83sAB';
+            throwERR(e);
+        }
     }
 
     , restoreArr: (toLen, arr, history) => {
@@ -118,7 +124,7 @@ var Game = {
         if (!Game.db[ItemID][Prop]) {
             Game.db[ItemID][Prop] = [];
         }
-        Game.setArrBackup(`db.${ItemID}.${Prop}`, val);
+        Game.setArrBackup(`db.${ItemID}['${Prop}']`, val);
     },
 
     getARandomItemAndRestore: (arr, conditions, restorate = () => { }) => {
@@ -143,15 +149,21 @@ var Game = {
 
     searchIn: (obj, value) => {
         if (!Game.db[obj]) Game.db[obj] = {};
-        let entry = Object.entries(Game.db[obj]).find(([key, val]) => val.includes(value));
+        let entry = Object.entries(Game.db[obj]).find(([key, val]) => {
+            try{
+                return val.includes(value);
+            }catch (e){
+                return false;
+            }
+        });
         if (!entry) {
             return [undefined, undefined];
         }
         return entry;
     },
 
-    getObjForIn: (obj, val) => {
-        return Game.searchIn(obj, val)[0];
+    getObjForIn: (_in, obj) => {
+        return Game.searchIn(_in, obj)[0];
     },
 
 
@@ -590,7 +602,7 @@ var Game = {
     },
 
     useObject: (obj) => {
-        if ('0' != findInArr(miDb.lib, miDb.LOC_OBJS[0], miDb.LOC_OBJS[1], item => item[0] == MChat.ans)[1][2]) Game.db[obj].nb -= 1;
+        if ('0' != findInArr(miDb.lib, miDb.LOC_OBJS[0], miDb.LOC_OBJS[1], item => item[0] == obj)[1][2]) Game.db[obj].nb -= 1;
     },
 
 
@@ -626,6 +638,7 @@ var Game = {
                 alert('Game loaded successfully!');
                 Object.assign(Game, Gamebis);
                 console.log('Game ready');
+                showRoom(Game.actualRoom);
             };
             reader.readAsText(file);
         };

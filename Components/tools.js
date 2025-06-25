@@ -1,4 +1,5 @@
-// V1.0.EDDG
+// V1.2.EDDG
+// From: V0.0.EDDG
 
 var UNIQUEID = Math.floor(Date.now() / (10000)) - 170000000;
 
@@ -230,9 +231,16 @@ async function getDb(path) {
             data = dt;
         })
         .catch(error => {
-            console.error("Error fetching and parsing data:", error);
+            console.error(error);
         });
     return data;
+}
+
+// ## ERRORS
+// Require Loading.js
+function throwERR(e){
+    Loading.setTitle('Oops, une erreur est survenue: 1' + e.code);
+    throw e;
 }
 
 

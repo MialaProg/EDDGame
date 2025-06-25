@@ -130,9 +130,11 @@ var Actions = {
             Object.keys(actualPlaceObjs).forEach((key) => {
                 console.log('Find', key);
                 if (key.startsWith('0')) {
-                    actualPlaceObjs[key].split('&').forEach((getID) => {
-                        let txt = miDb.lib.find(e => e[0] == getID)[1];
-                        MSelect.options.push({ id: getID, text: txt });
+                    actualPlaceObjs[key].forEach((item) => {
+                        item.split('&').forEach((getID) => {
+                            let txt = miDb.lib.find(e => e[0] == getID)[1];
+                            MSelect.options.push({ id: getID, text: txt });
+                        });
                     });
                 }
             });

@@ -97,7 +97,10 @@ var Loading = {
 
 
 
-    changeMode: (mode) => {
+    changeMode: async (mode) => {
+        await wait(()=>!Loading.inChange);
+        Loading.inChange = 1;
+
         let modes = ["pregame", "loadinggame", "ingame"];
 
         if (typeof mode == 'number') {
@@ -113,6 +116,7 @@ var Loading = {
             modes.forEach((m) => {
                 document.getElementById(m + "-interface").classList.toggle('is-hidden', m != mode);
             })
+            Loading.inChange = 0;
         })
         pageMode = mode;
     }

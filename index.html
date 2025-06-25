@@ -76,6 +76,18 @@
                         <button class="button is-primary" id="playBtn" disabled>Jouer !</button>
                     </div>
                 </div>
+
+                <div class="field control">
+                    <label class="checkbox">
+                        <input type="checkbox" id="noSnakeModeCheckbox" onchange="noSnakeMode = this.checked;">
+                        Mode sans serpent
+                    </label>
+                </div>
+                <script>var noSnakeMode;
+                    document.addEventListener('DOMContentLoaded', function() {
+                        noSnakeMode = document.getElementById('noSnakeModeCheckbox').checked;
+                    });
+                </script>
             </form>
         </div>
 
