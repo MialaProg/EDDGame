@@ -52,6 +52,7 @@ function waitTime(waitMs) {
 }
 
 // ## VARS
+
 function noError(varName){
     let Var;
     try {

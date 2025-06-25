@@ -63,6 +63,8 @@ Ex: #if:#var-WAZO::#js-'E'+(5*7) (If var 'WAZO', go to 'E35')
 - Verify all text & assets in miBasic: [#7](https://github.com/MialaProg/EDDGame/issues/7)
 
 # Changelog
+- Actual online version: V0.01.0
+- Verified stable version: (nothing to see here)
 ## V0.01.0 - 25/06/25
 - We can play a game !
 - Bugfixes: 1 to 11

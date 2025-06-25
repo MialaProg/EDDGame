@@ -178,8 +178,8 @@ var Game = {
     },
 
 
-    placesAdded: [],
-    placesDefault: [],
+    placesAdded: [99],
+    placesDefault: [99],
     placesToBeAdded: [],
     numPlacesAvaible: 0,
 
@@ -771,8 +771,8 @@ var Game = {
     addUselessThings: () => {
         var GameAvaiblePersos = [];
         miDb.lib.slice(miDb.LOC_PERSO[0], miDb.LOC_PERSO[1]).forEach(perso => {
-            if (perso[0][0] == 'P' && !Game.db[perso[0]].isUsefull) {
-                GameAvaiblePersos.push(perso[0]);
+            if (perso[0][0] == 'P' && !noError('Game.db[perso[0]].isUsefull')) {
+                GameAvaiblePersos.push(perso);
             }
         })
 
@@ -783,14 +783,14 @@ var Game = {
                 // Check for places
                 if (!room['L']) {
                     Game.getARandomItemAndRestore(miDb.lib.slice(miDb.LOC_PLACES[0], miDb.LOC_PLACES[1]), (loc) => {
-                        if (!randint(0, 5)) return; // 16% chance to skip useless place
+                        if (!randint(0, 5) || loc[0][0] != 'L') return; // 16% chance to skip useless place
                         let locID = parseInt(loc[0].slice(1));
-                        if (Game.placesAdded.includes(locID)) {
+                        if (isNaN(locID) || Game.placesAdded.includes(locID)) {
                             return;
                         }
                         Game.placesAdded.push(locID);
                         room['L'] = locID;
-                        Game.logs.push('UlA- Add useless loc', locID, 'to room', i, j);
+                        Game.logs.push('UlA- Add useless loc ' + locID + ' to room ' + i + j);
                         return true;
                     });
                 }
@@ -829,7 +829,7 @@ var Game = {
                             Game.setDbItem(perso[0], 'L', room['L']);
                             Game.pushDbItem(locUID, perso[0], 'P');
                             Game.logs.push('Add useless perso ' + perso[0] + ' to ' + locUID);
-                            GameAvaiblePersos = GameAvaiblePersos.filter(p => p !== perso[0]);
+                            GameAvaiblePersos = GameAvaiblePersos.filter(p => p[0] !== perso[0]);
                             return true;
                         }
                         return;
