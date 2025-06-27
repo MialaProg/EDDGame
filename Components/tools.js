@@ -3,7 +3,7 @@
 
 var UNIQUEID = Math.floor(Date.now() / (10000)) - 170000000;
 
-function nothing() { }
+function emptyFn() { }
 
 var logs = [];
 var logsIdx = '';
@@ -53,11 +53,11 @@ function waitTime(waitMs) {
 
 // ## VARS
 
-function noError(varName){
+function noError(varName) {
     let Var;
     try {
         Var = eval(varName);
-    } catch (e) {}
+    } catch (e) { }
     return Var;
 }
 
@@ -76,34 +76,34 @@ function randint(min, max) {
 
 // Fonction de compression native (utilisant l'API Compression Streams)
 async function compress(str) {
-  const byteArray = new TextEncoder().encode(str);
-  const cs = new CompressionStream('gzip');
-  const writer = cs.writable.getWriter();
-  writer.write(byteArray);
-  writer.close();
-  const compressed = await new Response(cs.readable).arrayBuffer();
-  return String.fromCharCode(...new Uint8Array(compressed));
+    const byteArray = new TextEncoder().encode(str);
+    const cs = new CompressionStream('gzip');
+    const writer = cs.writable.getWriter();
+    writer.write(byteArray);
+    writer.close();
+    const compressed = await new Response(cs.readable).arrayBuffer();
+    return String.fromCharCode(...new Uint8Array(compressed));
 }
 
 // Fonction de décompression native
 async function decompress(compressedStr) {
-  if (typeof compressedStr !== 'string') {
-    throw new TypeError('compressedStr must be a string');
-  }
-  const bytes = new Uint8Array(Array.from(compressedStr).map(c => c.charCodeAt(0)));
-  const stream = new ReadableStream({
-    start(controller) {
-      controller.enqueue(bytes);
-      controller.close();
+    if (typeof compressedStr !== 'string') {
+        throw new TypeError('compressedStr must be a string');
     }
-  });
-  const ds = new DecompressionStream('gzip');
-  const decompressedStream = stream.pipeThrough(ds);
-  const decompressed = await new Response(decompressedStream).arrayBuffer();
-  return new TextDecoder().decode(decompressed);
+    const bytes = new Uint8Array(Array.from(compressedStr).map(c => c.charCodeAt(0)));
+    const stream = new ReadableStream({
+        start(controller) {
+            controller.enqueue(bytes);
+            controller.close();
+        }
+    });
+    const ds = new DecompressionStream('gzip');
+    const decompressedStream = stream.pipeThrough(ds);
+    const decompressed = await new Response(decompressedStream).arrayBuffer();
+    return new TextDecoder().decode(decompressed);
 }
 
-// ## ARRAY
+// ## ARRAY -ARR
 
 /**
  * Detect duplicates from an array
@@ -112,6 +112,20 @@ async function decompress(compressedStr) {
  */
 function hasDuplicates(arr) {
     return arr.some((item, index) => arr.indexOf(item) !== index);
+}
+
+/**
+ * Delete the first occurence of element in array
+ * @param {array} arr 
+ * @param {*} element 
+ * @returns array without the element if it exists
+ */
+function delOneItem(arr, element) {
+    const index = arr.indexOf(element);
+    if (index !== -1) {
+        arr.splice(index, 1);
+    }
+    return arr;
 }
 
 /**
@@ -189,57 +203,60 @@ function copy(obj) {
 // ## RESOLUTION UI UPDATE
 function waitUIupdate() {
     return new Promise(resolve => {
-      // Double raf pour s'assurer que le navigateur a fait son rendu
-      requestAnimationFrame(() => {
+        // Double raf pour s'assurer que le navigateur a fait son rendu
         requestAnimationFrame(() => {
-          resolve();
+            requestAnimationFrame(() => {
+                resolve();
+            });
         });
-      });
     });
-  }
+}
 
 function runWithUIupdate(func) {
     return new Promise((resolve, reject) => {
-      const execute = () => {
-        try {
-          // Exécute la fonction et récupère le résultat
-          const result = func();
-          
-          // Utilise requestAnimationFrame pour la résolution
-          requestAnimationFrame(() => {
-            resolve(result);
-          });
-        } catch (error) {
-          // Gère les erreurs avec requestAnimationFrame
-          requestAnimationFrame(() => {
-            reject(error);
-          });
-        }
-      };
-  
-      // Lance l'exécution dans la file d'attente des tâches lourdes
-      setTimeout(execute, 0);
+        const execute = () => {
+            try {
+                // Exécute la fonction et récupère le résultat
+                const result = func();
+
+                // Utilise requestAnimationFrame pour la résolution
+                requestAnimationFrame(() => {
+                    resolve(result);
+                });
+            } catch (error) {
+                // Gère les erreurs avec requestAnimationFrame
+                requestAnimationFrame(() => {
+                    reject(error);
+                });
+            }
+        };
+
+        // Lance l'exécution dans la file d'attente des tâches lourdes
+        setTimeout(execute, 0);
     });
-  }
+}
 
 // ## FETCH
 
-async function getDb(path) {
+async function getDb(path, waitERR = true) {
     let data;
-    await fetch(path)
-        .then(response => response.text())
-        .then(dt => {
-            data = dt;
-        })
-        .catch(error => {
-            console.error(error);
-        });
+    do {
+        await fetch(path)
+            .then(response => response.text())
+            .then(dt => {
+                data = dt;
+            })
+            .catch(error => {
+                console.error(error);
+            });
+        await waitTime(3000)
+    } while (!data && waitERR);
     return data;
 }
 
 // ## ERRORS
 // Require Loading.js
-function throwERR(e){
+function throwERR(e) {
     Loading.setTitle('Oops, une erreur est survenue: 1' + e.code);
     throw e;
 }
@@ -261,20 +278,20 @@ function scrollToInContainer(element, duration = 500, align = 'top', container =
     return new Promise((resolve) => {
         // Déterminer le conteneur de défilement (window ou élément DOM)
         const isWindowContainer = (
-            container === document.documentElement || 
+            container === document.documentElement ||
             container === document.body
         );
-        
+
         // Calculer les dimensions et positions
-        const containerHeight = isWindowContainer 
-            ? window.innerHeight 
+        const containerHeight = isWindowContainer
+            ? window.innerHeight
             : container.clientHeight;
-        
+
         const elementRect = element.getBoundingClientRect();
         const containerRect = isWindowContainer
             ? { top: 0, bottom: window.innerHeight }
             : container.getBoundingClientRect();
-        
+
         // Calculer la position cible
         let targetPosition;
         if (align === 'top') {
@@ -284,31 +301,31 @@ function scrollToInContainer(element, duration = 500, align = 'top', container =
         } else {
             throw new Error("L'alignement doit être 'top' ou 'bottom'");
         }
-        
+
         // Ajouter le défilement actuel
         const currentScroll = isWindowContainer
             ? window.pageYOffset || document.documentElement.scrollTop
             : container.scrollTop;
-        
+
         targetPosition += currentScroll;
-        
+
         // Animation avec easing
         const startTime = performance.now();
-        
+
         function animate(time) {
             const elapsed = time - startTime;
             const progress = Math.min(elapsed / duration, 1);
             const ease = easeInOutQuad(progress);
-            
+
             const newPosition = currentScroll + (targetPosition - currentScroll) * ease;
-            
+
             // Appliquer le défilement
             if (isWindowContainer) {
                 window.scrollTo(0, newPosition);
             } else {
                 container.scrollTop = newPosition;
             }
-            
+
             // Continuer ou terminer l'animation
             if (progress < 1) {
                 requestAnimationFrame(animate);
@@ -316,7 +333,7 @@ function scrollToInContainer(element, duration = 500, align = 'top', container =
                 resolve();
             }
         }
-        
+
         requestAnimationFrame(animate);
     });
 }

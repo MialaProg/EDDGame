@@ -1,6 +1,6 @@
 var UNIQUEID = Math.floor(Date.now() / (10000)) - 170000000;
 
-function nothing() { }
+function emptyFn() { }
 
 var logs = [];
 var logsIdx = '';

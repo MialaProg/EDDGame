@@ -27,10 +27,13 @@ Perso: Character
 ## Game   
 rooms: {L;R}   
 db: {L:{P;O}}   
-    for objects: nb (0~) ; isUsefull?
+    for objects: nb (0~) ; isUsefull? ; exists? => For mode
     for doors: opened?   
     for perso: isHidden? ; isUsefull?
     [xx] = [xx,yy,zz] (&)
+objUnavaibles:
+    set objToBeUnavaible
+    => if isn't changed & an error occured: always an error => can skip this for better perfs
 
    
 Variables disponibles: cf. miDbReader   

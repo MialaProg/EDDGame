@@ -6,7 +6,7 @@ var Modal = {
     },
 
     open: () => Modal.getHTMLE().classList.add('is-active'),
-    close: () => { Modal.getHTMLE().classList.remove('is-active'); miBasic.running = false; console.log('close'); },
+    close: () => { Modal.getHTMLE().classList.remove('is-active'); miBasic.running = false;},
 
     init: () => {
         Modal.close();

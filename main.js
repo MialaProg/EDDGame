@@ -149,7 +149,7 @@ function initMiBasicFunc() {
             let txt = option[0];
             if (type == 'OBJ') {
                 const obj = Game.db[txt];
-                if (!obj || obj.nb <= 0) return;
+                if (!obj || !obj.nb) return;
                 txt = findInArr(miDb.lib, miDb.LOC_OBJS[0], miDb.LOC_OBJS[1], item => item[0] == txt)[1][1];
             }
             if (type == 'ON') {
@@ -219,7 +219,6 @@ function showRoom(roomINT = Game.actualRoom) {
             const placeLine = findInArr(miDb.lib, miDb.LOC_PLACES[0], miDb.LOC_PLACES[1], item => item[0] == 'L' + placeID); //Returns [key, val]
             if (placeLine) {
                 let placeName = placeLine[1][1];
-                console.log('Place:L' + placeName);
                 if (roomARR[0] != 0) {
                     placeName = optionSelected.textContent + ' : ' + placeName;
                 }
@@ -227,8 +226,6 @@ function showRoom(roomINT = Game.actualRoom) {
             }
         }
     }
-
-    console.log('Draw doors');
 
     // Gestion des portes
     if (roomARR[0] != 0) {
@@ -251,7 +248,6 @@ function showRoom(roomINT = Game.actualRoom) {
                     canvasObj.drawArrow(60, 50 + 40 * doorKey, 10, 15, doorKey > 0 ? 'down' : 'up');
                 }
                 const nextRoom = (parseInt(roomINT) + doorKey).toString();
-                console.log('Test add :', nextRoom, roomINT, doorKey);
                 if (RoomSelect.HTMLE && !Array.from(RoomSelect.HTMLE.options).some(option => option.value === nextRoom)) {
                     const option = document.createElement("option");
                     option.value = nextRoom;

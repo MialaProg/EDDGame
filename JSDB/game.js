@@ -1,161 +1,3 @@
-/**
- * The main Game object containing all game logic, state, and utility functions for the board web game.
- * /!\ This doc is AI-generated
- *
- * @namespace Game
- * @property {Array<Array<Object>>} rooms - 2D array representing the rooms in the game.
- * @property {number[]} roomsPriority - Array of room numbers in order of priority.
- * @property {number[]} uselessRooms - Array of room numbers considered "useless".
- * @property {Object} doors - Mapping of room numbers to arrays of door identifiers.
- * @property {Array} placesAdded - List of place IDs that have been added.
- * @property {Array} placesDefault - List of default place IDs.
- * @property {Array} placesToBeAdded - List of place IDs to be added.
- * @property {number} numPlacesAvaible - Number of available places.
- * @property {Object} db - Main database object for storing game state.
- * @property {Array} logPath - Array representing the current log path.
- * @property {Array} logs - Array of log messages.
- * @property {Array<string>} toBeRestored - List of property names to be restored during state restoration.
- * @property {Array} History - Array storing the history of changes for undo/restore functionality.
- * @property {boolean} isGenerate - Flag indicating if the game has been generated.
- * @property {Array} myItems - Array of items owned by the player.
- *
- * @function setArrBackup
- * @description Simplified version of setArr for backup purposes.
- * @param {string} idx - The index or property to set.
- * @param {*} val - The value to set.
- *
- * @function restoreArr
- * @description Restores an array or object property to a previous state using history.
- * @param {number} toLen - The length to restore to.
- * @param {string} arr - The array or object to restore.
- * @param {string} [history] - The history array to use for restoration.
- *
- * @function stopChain
- * @description Stops the current operation and logs an error message.
- * @param {string} err - The error message.
- *
- * @function setDbItem
- * @description Sets a property of an item in the database and saves the change.
- * @param {string} ItemID - The item identifier.
- * @param {string} Prop - The property to set.
- * @param {*} val - The value to set.
- *
- * @function pushDbItem
- * @description Pushes a value to an array property of an item in the database.
- * @param {string} ItemID - The item identifier.
- * @param {string} Prop - The property to push to.
- * @param {*} val - The value to push.
- *
- * @function getARandomItemAndRestore
- * @description Gets a random item from an array that meets certain conditions, restoring state if not successful.
- * @param {Array} arr - The array to select from.
- * @param {Function} conditions - Function to test each item.
- * @param {Function} [restorate] - Function to call after restoration.
- * @returns {*} The selected item, or undefined.
- *
- * @function searchIn
- * @description Searches for a value in the database object.
- * @param {string} obj - The object key to search in.
- * @param {*} value - The value to search for.
- * @returns {[string|undefined, *|undefined]} The key and value found, or [undefined, undefined].
- *
- * @function getObjForIn
- * @description Gets the key for a value in the database object.
- * @param {string} _in - The object key to search in.
- * @param {*} obj - The value to search for.
- * @returns {string|undefined} The key found, or undefined.
- *
- * @function intToCoords
- * @description Converts a room number to coordinates.
- * @param {number|string} num - The room number.
- * @returns {number[]} The coordinates as [row, column].
- *
- * @function coordsToInt
- * @description Converts coordinates to a room number.
- * @param {number[]} arr - The coordinates as [row, column].
- * @returns {number} The room number.
- *
- * @function getRoomDoors
- * @description Gets the doors for a given room number.
- * @param {number} roomNum - The room number.
- * @returns {number[]} Array of door identifiers.
- *
- * @function setDoor
- * @description Sets the value of a door in a room.
- * @param {number} door - The door identifier.
- * @param {number[]} roomARR - The room coordinates.
- * @param {*} val - The value to set.
- *
- * @function getRoom
- * @description Gets the room object for given coordinates or room number.
- * @param {number[]|number} roomIDX - The room coordinates or number.
- * @returns {Object} The room object.
- *
- * @function setRoom
- * @description Sets the room object for given coordinates or room number.
- * @param {number[]|number} roomIDX - The room coordinates or number.
- * @param {Object} val - The value to set.
- * @returns {Object} The value set.
- *
- * @function delItemGetter
- * @description Removes an item from all getters in the database.
- * @param {string} item - The item identifier.
- *
- * @function placeChecks
- * @description Checks if a place can be added or used.
- * @param {number|string} placeID - The place identifier.
- * @param {boolean} ToAdd - Whether the place is to be added.
- * @returns {true|undefined} True if checks pass, otherwise stops the chain.
- *
- * @function resolvePlace
- * @description Resolves a place for a given requirement and type.
- * @param {Array} plReq - Array of place requirements.
- * @param {string} type - The type of requirement.
- * @param {boolean} ToAdd - Whether the place is to be added.
- * @returns {true|undefined} True if resolved, otherwise stops the chain.
- *
- * @function resolveGiver
- * @description Resolves a giver (person) for a given object.
- * @param {string} _for - The object to resolve a giver for.
- * @returns {true|undefined} True if resolved, otherwise stops the chain.
- *
- * @function resolveObjects
- * @description Resolves objects required for a given requirement.
- * @param {Object} objReq - The requirements object.
- * @param {string} [toGet='open'] - The object to get.
- * @returns {true|undefined} True if resolved, otherwise stops the chain.
- *
- * @function ranDoor
- * @description Randomly selects a door for a given room.
- * @param {number[]|number} roomIDX - The room coordinates or number.
- * @returns {true|undefined} True if successful, otherwise stops the chain.
- *
- * @function generate
- * @description Asynchronously generates the game state, rooms, and doors.
- * @returns {Promise<void>}
- *
- * @function addPlacesRequired
- * @description Adds required places to the game state.
- *
- * @function addUselessThings
- * @description Adds useless places and objects to fill the game.
- *
- * @function getObject
- * @description Increments the count of an object in the database.
- * @param {string} obj - The object identifier.
- *
- * @function useObject
- * @description Decrements the count of an object in the database if it is not a "0" object.
- * @param {string} obj - The object identifier.
- *
- * @function save
- * @description Asynchronously saves the game state to a compressed file.
- * @returns {Promise<void>}
- *
- * @function load
- * @description Asynchronously loads the game state from a compressed file.
- * @returns {Promise<void>}
- */
 var Game = {
 
     rooms: [
@@ -166,7 +8,7 @@ var Game = {
     ],
 
     roomsPriority: [
-        30, 20, 21, 10, 31, 22, 11, 32, 12, 33, 24, 34, 35, 25, 15, 23, 14, 13
+        30, 20, 21, 31, 10, 22, 32, 11, 33, 12, 34, 35, 24, 25, 15, 23, 14, 13
     ],
 
     uselessRooms: [21, 22, 23, 24],
@@ -177,11 +19,21 @@ var Game = {
         30: [1], 31: [1], 32: [1], 33: [1], 34: [1], 35: []
     },
 
+    // When loc req = *, not implemented everywhere
+    allLocs: Array.from({ length: 99 }, (_, i) => i + 1),
+
 
     placesAdded: [99],
     placesDefault: [99],
     placesToBeAdded: [],
     numPlacesAvaible: 0,
+
+    // For better perfs (ID inside)
+    objToBeUnavaible: undefined,
+    objUnavaibles: [],
+
+    emptyPlaces: [], // Scan places will scan wich locations gives nothing
+
 
     db: {},
     // dbHistory: [],
@@ -207,7 +59,7 @@ var Game = {
         }
 
         try {
-            eval('nothing(' + val + ');');
+            eval('emptyFn(' + val + ');');
         } catch (e) {
             if (!(e instanceof ReferenceError || e instanceof SyntaxError)) throw e;
             val = JSON.stringify(val);
@@ -255,6 +107,8 @@ var Game = {
         // console.log('Restore: ', arr, 'to', toLen);
         for (let i = eval(history).length; i > toLen; i--) {
             const e = eval(history)[i - 1];
+            // console.log('restoreArr', arr);
+            // console.log(e);
             eval(`
                 if ('${e[1]}' === 'undefined'){
                 ${arr}${e[0]} = undefined;
@@ -446,15 +300,27 @@ var Game = {
         return objReqFormatted;
     },
 
+    scanPlaces: ()  => {
+        Game.emptyPlaces = [];
+        findInArr(miDb.lib, miDb.LOC_PLACES[0], miDb.LOC_PLACES[1], item => {
+            if (item[0][0] != 'L') return; // Not a place
+            if (item[4] && item[4].trim() != '') return;
+            const placeID = parseInt(item[0].slice(1));
+            Game.emptyPlaces.push(placeID);
+        })
+    },
+
     placeChecks: (placeID, ToAdd) => {
+        // Check if it can be used
+        if (!Game.numPlacesAvaible) return Game.stopChain('L-FULL');
 
         placeID = parseInt(placeID);
         // Check if already added
         let Added = Game.placesAdded.includes(placeID);
-        if ((ToAdd || !Game.placesDefault.includes(placeID)) && Added) return Game.stopChain('L-alreadyAdded');
-
-        // Check if it can be used
-        if (!Game.numPlacesAvaible) return Game.stopChain('L-FULL');
+        if ((ToAdd || !Game.placesDefault.includes(placeID)) && Added) {
+            if (Game.logPath.includes('L' + placeID)) Game.objToBeUnavaible = undefined;
+            return Game.stopChain('L-alreadyAdded');
+        };
 
         if (!Added && !Game.placesToBeAdded.includes(placeID)) Game.setArr('', Game.numPlacesAvaible - 1, 'Game.numPlacesAvaible');
         Game.setArr('', placeID, 'Game.placesToBeAdded');
@@ -462,8 +328,8 @@ var Game = {
         return true;
     },
 
-    resolvePlace: (plReq, type, ToAdd) => {
-        return Game.getARandomItemAndRestore(plReq, (placeID) => {
+    resolvePlace: (plReq, type, ToAdd, checkEmpty = true) => {
+        function checks(placeID) {
             Game.setArr('', 'L' + placeID, 'Game.logPath');
 
             // Check if it exist
@@ -471,7 +337,10 @@ var Game = {
 
             // Check if already taken for typeof
             try {
-                if (Game.db['L' + placeID][type]) return Game.stopChain('L-Already taken');
+                if (Game.db['L' + placeID][type]) {
+                    Game.objToBeUnavaible = undefined;
+                    return Game.stopChain('L-Already taken')
+                };
             } catch (e) {
                 if (!(e instanceof TypeError)) throw e;
             }
@@ -479,6 +348,18 @@ var Game = {
             if (!Game.placeChecks(placeID, ToAdd)) return Game.stopChain('L-No checks');
 
             return true;
+        }
+        // Priority to empty places
+        if (checkEmpty) {
+            const resultInEmptyPlaces = Game.getARandomItemAndRestore(plReq, (placeID) => {
+                if (!Game.emptyPlaces.includes(parseInt(placeID))) return;
+                return checks(placeID);
+            });
+            if (resultInEmptyPlaces) return resultInEmptyPlaces;
+        }
+        return Game.getARandomItemAndRestore(plReq, (placeID) => {
+            if (Game.emptyPlaces.includes(parseInt(placeID))) return;
+            return checks(placeID);
         });
     },
 
@@ -517,7 +398,7 @@ var Game = {
 
             // Check places required
             let plr = perso[3].split(',');
-            if (plr[0] == '*') plr = Array.from({ length: 99 }, (_, i) => i + 1);//.concat(Array.from({ length: 15 }, (_, i) => i + 85));
+            if (plr[0] == '*') plr = Game.allLocs;
             let place = Game.resolvePlace(plr, 'P');
             if (!place) return Game.stopChain('P-No Place');
 
@@ -525,7 +406,7 @@ var Game = {
 
             // For multiple 0
             if (object == '0') {
-                object += getUniqueID();
+                // object += getUniqueID(); // useless with push 
             } else {
                 object = 'O' + object;
             }
@@ -544,7 +425,7 @@ var Game = {
             if (!objReq[e].find((gives) => gives.split('&').includes(toGet))) return;
             // if (!objReq[e].split('&').includes(toGet)) return;
 
-            objectIDs = e.split('&');
+            const objectIDs = e.split('&');
 
             for (let i = 0; i < objectIDs.length; i++) {
                 const objectID = objectIDs[i];
@@ -555,11 +436,17 @@ var Game = {
                     continue;
                 }
 
+                const objUID = 'O' + objectID;
+
+                if (Game.logPath.includes(objUID)) return; // Avoid infinite loop
+                Game.setArr('', objUID, 'Game.logPath');
+
+                if (Game.objUnavaibles.includes(objectID)) return Game.stopChain('O-bj in UnA list');
+
                 // Check if object already used  
-                let [idx, cacheObject] = findInArr(miDb.lib, 60, undefined, item => item[0] == 'O' + objectID);
+                let [idx, cacheObject] = findInArr(miDb.lib, 60, undefined, item => item[0] == objUID);
 
 
-                Game.setArr('', cacheObject[0], 'Game.logPath');
                 try {
                     if (Game.db[cacheObject[0]]['exists']) {
                         if (cacheObject[2] == '1') {
@@ -570,11 +457,12 @@ var Game = {
                             Game.delItemGetter(cacheObject[0]);
                         }
                     }
-                    Game.setDbItem(cacheObject[0], 'exists', 'true');
                 } catch (e) {
                     if (!(e instanceof TypeError)) throw e;
                 }
+                Game.setDbItem(cacheObject[0], 'exists', 'true');
 
+                Game.objToBeUnavaible = objectID; // Save the object to be unavaible
                 let perso = Game.resolveGiver(cacheObject[0]);
                 if (!perso) {
                     // Check for location
@@ -597,15 +485,17 @@ var Game = {
 
                         // Save and return
 
-                        // For multiple 0
-                        if (object == '0') object += getUniqueID();
-                        else object = 'O' + object;
+                        // For multiple 0 (useless with push)
+                        // if (object == '0') object += getUniqueID();
+                        if (object != '0') object = 'O' + object;
 
                         Game.pushDbItem(loc[0], object, cacheObject[0]);
                         return true;
                     });
                     if (!loc) {
-                        return Game.stopChain('No Loc');
+                        let isUnA = Game.objToBeUnavaible == objectID;
+                        if (isUnA) Game.objUnavaibles.push(objectID);
+                        return Game.stopChain('O-No Loc =>isUnA:'+isUnA);
                     }
                 } // End if !perso
 
@@ -624,20 +514,22 @@ var Game = {
             let [idx, cacheDoor] = findInArr(miDb.lib, miDb.LOC_DOORS[0], miDb.LOC_DOORS[1], item => item[0] == 'R' + doorID);
             if (!cacheDoor) return;
             Game.setArr('', cacheDoor[0], 'Game.logPath');
-            Game.logs.push('=>' + doorID + ' for ' + roomIDX + ' <' + JSON.stringify(usable));
+            Game.logs.push('=>R' + doorID + ' for RM' + roomIDX + ' <' + JSON.stringify(usable));
 
             // ### Check if door already used
             if (Game.searchIn(cacheDoor[0], 'OPEN')[0] !== undefined) return Game.stopChain('Already use');
 
             // ### Check if places avaible
             let placesRequired = cacheDoor[3].split(",");
+            if (placesRequired[0] == '*') placesRequired = Game.allLocs;
+
             // ## Check if actual place is compatible with the door
             const room = Game.getRoom(roomIDX);
-            let place = Game.getRoom(roomIDX)['L'];
+            let place = room['L'];
             if (place) {
                 if (!placesRequired.includes(place.toString())) return Game.stopChain('R-Incompatible L' + place);
             } else {
-                place = parseInt(Game.resolvePlace(cacheDoor[3].split(','), 'R', true));
+                place = parseInt(Game.resolvePlace(placesRequired, 'R', true));
                 if (!place) return Game.stopChain('R-No Place');
                 room['L'] = place;
                 Game.setArr('', place, 'Game.placesAdded');
@@ -651,6 +543,7 @@ var Game = {
             // Save and return
             Game.setDbItem(cacheDoor[0], 'O' + objectID, 'OPEN');
             return true;
+            // Game.stopChain('OK'); // For test all chaines
         }, () => { Game.setRoom(roomIDX, copy(iniRoom)); log('Reset room to', iniRoom); });
     },
 
@@ -658,6 +551,8 @@ var Game = {
         // Setup the end room
         const end = Game.getRoom(miDb.END_ROOM[0]);
         end.L = 99;
+
+        Game.scanPlaces();
 
         const len = Game.roomsPriority.length;
         const roomChecked = [];

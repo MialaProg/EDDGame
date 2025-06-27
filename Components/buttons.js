@@ -145,7 +145,10 @@ var Actions = {
         MSelect.select = (sid, stxt) => {
             if (!actualPlaceObjs) return;
             console.log('Choiced: ' + sid);
-            delete actualPlaceObjs[Object.keys(actualPlaceObjs).find(key => actualPlaceObjs[key] === sid)];
+            // Bugfix: with 0 directly
+            // delete actualPlaceObjs[Object.keys(actualPlaceObjs).find(key => actualPlaceObjs[key] === sid)];
+            delOneItem(actualPlaceObjs[0], sid);
+
             Game.getObject(sid);
             Modal.switch('chat');
             MChat.addText(miDb.TXT_GET[1] + stxt);

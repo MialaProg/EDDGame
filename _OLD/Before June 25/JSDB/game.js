@@ -46,7 +46,7 @@ var Game = {
         }
 
         try {
-            eval('nothing(' + val + ');');
+            eval('emptyFn(' + val + ');');
         } catch (e) {
             if (!(e instanceof ReferenceError || e instanceof SyntaxError)) throw e;
             val = JSON.stringify(val);
