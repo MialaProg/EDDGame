@@ -22,6 +22,9 @@ var Game = {
     // When loc req = *, not implemented everywhere
     allLocs: Array.from({ length: 99 }, (_, i) => i + 1),
 
+    // For external save
+    unlockedPlaces: [],
+    timer: 0,
 
     placesAdded: [99],
     placesDefault: [99],
@@ -290,7 +293,7 @@ var Game = {
             let objsNF = poss[1].split('|');
             poss[0].split('|').forEach((reqs) => { // x&y ; z
                 const inDb = Game.db[obj[0]];
-                if (inDb && inDb[reqs]) return; // Verify object giver isn't already used
+                if (inDb && inDb[reqs]) return Game.logs.push('ORF-already:'+reqs); // Verify object giver isn't already used
                 objReqFormatted[reqs] = [];
                 objsNF.forEach((objs) => {
                     objReqFormatted[reqs].push(objs);
@@ -300,7 +303,7 @@ var Game = {
         return objReqFormatted;
     },
 
-    scanPlaces: ()  => {
+    scanPlaces: () => {
         Game.emptyPlaces = [];
         findInArr(miDb.lib, miDb.LOC_PLACES[0], miDb.LOC_PLACES[1], item => {
             if (item[0][0] != 'L') return; // Not a place
@@ -318,8 +321,9 @@ var Game = {
         // Check if already added
         let Added = Game.placesAdded.includes(placeID);
         if ((ToAdd || !Game.placesDefault.includes(placeID)) && Added) {
-            if (Game.logPath.includes('L' + placeID)) Game.objToBeUnavaible = undefined;
-            return Game.stopChain('L-alreadyAdded');
+            const local = Game.logPath.includes('L' + placeID);
+            if (local) Game.objToBeUnavaible = undefined;
+            return Game.stopChain('L-alreadyAdded (lcl:' + local);
         };
 
         if (!Added && !Game.placesToBeAdded.includes(placeID)) Game.setArr('', Game.numPlacesAvaible - 1, 'Game.numPlacesAvaible');
@@ -371,19 +375,15 @@ var Game = {
             }
             Game.setArr('', perso[0], 'Game.logPath');
 
-            if (perso[0] == 'P1' && players.includes('E')) {
-                return Game.stopChain('P-Efelant is in the tree');
-            }
-
-            if (perso[0] == 'P2' && noError('noSnakeMode')) {
-                return Game.stopChain('P-NoSnakeMode');
-            }
+            // Spec, TODO: add in gameconst
+            if (perso[0] == 'P1' && players.includes('E')) return Game.stopChain('P-Efelant is in the tree');
+            if (perso[0] == 'P2' && noError('noSnakeMode')) return Game.stopChain('P-NoSnakeMode');
 
             // Check if it is already used
             try {
-                const oldPlace = Game.db[perso[0]]['L'];
+                const oldPlace = Game.db[perso[0]].L;
                 if (oldPlace) {
-                    Game.setArr(`['L${oldPlace}']['P']`, undefined, 'Game.db'); // Remove the place
+                    Game.setArr(`['L${oldPlace}'].P`, undefined, 'Game.db'); // Remove the place
                 }
             } catch (e) {
                 if (!(e instanceof TypeError)) throw e;
@@ -419,11 +419,24 @@ var Game = {
         });
     },
 
+    getSearchGivesPatern: (toGetNum) => {
+        // For optimisation:
+        return new RegExp(`(?:^|&)${toGetNum}(?:$|&)`);
+        // Next use with :
+        objReq = Game.objectsReqFormat(miDb.lib.find(e => e[0] == ''));
+        pattern = Game.getSearchGivesPatern('');
+        x = Object.keys(objReq).some((e) => {
+            if (objReq[e].some(gives => pattern.test(gives))) return true;
+        });
+    },
+
     resolveObjects: (objReq, toGet = 'open') => {
+        const pattern = Game.getSearchGivesPatern(toGet);
+
         return Game.getARandomItemAndRestore(Object.keys(objReq), (e) => {
             // Check if it gives the toGet
-            if (!objReq[e].find((gives) => gives.split('&').includes(toGet))) return;
-            // if (!objReq[e].split('&').includes(toGet)) return;
+            // if (!objReq[e].find((gives) => gives.split('&').includes(toGet))) return;
+            if (!objReq[e].some(gives => pattern.test(gives))) return;
 
             const objectIDs = e.split('&');
 
@@ -474,14 +487,32 @@ var Game = {
 
                         Game.setArr('', loc[0], 'Game.logPath');
 
-                        if (!Game.placeChecks(loc[0].slice(1))) return Game.stopChain('L-No placeChecks');
+                        // Principe: si UnA change, vérifie que c'est pour de bonnes raisons
+                        const isUnA = Game.objToBeUnavaible == objectID;
+                        const checksOK = Game.placeChecks(loc[0].slice(1));
+                        if (!checksOK) {
+                            if (!isUnA || Game.objToBeUnavaible) return Game.stopChain('L-No placeChecks');
+                            const objReq = Game.objectsReqFormat(loc);
+                            const pattern = Game.getSearchGivesPatern(cacheObject[0].slice(1));
+                            const thisPlaceGiveMe = Object.keys(objReq).some((e) => {
+                                if (objReq[e].some(gives => pattern.test(gives))) return true;
+                            });
+                            if (!thisPlaceGiveMe) {
+                                Game.objToBeUnavaible = objectID;
+                                return Game.stopChain('L-No placeChecks, oTBU+');
+                            }
+                            return Game.stopChain('L-No placeChecks, oTBU-');
+                        }
 
                         // Check if he give the object
-                        let objReq = Game.objectsReqFormat(loc); //[4]
+                        const objReq = Game.objectsReqFormat(loc); //[4]
                         let object = Game.resolveObjects(objReq, cacheObject[0].slice(1));
                         if (!object) {
                             return Game.stopChain('L-No obj gives this');
                         }
+
+
+
 
                         // Save and return
 
@@ -493,9 +524,9 @@ var Game = {
                         return true;
                     });
                     if (!loc) {
-                        let isUnA = Game.objToBeUnavaible == objectID;
+                        const isUnA = Game.objToBeUnavaible == objectID;
                         if (isUnA) Game.objUnavaibles.push(objectID);
-                        return Game.stopChain('O-No Loc =>isUnA:'+isUnA);
+                        return Game.stopChain('O-No Loc =>isUnA:' + isUnA);
                     }
                 } // End if !perso
 
@@ -547,7 +578,11 @@ var Game = {
         }, () => { Game.setRoom(roomIDX, copy(iniRoom)); log('Reset room to', iniRoom); });
     },
 
+    isGen: false,
     generate: async () => {
+        if (Game.isGen) return;
+        Game.isGen = true;
+
         // Setup the end room
         const end = Game.getRoom(miDb.END_ROOM[0]);
         end.L = 99;
@@ -556,10 +591,8 @@ var Game = {
 
         const len = Game.roomsPriority.length;
         const roomChecked = [];
+        const coefLoading = 30 / (4 * len);
         for (let i = 0; i < len; i++) {
-            Loading.setProgressBar(10 + (i / len) * 30, false);
-            await waitUIupdate();
-
             Game.placesToBeAdded.push(1000 + i);
             const roomINT = Game.roomsPriority[i];
             const roomDoors = Game.getRoomDoors(roomINT);
@@ -573,6 +606,9 @@ var Game = {
             for (let j = 0; j < roomDoors.length; j++) {
                 if (!randint(0, 5)) continue; // 1/6 chance to skip door 
                 if (Game.uselessRooms.includes(room) && !randint(0, 3)) continue; // Skip useless rooms (Pb#10)
+
+                Loading.setProgressBar(10 + coefLoading * (4 * i + j), false); // 10 + ((4*i + j) / (len*4)) * 30 = 10 + 30/(4len)*(4i+j)
+                await waitUIupdate();
 
                 const doorRelative = roomDoors[j];
                 const oroomINT = roomINT + doorRelative;

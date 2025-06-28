@@ -54,13 +54,19 @@ class CanvasLib {
      * @param {string} [fillColor] - Couleur de remplissage optionnelle
      * @param {string} [strokeColor] - Couleur de contour optionnelle
      */
-    drawRect(x, y, w, h, fillColor, strokeColor) {
-        this._saveStyles();
+    async drawRect(x, y, w, h, fillColor, strokeColor) {
 
         const px = (x / 100) * this.canvas.width;
         const py = (y / 100) * this.canvas.height;
         const width = (w / 100) * this.canvas.width;
         const height = (h / 100) * this.canvas.height;
+
+        // Wait for perspective
+        const num = CanvasLib.numImgsToPrint;
+        CanvasLib.numImgsToPrint += 1;
+        await wait(()=>CanvasLib.numImgsPrinted >= num);
+        
+        this._saveStyles();
 
         if (fillColor) {
             this.ctx.fillStyle = fillColor || this.defaultFill;

@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="pageTitle">Commencer l'aventure | EDD Game</title>
-    <meta name="description" content="Compagnon web pour le jeu EDD Game. Gérez vos parties, joueurs et aventures en ligne.">
+    <meta name="description"
+        content="Compagnon web pour le jeu EDD Game. Gérez vos parties, joueurs et aventures en ligne.">
     <meta name="author" content="Miala">
     <meta property="og:title" content="EDD Board Game">
     <meta property="og:description" content="Compagnon web pour le jeu EDD Game.">
@@ -37,78 +38,79 @@
     <!-- Service Worker -->
     <link rel="manifest" href="gameLib/EDDGame.webmanifest">
     <script>
-      /*
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('gameLib/sw.js')
-                .then(registration => {
-                    console.log('ServiceWorker registration successful with scope: ', registration.scope);
-                })
-                .catch(error => {
-                    console.log('ServiceWorker registration failed: ', error);
-                });
-        }*/
+        /*
+          if ('serviceWorker' in navigator) {
+              navigator.serviceWorker.register('gameLib/sw.js')
+                  .then(registration => {
+                      console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                  })
+                  .catch(error => {
+                      console.log('ServiceWorker registration failed: ', error);
+                  });
+          }*/
     </script>
-    </head>
-    <body>
-        <div id='ErrorMessageIfNoCSS'>
-            <style>
-                .error-msg-stop {
-                    position: fixed;
-                    top: 0;
-                    left: 0;
-                    width: 100vw;
-                    height: 100vh;
-                    background-color: rgba(128, 48, 1, 0.527);
-                    font-size: 4em;
-                    text-align: center;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                }
-            </style>
-            <div class="is-hidden error-msg-stop">
-                <p>
-                    Bulma CSS (et autres) n'est pas supporté...
-                    Vérifiez votre connexion internet.
-                </p>
-            </div>
+</head>
+
+<body>
+    <div id='ErrorMessageIfNoCSS'>
+        <style>
+            .error-msg-stop {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                background-color: rgba(128, 48, 1, 0.527);
+                font-size: 4em;
+                text-align: center;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+        </style>
+        <div class="is-hidden error-msg-stop">
+            <p>
+                Bulma CSS (et autres) n'est pas supporté...
+                Vérifiez votre connexion internet.
+            </p>
         </div>
+    </div>
 
-        <div class="block content" id="pregame-interface">
-            <h1>Bienvenue sur le compagnon EDD Game !</h1>
-            <p id='players-p'>Chargement en cours...</p>
-            <form action="#" method="post" id="players-form">
-                <!-- Completed with players.js -->
+    <div class="block content" id="pregame-interface">
+        <h1>Bienvenue sur le compagnon EDD Game !</h1>
+        <p id='players-p'>Chargement en cours...</p>
+        <form action="#" method="post" id="players-form">
+            <!-- Completed with players.js -->
 
-                <div class="field is-grouped">
-                    <div class="control">
-                        <button class="button is-primary" id="playBtn" disabled>Jouer !</button>
-                    </div>
+            <div class="field is-grouped">
+                <div class="control">
+                    <button class="button is-primary" id="playBtn" disabled>Jouer !</button>
                 </div>
-
-                <div class="field control">
-                    <label class="checkbox">
-                        <input type="checkbox" id="noSnakeModeCheckbox" onchange="noSnakeMode = this.checked;">
-                        Mode sans serpent
-                    </label>
-                </div>
-                <script>var noSnakeMode;
-                    document.addEventListener('DOMContentLoaded', function() {
-                        noSnakeMode = document.getElementById('noSnakeModeCheckbox').checked;
-                    });
-                </script>
-            </form>
-        </div>
-
-        <div class="block content is-hidden" id="loadinggame-interface">
-            <div class="has-text-centered centered-height">
-                <h1 class="title" id="loadingTitle">Chargement en cours...</h1><br>
-                <progress class="progress is-primary" max="100" id="loadingProgress">50%</progress>
             </div>
-        </div>
 
-        <div class="content is-hidden" id="ingame-interface">
-            <div class="block buttons top">
+            <div class="field control">
+                <label class="checkbox">
+                    <input type="checkbox" id="noSnakeModeCheckbox" onchange="noSnakeMode = this.checked;">
+                    Mode sans serpent
+                </label>
+            </div>
+            <script>var noSnakeMode;
+                document.addEventListener('DOMContentLoaded', function () {
+                    noSnakeMode = document.getElementById('noSnakeModeCheckbox').checked;
+                });
+            </script>
+        </form>
+    </div>
+
+    <div class="block content is-hidden" id="loadinggame-interface">
+        <div class="has-text-centered centered-height">
+            <h1 class="title" id="loadingTitle">Chargement en cours...</h1><br>
+            <progress class="progress is-primary" max="100" id="loadingProgress">50%</progress>
+        </div>
+    </div>
+
+    <div class="content is-hidden" id="ingame-interface" style="margin-bottom: 0px;">
+        <!-- <div class="block buttons top">
                 <div class="control">
                     <div class="control select">
                         <select id="current-room" name="current-room">
@@ -119,12 +121,31 @@
                 <div class="control">
                     <button id="save" class="button is-info" onclick="Actions.save()">Save</button>
                 </div>
+            </div> -->
+
+        <div class="canvas-container">
+            <canvas id="room-canvas"></canvas>
+        </div>
+
+        <div class="buttons-bottom-container">
+            <div class="buttons" style="margin-bottom: 0.25rem;">
+                <!-- <div class="control">
+                    <button id="inventory" class="button is-info" onclick="Actions.openInventory()">Inventaire</button>
+                </div> -->
+                <div class="control">
+                    <button id="inventory" class="button is-warning action1" onclick="Actions.random()">Dé</button>
+                </div>
+                <div class="control">
+                    <button id="action" class="button is-primary action3" onclick="Actions.toolBox()" disabled>Agir</button>
+                </div>
             </div>
-    
-            <div class="canvas-container">
-                <canvas id="room-canvas"></canvas>
+            <div class="buttons">
+                <div class="control">
+                    <button id="roomSelect" class="button action2" onclick="Actions.changeRoom()" disabled>Changer de pièce (HALL)</button>
+                </div>
             </div>
-            <div class="block buttons bottom" oldclass="field is-grouped">
+        </div>
+        <!-- <div class="block buttons bottom" oldclass="field is-grouped">
                 <div class="control">
                     <button id="actionUse" class="button is-info actionBtn" onclick="Actions.use()">Utiliser</button>
                 </div>
@@ -134,21 +155,21 @@
                 <div class="control">
                     <button id="actionSearch" class="button is-warning actionBtn" onclick="Actions.search()">Chercher</button>
                 </div>
-            </div>
-        </div>
+            </div> -->
+    </div>
 
-        <div class="modal" id="gameModal">
-            <div class="modal-background"></div>
-            <div class="modal-card">
-                <header class="modal-card-head">
-                    <p class="modal-card-title">Module d'intéraction</p>
-                    <button class="delete modal-close" aria-label="close"></button>
-                </header>
-                <section class="modal-card-body" id="gameModalContent">
-                    <div id="gameModalMessages"></div>
-                    <ul id="gameModalSelect" class="menu-list is-hidden"></ul>
-                </section>
-                <footer class="modal-card-foot is-flex-wrap-wrap" id="gameModalAnswers"></footer>
-            </div>
+    <div class="modal" id="gameModal">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <header class="modal-card-head">
+                <p class="modal-card-title" id="modalTitle">Module d'intéraction</p>
+                <button class="delete modal-close" aria-label="close"></button>
+            </header>
+            <section class="modal-card-body" id="gameModalContent">
+                <div id="gameModalMessages"></div>
+                <ul id="gameModalSelect" class="menu-list is-hidden"></ul>
+            </section>
+            <footer class="modal-card-foot is-flex-wrap-wrap" id="gameModalAnswers"></footer>
         </div>
-    </body>
+    </div>
+</body>

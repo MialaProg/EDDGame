@@ -112,7 +112,7 @@ async function initMain() {
 
     await wait(() => libLoaded('Buttons'));
     // Buttons init
-    RoomSelect.init();
+    Actions.init();
     await wait(() => libLoaded('Modal') && libLoaded('MiBasicReader'));
     // Init all
     Modal.init();
@@ -195,36 +195,41 @@ function showRoom(roomINT = Game.actualRoom) {
     const roomARR = Game.intToCoords(roomINT);
     const room = Game.getRoom(roomARR);
     const placeID = room['L'];
+    let place;
     if (placeID) {
         Game.actualItems.push('L' + placeID);
-        canvasObj.drawImage(40, 40, 40, 40, 'L' + placeID);
+        canvasObj.drawImage(50, 50 / 1.2, 40, 40 / 1.2, 'L' + placeID);
 
         place = Game.db['L' + placeID];
-        if (place) {
-            let persoID = place['P'];
-            if (persoID && !Game.db['P' + persoID].isHidden) {
-                Game.actualItems.push('P' + persoID);
-                canvasObj.drawImage(20, 85, 39, 29, 'P' + persoID);
-                canvasObj.drawRect(20, 85, 41, 31, undefined, 'black');
-            }
-        }
 
         // Rename the option
-        const optionSelected = RoomSelect.HTMLE ? Array.from(RoomSelect.HTMLE.options).find(option => option.value === roomINT.toString()) : undefined;
-
-        if (optionSelected && !optionSelected.textContent) {
-            optionSelected.textContent = optionSelected.innerHTML + '';
-        }
-        if (optionSelected && optionSelected.textContent.length < 5) {
+        const option = findInArr(Game.unlockedPlaces, 0, undefined, option => option.id === roomINT.toString());
+        if (option[0] && option[1].text.length < 5){
             const placeLine = findInArr(miDb.lib, miDb.LOC_PLACES[0], miDb.LOC_PLACES[1], item => item[0] == 'L' + placeID); //Returns [key, val]
             if (placeLine) {
                 let placeName = placeLine[1][1];
                 if (roomARR[0] != 0) {
-                    placeName = optionSelected.textContent + ' : ' + placeName;
+                    placeName = option[1].text + ' : ' + placeName;
                 }
-                optionSelected.textContent = placeName;
+                option[1].text = placeName;
             }
         }
+        // OLD with roomSelect
+        // const optionSelected = RoomSelect.HTMLE ? Array.from(RoomSelect.HTMLE.options).find(option => option.value === roomINT.toString()) : undefined;
+
+        // if (optionSelected && !optionSelected.textContent) {
+        //     optionSelected.textContent = optionSelected.innerHTML + '';
+        // }
+        // if (optionSelected && optionSelected.textContent.length < 5) {
+        //     const placeLine = findInArr(miDb.lib, miDb.LOC_PLACES[0], miDb.LOC_PLACES[1], item => item[0] == 'L' + placeID); //Returns [key, val]
+        //     if (placeLine) {
+        //         let placeName = placeLine[1][1];
+        //         if (roomARR[0] != 0) {
+        //             placeName = optionSelected.textContent + ' : ' + placeName;
+        //         }
+        //         optionSelected.textContent = placeName;
+        //     }
+        // }
     }
 
     // Gestion des portes
@@ -236,25 +241,40 @@ function showRoom(roomINT = Game.actualRoom) {
             let doorID = doorIDs ? doorIDs[doorKey] : undefined;
             if (doorID && !Game.db['R' + doorID]['opened']) {
                 Game.actualItems.push('R' + doorID);
-                if (Math.abs(doorKey) > 5) {
-                    canvasObj.drawImage(50 + 4 * doorKey, 40, 20, 40, 'R' + doorID);
-                } else {
-                    canvasObj.drawImage(60, 50 + 40 * doorKey, 40, 20, 'R' + doorID);
+                if (Math.abs(doorKey) > 5) { // +10/-10
+                    canvasObj.drawImage(50 + 4 * doorKey, 10/1.2, 20, 40/1.2, 'R' + doorID);
+                } else { // +1/-1
+                    canvasObj.drawImage(10, (50 + 40 * doorKey)/1.2, 40, 20/1.2, 'R' + doorID);
                 }
             } else {
                 if (Math.abs(doorKey) > 5) {
-                    canvasObj.drawArrow(50 + 4 * doorKey, 40, 15, 10, doorKey > 0 ? 'right' : 'left');
+                    canvasObj.drawArrow(50 + 3 * doorKey, 50/1.2, 15, 10/1.2, doorKey > 0 ? 'right' : 'left');
                 } else {
-                    canvasObj.drawArrow(60, 50 + 40 * doorKey, 10, 15, doorKey > 0 ? 'down' : 'up');
+                    canvasObj.drawArrow(50, (50 + 40 * doorKey)/1.2, 10, 15/1.2, doorKey > 0 ? 'down' : 'up');
                 }
                 const nextRoom = (parseInt(roomINT) + doorKey).toString();
-                if (RoomSelect.HTMLE && !Array.from(RoomSelect.HTMLE.options).some(option => option.value === nextRoom)) {
-                    const option = document.createElement("option");
-                    option.value = nextRoom;
-                    option.textContent = RoomSelect.roomIntToID(nextRoom);
-                    RoomSelect.HTMLE.appendChild(option);
+                // if (RoomSelect.HTMLE && !Array.from(RoomSelect.HTMLE.options).some(option => option.value === nextRoom)) {
+                //     const option = document.createElement("option");
+                //     option.value = nextRoom;
+                //     option.textContent = RoomSelect.roomIntToID(nextRoom);
+                //     RoomSelect.HTMLE.appendChild(option);
+                // }
+                //Update changeRoom
+                const option = findInArr(Game.unlockedPlaces, 0, undefined, option => option.id === nextRoom);
+                if (!option[1]){
+                    Game.unlockedPlaces.push({id: nextRoom, text: Actions.roomStrToID(nextRoom.toString())});
                 }
             }
+        }
+    }
+
+    // Draw character (perso)
+    if (place) {
+        let persoID = place['P'];
+        if (persoID && !Game.db['P' + persoID].isHidden) {
+            Game.actualItems.push('P' + persoID);
+            canvasObj.drawRect(20, 80 / 1.2, 41, 41 / 1.2, 'white', 'black');
+            canvasObj.drawImage(20, 80 / 1.2, 39, 39 / 1.2, 'P' + persoID);
         }
     }
 

@@ -24,7 +24,9 @@ var Modal = {
     switch: (mode) => {
         Modal.getHTMLE('Select').classList.toggle('is-hidden', mode !== 'select');
         Modal.getHTMLE('Messages').classList.toggle('is-hidden', mode !== 'chat');
-    }
+    },
+
+    changeTitle: (title) => {document.getElementById('modalTitle').innerHTML = title; },
 };
 
 var MSelect = {
