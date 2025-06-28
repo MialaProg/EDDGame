@@ -8,7 +8,7 @@ Board game
 (All files in 'DB', 'Images. or 'Audio' folder)
 => License CC BY-NC-ND 4.0
 ## External tools
-This project use Bulma CSS under his MIT license.
+This project use Bulma CSS under his MIT license: bulma.io v1.0.2 | MIT License | github.com/jgthms/bulma
 ## Contact
 miala+EDDGame.licensing@ik.me
 ## Attention
