@@ -101,7 +101,7 @@ var Actions = {
         Game.actualItems.forEach((itemID) => { push(itemID) });
         // Add the inventory
         Object.keys(Game.db).forEach((itemID) => {
-            if (type !== 'O') return;
+            if (itemID[0] !== 'O') return;
             if (Game.db[itemID].nb) push(itemID);
         });
 
