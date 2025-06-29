@@ -643,6 +643,20 @@ Vous atteignez la porte.
 #open:R14
 #stop
 ------------------
+:O18
+Salut ! Nous c'est Suika & Citrouille !
+À partir de maintenant on te suis partout !
+#:ON
+R14:R14opx18
+L11:O18xL11
+#
+:O18xL11
+Tu veux qu'on t'aide à monter ?
+D'accord !
+*Vous grimpez sur les deux sœurs et décrochez le nez du Sphinx.
+#get:O27
+#stop
+------------------
 :PR15
 #IF:#js-Game.db['O27'].nb:R15u
 *Il ne vaudrait mieux pas l'approcher...
