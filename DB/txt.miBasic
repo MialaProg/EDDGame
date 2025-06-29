@@ -663,6 +663,7 @@ Tu veux qu'on t'aide à monter ?
 D'accord !
 *Vous grimpez sur les deux sœurs et décrochez le nez du Sphinx.
 #get:O27
+#js-Game.db.P18.isHidden=true;
 #stop
 ------------------
 :O17
