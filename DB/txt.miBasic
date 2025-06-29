@@ -657,6 +657,22 @@ D'accord !
 #get:O27
 #stop
 ------------------
+:O17
+Tu veux faire du trampoline sur ma carapace ?
+#:rep
+Oui:O17ui
+#
+:O17ui
+*Vous faites du trampoline sur Bobi.
+#:ON
+R14:R14op
+L11:O17xL11
+#
+:O17xL11
+*Vous atteignez et décrochez le nez du Sphinx.
+#get:O27
+#stop
+------------------
 :PR15
 #IF:#js-Game.db['O27'].nb:R15u
 *Il ne vaudrait mieux pas l'approcher...
