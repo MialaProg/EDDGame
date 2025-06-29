@@ -84,7 +84,7 @@ var Actions = {
             let type = itemID[0];
             if (type == 'R') {
                 if (Game.db[itemID].opened) return;
-                if (miBasic.keywords['U' + itemID]) type = 'O';
+                if (miBasic.keywords['U' + itemID]) type = 'U';
                 else if (miBasic.keywords['P' + itemID]) type = 'P';
                 else return;
             } else {
@@ -92,7 +92,7 @@ var Actions = {
             }
 
             let actionTxt;
-            if (type == 'O') actionTxt = 'Utiliser : ';
+            if (['O', 'U'].includes(type)) actionTxt = 'Utiliser : ';
             else if (type == 'P') actionTxt = 'Parler à : ';
 
             MSelect.options.push({ id: (itemID[0] == 'R' ? type : '') + itemID, text: actionTxt + findInArr(miDb.lib, 0, undefined, (item) => item[0] === itemID)[1][1] });
@@ -101,7 +101,7 @@ var Actions = {
         Game.actualItems.forEach((itemID) => { push(itemID) });
         // Add the inventory
         Object.keys(Game.db).forEach((itemID) => {
-            if (itemID[0] !== 'O') return;
+            if (type !== 'O') return;
             if (Game.db[itemID].nb) push(itemID);
         });
 
