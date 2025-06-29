@@ -36,4 +36,6 @@ Tu ne peux rien utiliser actuellement.;Il n'y a personne...;Tu ne trouvera  rien
 #TXT_GET
 *Tu obtiens: ;*Tu trouves: 
 #TIMER
-12;60
+12;600;400;300;200;100
+#TIME_ALERT
+Oh non ! Le temps est écoulé ! Les cours reprennent !/br/Malheureusement, vous ne pouvez etre absents et le personnel va pendant ce temps déjouer votre plan de vol.../br/Vous avez échouer, ou du moins il faudra remettre ça à plus tard...

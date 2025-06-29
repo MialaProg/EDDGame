@@ -88,6 +88,21 @@
                 </div>
             </div>
 
+            <div class="field">
+                <label class="label" for="levelSelect">Niveau</label>
+                <div class="control">
+                    <div class="select">
+                        <select id="levelSelect" name="levelSelect" onchange="level = parseInt(this.value, 10);">
+                            <option value="1" selected>Facile</option>
+                            <option value="2">Moyen</option>
+                            <option value="3">Difficile</option>
+                            <option value="4">Extreme</option>
+                            <option value="5">Impossible</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
             <div class="field control">
                 <label class="checkbox">
                     <input type="checkbox" id="noSnakeModeCheckbox" onchange="noSnakeMode = this.checked;">
@@ -103,7 +118,7 @@
 
             <div class="field is-grouped">
                 <div class="control">
-                    <button class="button" id="saveIntro" onclick="Game.load(); alert('Si cela ne fonctionne pas, faites-le directement en jeu.')">Charger une sauvegarde</button>
+                    <button class="button" id="saveIntro" disabled onclick="Game.load(); alert('Si cela ne fonctionne pas, faites-le directement en jeu.')">Charger une sauvegarde</button>
                 </div>
             </div>
         </form>

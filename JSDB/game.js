@@ -25,6 +25,7 @@ var Game = {
     // For external save
     unlockedPlaces: [],
     timer: 0,
+    level: 1,
 
     placesAdded: [99],
     placesDefault: [99],
