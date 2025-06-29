@@ -23,35 +23,39 @@ var Actions = {
 
     random: () => {
         Game.timer += 1;
-        let txt = "-- Résultat du dé --\nVous pouvez bouger de ";
+        Actions.changeMode(1);
+        PlayersJS.next();
+        let txt = "-- Résultat du dé --\n";
+        txt += "( Tour de " + PlayersJS.getName() + " )\n";
+        txt += "Vous pouvez bouger de ";
         txt += (randint(0, 2) + randint(0, 2));
         txt += " cases max.\nVous devez déplacer ";
         txt += randint(0, 1) ? "M. Le Directeur" : "le Surveillant";
         txt += " d'une case vers ";
-        switch (randint(0, 4)) {
+        switch (randint(0, 6)) {
             case 0: txt += "la direction de votre choix"; break;
-            case 1: txt += "le Nord"; break;
-            case 2: txt += "l'Est"; break;
-            case 3: txt += "le Sud"; break;
-            case 4: txt += "l'Ouest"; break;
+            case 1: txt += "le Nord (haut)"; break;
+            case 2: txt += "l'Est (droite)"; break;
+            case 3: txt += "le Sud (bas)"; break;
+            case 4: txt += "l'Ouest (gauche)"; break;
+            case 5: txt += "le HALL"; break;
+            case 6: txt += "E4"; break;
         }
         txt += ".";
         alert(txt);
-        Actions.changeMode(1);
-        PlayersJS.next();
     },
 
     changeRoom: () => {
         MChat.clearConv();
-        Modal.changeTitle('Il est ' + Math.floor(Game.timer / miDb.TIMER[0]) + 'h');
+        Modal.changeTitle(`Il est ${miDb.TIMER[0]}h${Math.floor(Game.timer / miDb.TIMER[1] * 60)}min`);
         MSelect.options = [...Game.unlockedPlaces];
         MSelect.empty = 'Aucune destination n\'est disponible.';
 
         MSelect.select = (sid, txt) => {
             Actions.changeMode(2);
             Game.timer += 1;
-            showRoom(sid);
             Actions.setRoomTxt(txt);
+            showRoom(sid);
             Modal.close();
         };
         MSelect.create();
@@ -64,10 +68,10 @@ var Actions = {
     toolBox: async () => {
         MChat.clearConv();
         MSelect.options = [
-            { id: 'search', text: 'Chercher ici' },
             { id: 'save', text: 'Sauvegarder' },
             { id: 'load', text: 'Charger' },
-            { id: 'thisIsTheEvil', text: '--------------' }
+            { id: 'thisIsTheEvil', text: '--------------' },
+            { id: 'search', text: 'Chercher ici' }
         ];
         let push = (itemID) => {
             console.log('Vérification du type');

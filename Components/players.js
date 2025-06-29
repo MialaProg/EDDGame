@@ -31,6 +31,8 @@ var PlayersJS = {
     }
   },
 
+  getName: (PID = actualPlayer) => {return findInArr(miDb.lib, miDb.LOC_PLUS[0], undefined, (item) => item[0] == "_PLAYER" && item[1] === PID)[1][2].trim();},
+
   createSelects: () => {
     // let form = document.getElementById('players-form');
     for (let i = 1; i < 6; i++) {

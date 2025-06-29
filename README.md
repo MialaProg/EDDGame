@@ -81,7 +81,7 @@ Ex: #if:#var-WAZO::#js-'E'+(5*7) (If var 'WAZO', go to 'E35')
 # TODO   
 - Check no error: [#11](https://github.com/MialaProg/EDDGame/issues/11)
 - Verify all text & assets in miBasic: [#7](https://github.com/MialaProg/EDDGame/issues/7)
-- 
+- Test [#16](https://github.com/MialaProg/EDDGame/issues/16)
 ## Notes
 Pr G.oRF, on retire les spots dj pris, mais parfois obj type 0 => pas grave juste reloc => ness reflx apprf
 

@@ -23,6 +23,7 @@ class CanvasLib {
         CanvasLib.canvasList.push(this);
         CanvasLib.updateCanvasSize();
         window.addEventListener("resize", CanvasLib.updateCanvasSize);
+        this.history = [];
     }
 
     static updateCanvasSize() {
@@ -45,6 +46,21 @@ class CanvasLib {
         });
     }
 
+    clearHistory() { this.history = []; CanvasLib.numImgsToPrint = 0; CanvasLib.numImgsPrinted = 0;}
+
+    redraw() {
+        // this.history.push([func, [args]]);
+        const savedHistory = [...this.history];
+        savedHistory.forEach(action => {
+            let params = "";
+            action[1].forEach(parameter => {
+                params += "," + JSON.stringify(parameter);
+            });
+            eval("this." + action[0] + "(" + params.slice(1) + ")");
+        });
+        this.history = savedHistory;
+    }
+
     /**
      * Dessine un rectangle centré
      * @param {number} x - Position X centrale en %
@@ -55,6 +71,7 @@ class CanvasLib {
      * @param {string} [strokeColor] - Couleur de contour optionnelle
      */
     async drawRect(x, y, w, h, fillColor, strokeColor) {
+        this.history.push(['drawRect', [x,y,w,h,fillColor,strokeColor]]);
 
         const px = (x / 100) * this.canvas.width;
         const py = (y / 100) * this.canvas.height;
@@ -65,6 +82,7 @@ class CanvasLib {
         const num = CanvasLib.numImgsToPrint;
         CanvasLib.numImgsToPrint += 1;
         await wait(()=>CanvasLib.numImgsPrinted >= num);
+        CanvasLib.numImgsPrinted += 1;
         
         this._saveStyles();
 
@@ -93,14 +111,16 @@ class CanvasLib {
      * @param {boolean} [rounded] - Si vrai, arrondit les coins
      * @param {string} [fillColor] - Teinte optionnelle pour l'image
      */
-    drawImage(x, y, w, h, image, rounded = true, fillColor) {
+    drawImage(x, y, w, h, image, rounded = true, fillColor, save = true) {
+        if (save) this.history.push(['drawImage', [x,y,w,h,image,rounded,fillColor]]);
         if (typeof image === 'string') {
             const img = Imgs.get(image);
             const num = CanvasLib.numImgsToPrint;
+            const timer = Date.now() + 5000;
             CanvasLib.numImgsToPrint += 1;
             Imgs.isAvaible(image).then(() => {
-                wait(()=>CanvasLib.numImgsPrinted >= num).then(() => {
-                    if (img.isLoaded) this.drawImage(x, y, w, h, img, rounded, fillColor);
+                wait(()=>CanvasLib.numImgsPrinted >= num && (img.isLoaded||Date.now()>timer)).then(() => {
+                    if (img.isLoaded) this.drawImage(x, y, w, h, img, rounded, fillColor, false);
                     CanvasLib.numImgsPrinted += 1;
                 })
             });
@@ -121,11 +141,16 @@ class CanvasLib {
 
         w = image.naturalWidth * ratio;
         h = image.naturalHeight * ratio;
-        [x, y] = [px - w / 2, py - h / 2];
+        [x, y, w, h] = [px - w / 2, py - h / 2, w, h].map(coord => Math.round(coord));
 
         if (fillColor) {
             this.ctx.filter = `hue-rotate(${fillColor})`;
         }
+
+        if (x < 0 || y < 0) console.errror('Canvas: x|y<0 (enter the middle)');
+
+        console.log('DrawImage',x,y,w,h);
+        console.log(image);
 
         if (rounded) {
             // Calculate radius as 10% of the smaller dimension
@@ -162,6 +187,7 @@ class CanvasLib {
      * @param {string} [fillColor] - Couleur optionnelle
      */
     drawArrow(x, y, w, h, dir, strokeFillColor) {
+        this.history.push(['drawArrow', [x,y,w,h,dir,strokeFillColor]]);
         this._saveStyles();
 
         const px = (x / 100) * this.canvas.width;

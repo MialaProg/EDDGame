@@ -5,8 +5,10 @@ var Loading = {
         Loading.title = document.getElementById('loadingTitle');
         Loading.progress = document.getElementById('loadingProgress');
         // PlayersJS.playBtn.addEventListener('click', () => {Loading.changeMode(1)});
-        PlayersJS.change.push(() => { Loading.setTitle(findInArr(miDb.lib, miDb.LOC_LOADING[0], undefined, (item) => item[1] === actualPlayer)[1][2]); })
+        // PlayersJS.change.push(() => { Loading.setPlayerTitle(); })
     },
+
+    setPlayerTitle: () => { Loading.setTitle(findInArr(miDb.lib, miDb.LOC_PLUS[0], undefined, (item) => item[0] == "LOADING" && item[1] === actualPlayer)[1][2]); },
 
     setProgressBar: (val, animated = true) => {
         // console.log('SetPrgss', val);
@@ -16,7 +18,7 @@ var Loading = {
         if (Loading.progressInterval) {
             clearInterval(Loading.progressInterval);
         }
-        if (!animated){
+        if (!animated) {
             Loading.progress.value = val;
             return;
         }
@@ -98,7 +100,7 @@ var Loading = {
 
 
     changeMode: async (mode) => {
-        await wait(()=>!Loading.inChange);
+        await wait(() => !Loading.inChange);
         Loading.inChange = 1;
 
         let modes = ["pregame", "loadinggame", "ingame"];

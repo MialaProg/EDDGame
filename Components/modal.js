@@ -35,6 +35,13 @@ var MSelect = {
 
     select: (sid, stxt) => { },
 
+    _select: (sid, stxt)=>{
+        // Prevent from double clicking (maybe fix #14)
+        if (Date.now() - MSelect.selectTimer < 2000) return;
+        MSelect.selectTimer = Date.now();
+        MSelect.select(sid, stxt);
+    },
+
     show: () => {
         Modal.switch('select');
         Modal.open();
@@ -50,13 +57,14 @@ var MSelect = {
                 const li = document.createElement('li');
                 li.innerHTML = `
             <a class="choice-item is-rounded" 
-               onclick="MSelect.select('${choice.id}', \`${choice.text}\`)">
+               onclick="MSelect._select('${choice.id}', \`${choice.text}\`)">
                 ${choice.text}
             </a>
         `;
                 list.appendChild(li);
             });
         }
+        MSelect.selectTimer = 0;
         MSelect.show();
     }
 };
@@ -73,10 +81,12 @@ var MChat = {
         let actualText = '';
         let HTMLE;
         if (from === MChat.last) {
+            console.log('Add msg '+text);
             let lastMsg = document.getElementsByClassName(`${from}-message`);
             HTMLE = lastMsg[lastMsg.length - 1].childNodes[0];
             oldText = HTMLE.innerHTML + '<br>';
         } else {
+            console.log('Create msg '+text);
             const msg = document.createElement('div');
             msg.className = `message ${from}-message`;
             HTMLE = document.createElement('div');

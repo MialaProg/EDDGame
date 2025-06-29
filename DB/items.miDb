@@ -112,5 +112,10 @@ O43
 LOADING;T;C'est presque pret, Toutie
 LOADING;DN;Soit patient Doudou Noisette
 LOADING;DA;Calme-toi Doudou Ane
-LOADING;E;Avec un peu de chance tu trouvera des médicaments Efélent
+LOADING;E;Avec un peu de chance tu trouvera des médicaments Efélant
 LOADING;P;Va pas trop vite Peupeuvre !as trop vite Peupeuvre !
+_PLAYER;T;Toutie
+_PLAYER;DN;Doudou Noisette 
+_PLAYER;DA;Doudou Ane 
+_PLAYER;E;Efélant
+_PLAYER;P;Peupeuvre

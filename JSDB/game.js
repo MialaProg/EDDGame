@@ -423,11 +423,11 @@ var Game = {
         // For optimisation:
         return new RegExp(`(?:^|&)${toGetNum}(?:$|&)`);
         // Next use with :
-        objReq = Game.objectsReqFormat(miDb.lib.find(e => e[0] == ''));
-        pattern = Game.getSearchGivesPatern('');
-        x = Object.keys(objReq).some((e) => {
-            if (objReq[e].some(gives => pattern.test(gives))) return true;
-        });
+        // objReq = Game.objectsReqFormat(miDb.lib.find(e => e[0] == ''));
+        // pattern = Game.getSearchGivesPatern('');
+        // x = Object.keys(objReq).some((e) => {
+        //     if (objReq[e].some(gives => pattern.test(gives))) return true;
+        // });
     },
 
     resolveObjects: (objReq, toGet = 'open') => {
@@ -611,14 +611,14 @@ var Game = {
                 await waitUIupdate();
 
                 const doorRelative = roomDoors[j];
+                // Search if door already set
+                try {if (room.R[doorRelative]) continue;}
+                catch (e) { /* No door set yet */ }
+
                 const oroomINT = roomINT + doorRelative;
                 if (Game.uselessRooms.includes(oroomINT) && !randint(0, 3)) continue; // Skip useless rooms (Pb#10)
                 const oroomCoords = Game.intToCoords(oroomINT);
-                const oroom = Game.getRoom(oroomINT);
-                try {
-                    // log('Check door', doorRelative, 'for', roomINT, 'to', oroomINT, Game.db['L' + room]);
-                    if (Game.db['L' + room]['R'][doorRelative] != undefined) continue;
-                } catch (e) { }
+                // const oroom = Game.getRoom(oroomINT);
 
                 Game.logs.push('----- Check door ' + doorRelative + ' for ' + roomINT + ' to ' + oroomINT);
                 Game.logPath = [];

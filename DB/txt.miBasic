@@ -687,7 +687,7 @@ On va te suivre partout !
 #stop
 ---------------
 :O21
-*Sur quoi utilisez-vous vos crédits-Mi ?
+*Où utilisez-vous vos crédits-Mi ?
 #:ON
 L1:O21xL1
 L6:O21xL6
@@ -698,7 +698,15 @@ Vous ne pouvez rien acheter.
 #stop
 ***
 :O21xL1
-#if:#js-!Game.db.L1.O21.includes('O2'):no21
+Que souhaitez-vous acheter ?
+#:rep
+Des médicaments:O21xL1.2
+#
+:O21xL1.2
+#if:#js-Game.db.L1.O21.includes('O2'):O21xL1ok
+Désolé, nous ne vendons ici que des piles.
+#stop
+:O21xL1ok
 #use:O21
 #get:O2
 #stop

@@ -184,6 +184,8 @@ function showRoom(roomINT = Game.actualRoom) {
     Game.actualRoom = roomINT;
     Game.actualItems = [];
 
+    Loading.setTitle('Affichage de la pièce');
+
     if (pageMode == 'ingame') {
         Loading.setProgressBar(0);
         Loading.changeMode(1);
@@ -191,6 +193,7 @@ function showRoom(roomINT = Game.actualRoom) {
     }
 
     canvasObj.setBackground();
+    canvasObj.clearHistory()
 
     const roomARR = Game.intToCoords(roomINT);
     const room = Game.getRoom(roomARR);
@@ -212,6 +215,7 @@ function showRoom(roomINT = Game.actualRoom) {
                     placeName = option[1].text + ' : ' + placeName;
                 }
                 option[1].text = placeName;
+                Actions.setRoomTxt(placeName);
             }
         }
         // OLD with roomSelect
@@ -242,9 +246,9 @@ function showRoom(roomINT = Game.actualRoom) {
             if (doorID && !Game.db['R' + doorID]['opened']) {
                 Game.actualItems.push('R' + doorID);
                 if (Math.abs(doorKey) > 5) { // +10/-10
-                    canvasObj.drawImage(50 + 4 * doorKey, 10/1.2, 20, 40/1.2, 'R' + doorID);
+                    canvasObj.drawImage(50 + 4 * doorKey, 50/1.2, 20, 40/1.2, 'R' + doorID);
                 } else { // +1/-1
-                    canvasObj.drawImage(10, (50 + 40 * doorKey)/1.2, 40, 20/1.2, 'R' + doorID);
+                    canvasObj.drawImage(50, (50 + 40 * doorKey)/1.2, 40, 20/1.2, 'R' + doorID);
                 }
             } else {
                 if (Math.abs(doorKey) > 5) {
@@ -278,6 +282,7 @@ function showRoom(roomINT = Game.actualRoom) {
         }
     }
 
+    Loading.setTitle('Chargement des images...');
 
 
     // Fin du chargement
@@ -293,10 +298,10 @@ function showRoom(roomINT = Game.actualRoom) {
         if (Date.now() - noCoTimer > 7000) {
             alert('Certaines images n\'ont pas pu être chargées.\nVeuillez vérifier votre connexion internet.');
         }
+        Loading.setProgressBar(99);
         console.log('End LG => changeMode');
-        Loading.setProgressBar(100);
-        Loading.setTitle('Fin du chargement...');
         Loading.changeMode(2);
+        Loading.setPlayerTitle();
     });
 }
 
