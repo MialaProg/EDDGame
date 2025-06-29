@@ -16,6 +16,7 @@ Au moins tu aura en exclu quelques runes:
 C'est votre cours de plongée.
 #:ON
     R6:UR6+O10
+  L4:+O10xL4
 #ENDOBJ
 ****
 :UR6+O10
@@ -24,6 +25,10 @@ C'est votre cours de plongée.
 #USE:O10
 #OPEN:R6
 #STOP
+:+O10xL4
+*Vous vous baignez.
+*Hmm, refreshing !
+#stop
 -------------
 :PR2
 Salut.
@@ -36,6 +41,7 @@ Non.
 #STOP
 :PR2CL
 C'est pas gratuit hein
+*Attention, l'argent peut avoir différents usages.
 #:OBJ
   O21:PR2OPEN
   0:PR2NADA
@@ -62,6 +68,8 @@ R2:O22.2
 #STOP
 --------
 :O19
+Ces noisettes sont un peu pourries…
+Moi je les mangerai pas.
 #:ON
 R1:O19.2
 #ENDON
@@ -82,7 +90,7 @@ R1:O19.2
 #STOP
 -------
 :O23
-C'est un outils pour dévérouiller les portes bloquées.
+C'est un outil pour déverrouiller les portes bloquées.
 #:ON
 R3:O23.2
 L14:O23.L14
