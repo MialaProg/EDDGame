@@ -1,12 +1,20 @@
 
 
 var Modal = {
+    isLocked: false,
+
     getHTMLE: (id = '') => {
         return document.getElementById('gameModal' + id);
     },
 
     open: () => Modal.getHTMLE().classList.add('is-active'),
-    close: () => { Modal.getHTMLE().classList.remove('is-active'); miBasic.running = false;},
+    close: () => {
+        if (!Modal.isLocked) {
+            Modal.getHTMLE().classList.remove('is-active');
+            miBasic.running = false;
+        }
+        else alert("Impossible de fermer le popup pour le moment.");
+    },
 
     init: () => {
         Modal.close();
@@ -26,7 +34,7 @@ var Modal = {
         Modal.getHTMLE('Messages').classList.toggle('is-hidden', mode !== 'chat');
     },
 
-    changeTitle: (title) => {document.getElementById('modalTitle').innerHTML = title; },
+    changeTitle: (title) => { document.getElementById('modalTitle').innerHTML = title; },
 };
 
 var MSelect = {
@@ -35,7 +43,7 @@ var MSelect = {
 
     select: (sid, stxt) => { },
 
-    _select: (sid, stxt)=>{
+    _select: (sid, stxt) => {
         // Prevent from double clicking (maybe fix #14)
         if (Date.now() - MSelect.selectTimer < 2000) return;
         MSelect.selectTimer = Date.now();
@@ -81,12 +89,12 @@ var MChat = {
         let actualText = '';
         let HTMLE;
         if (from === MChat.last) {
-            console.log('Add msg '+text);
+            console.log('Add msg ' + text);
             let lastMsg = document.getElementsByClassName(`${from}-message`);
             HTMLE = lastMsg[lastMsg.length - 1].childNodes[0];
             oldText = HTMLE.innerHTML + '<br>';
         } else {
-            console.log('Create msg '+text);
+            console.log('Create msg ' + text);
             const msg = document.createElement('div');
             msg.className = `message ${from}-message`;
             HTMLE = document.createElement('div');

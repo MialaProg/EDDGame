@@ -710,7 +710,9 @@ var Game = {
             }
         })
 
-        const allRooms = [...Game.roomsPriority];
+        const allRooms = [...Game.roomsPriority].concat(
+            Array.from({ length: Game.rooms[0] }, (_, i) => ("0" + i))
+        );
         shuffleArray(allRooms).forEach((roomINT) => {
             // for (let i = 0; i < 4; i++) {
             //     for (let j = 0; j < 6; j++) {
@@ -725,7 +727,7 @@ var Game = {
                     }
                     Game.placesAdded.push(locID);
                     room['L'] = locID;
-                    Game.logs.push('UlA- Add useless loc ' + locID + ' to room ' + i + j);
+                    Game.logs.push('UlA- Add useless loc ' + locID + ' to room ' +roomINT);
                     return true;
                 });
             }

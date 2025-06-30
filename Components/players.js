@@ -131,7 +131,7 @@ var PlayersJS = {
   submit: async () => {
     PlayersJS.updateSelects();
 
-    PlayersJS.actualIdx = randint(1, playersNb) - 1;
+    if (randomFirstPlayer) PlayersJS.actualIdx = randint(1, playersNb) - 1;
     actualPlayer = players[PlayersJS.actualIdx];
 
     PlayersJS.PlayersChoiced = true;

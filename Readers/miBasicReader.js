@@ -5,9 +5,10 @@ var miBasic = {
     vars: {},
     showTxt: async (text) => { },
     choice: async (type, options) => { return 0; },
-    openDoor: (door) => { },
-    getObject: (obj) => { },
-    useObject: (obj) => { },
+    openDoor: async (door) => { },
+    getObject: async (obj) => { },
+    useObject: async (obj) => { },
+    lock: async (locking) => { },
 
     init: async (path = miDb.MIB_SCRIPT_PATH) => {
         let script = await getDb(path);
@@ -20,6 +21,14 @@ var miBasic = {
         miBasic._scanScript();
 
         miBasic.isLoaded = true
+    },
+
+    isLocked: false,
+    _lock: async (locking) => {
+        if (miBasic.isLocked !== locking) {
+            miBasic.isLocked = locking;
+            await miBasic.lock(locking);
+        }
     },
 
     /**
@@ -71,7 +80,9 @@ var miBasic = {
         return line;
     },
 
+    sessID: 0,
     run: async (from = miBasic.location) => {
+        miBasic.sessID += 1;
         if (typeof from == 'string') {
             miBasic.goTo(from);
         } else {
@@ -94,6 +105,7 @@ var miBasic = {
             }
 
             if (line.startsWith('#')) {
+                await miBasic._lock(true);
                 let [parts, command] = miBasic._splitLine(line);
 
                 switch (command) {
@@ -106,7 +118,10 @@ var miBasic = {
                             options.push(line);
                             line = miBasic._readLine();
                         }
+                        await miBasic._lock(false);
+                        const sessID = miBasic.sessID;
                         let resultID = await miBasic.choice(type, options);
+                        if (sessID !== miBasic.sessID) return;
                         console.log('Item choiced:', resultID);
                         miBasic.goTo(resultID);
                         break;
@@ -114,13 +129,13 @@ var miBasic = {
                         miBasic.running = false;
                         break;
                     case 'open':
-                        miBasic.openDoor(miBasic._getVal(parts[1]));
+                        await miBasic.openDoor(miBasic._getVal(parts[1]));
                         break;
                     case 'get':
-                        miBasic.getObject(miBasic._getVal(parts[1]));
+                        await miBasic.getObject(miBasic._getVal(parts[1]));
                         break;
                     case 'use':
-                        miBasic.useObject(miBasic._getVal(parts[1]));
+                        await miBasic.useObject(miBasic._getVal(parts[1]));
                         break;
                     case 'set':
                         let val = miBasic._getVal(parts[2]);
@@ -146,10 +161,13 @@ var miBasic = {
 
             }
 
+            await miBasic._lock(false);
+
             // If we reach here, it's a normal text output
             await miBasic.showTxt(line);
 
         }
+        await miBasic._lock(false);
     }
 }
 

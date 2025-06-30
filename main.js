@@ -146,11 +146,15 @@ function initMiBasicFunc() {
         try { selectText = eval('miDb.SELECT_TXT_' + type) } catch (e) { };
         if (selectText) selectText = selectText[0];
         options.forEach(option => {
-            let txt = option[0];
+            let txt = option[0].trim();
             if (type == 'OBJ') {
-                const obj = Game.db[txt];
-                if (!obj || !obj.nb) return;
-                txt = findInArr(miDb.lib, miDb.LOC_OBJS[0], miDb.LOC_OBJS[1], item => item[0] == txt)[1][1];
+                if (txt == '0') {
+                    txt = "(Ne rien utiliser)";
+                } else {
+                    const obj = Game.db[txt];
+                    if (!obj || !obj.nb) return;
+                    txt = findInArr(miDb.lib, miDb.LOC_OBJS[0], miDb.LOC_OBJS[1], item => item[0] == txt)[1][1];
+                }
             }
             if (type == 'ON') {
                 if (!Game.actualItems.includes(txt)) return;
@@ -161,22 +165,25 @@ function initMiBasicFunc() {
         await wait(() => MChat.ans !== undefined, 200)
         return MChat.ans;
     };
-    miBasic.openDoor = (door) => {
+    miBasic.openDoor = async (door) => {
         console.log('Open door:', door);
         Game.db[door].opened = true;
         showRoom();
     };
-    miBasic.getObject = (objs) => {
+    miBasic.getObject = async (objs) => {
         if (typeof objs != 'array') objs = [objs];
-        objs.forEach(obj => {
-            MChat.addText(miDb.TXT_GET[0] + findInArr(miDb.lib, miDb.LOC_OBJS[0], miDb.LOC_OBJS[1], item => item[0] == obj)[1][1], undefined, 10);
+        // objs.forEach(obj => {
+        for (const obj of objs) {
+            await MChat.addText(miDb.TXT_GET[0] + findInArr(miDb.lib, miDb.LOC_OBJS[0], miDb.LOC_OBJS[1], item => item[0] == obj)[1][1], undefined, 10);
             Game.getObject(obj);
-        });
+            // });
+        }
     };
-    miBasic.useObject = (obj) => {
+    miBasic.useObject = async (obj) => {
         console.log('Use object:', obj);
         Game.useObject(obj);
     };
+    miBasic.lock = async (locking) => { Modal.isLocked = locking; };
 }
 
 // Show room: use Canvas, Game, Loading
@@ -207,7 +214,7 @@ function showRoom(roomINT = Game.actualRoom) {
 
         // Rename the option
         const option = findInArr(Game.unlockedPlaces, 0, undefined, option => option.id === roomINT.toString());
-        if (option[0] && option[1].text.length < 5){
+        if (option[0] && option[1].text.length < 5) {
             const placeLine = findInArr(miDb.lib, miDb.LOC_PLACES[0], miDb.LOC_PLACES[1], item => item[0] == 'L' + placeID); //Returns [key, val]
             if (placeLine) {
                 let placeName = placeLine[1][1];
@@ -246,15 +253,15 @@ function showRoom(roomINT = Game.actualRoom) {
             if (doorID && !Game.db['R' + doorID]['opened']) {
                 Game.actualItems.push('R' + doorID);
                 if (Math.abs(doorKey) > 5) { // +10/-10
-                    canvasObj.drawImage(50 + 4 * doorKey, 50/1.2, 20, 40/1.2, 'R' + doorID);
+                    canvasObj.drawImage(50 + 4 * doorKey, 50 / 1.2, 20, 40 / 1.2, 'R' + doorID);
                 } else { // +1/-1
-                    canvasObj.drawImage(50, (50 + 40 * doorKey)/1.2, 40, 20/1.2, 'R' + doorID);
+                    canvasObj.drawImage(50, (50 + 40 * doorKey) / 1.2, 40, 20 / 1.2, 'R' + doorID);
                 }
             } else {
                 if (Math.abs(doorKey) > 5) {
-                    canvasObj.drawArrow(50 + 3 * doorKey, 50/1.2, 15, 10/1.2, doorKey > 0 ? 'right' : 'left');
+                    canvasObj.drawArrow(50 + 3 * doorKey, 50 / 1.2, 15, 10 / 1.2, doorKey > 0 ? 'right' : 'left');
                 } else {
-                    canvasObj.drawArrow(50, (50 + 40 * doorKey)/1.2, 10, 15/1.2, doorKey > 0 ? 'down' : 'up');
+                    canvasObj.drawArrow(50, (50 + 40 * doorKey) / 1.2, 10, 15 / 1.2, doorKey > 0 ? 'down' : 'up');
                 }
                 const nextRoom = (parseInt(roomINT) + doorKey).toString();
                 // if (RoomSelect.HTMLE && !Array.from(RoomSelect.HTMLE.options).some(option => option.value === nextRoom)) {
@@ -265,8 +272,8 @@ function showRoom(roomINT = Game.actualRoom) {
                 // }
                 //Update changeRoom
                 const option = findInArr(Game.unlockedPlaces, 0, undefined, option => option.id === nextRoom);
-                if (!option[1]){
-                    Game.unlockedPlaces.push({id: nextRoom, text: Actions.roomStrToID(nextRoom.toString())});
+                if (!option[1]) {
+                    Game.unlockedPlaces.push({ id: nextRoom, text: Actions.roomStrToID(nextRoom.toString()) });
                 }
             }
         }

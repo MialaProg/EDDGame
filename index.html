@@ -108,17 +108,30 @@
                     <input type="checkbox" id="noSnakeModeCheckbox" onchange="noSnakeMode = this.checked;">
                     Mode sans serpent
                 </label>
+                <script>var noSnakeMode;
+                    document.addEventListener('DOMContentLoaded', function () {
+                        noSnakeMode = document.getElementById('noSnakeModeCheckbox').checked;
+                    });
+                </script>
             </div>
-            <script>var noSnakeMode;
-                document.addEventListener('DOMContentLoaded', function () {
-                    noSnakeMode = document.getElementById('noSnakeModeCheckbox').checked;
-                });
-            </script>
+            <div class="field control">
+                <label class="checkbox">
+                    <input type="checkbox" id="randomFirstPlayer" onchange="randomFirstPlayer = this.checked;">
+                    Premier joueur aléatoire
+                </label>
+                <script>var randomFirstPlayer;
+                    document.addEventListener('DOMContentLoaded', function () {
+                        noSnakeMode = document.getElementById('randomFirstPlayer').checked;
+                    });
+                </script>
+            </div>
             <br><br>
 
             <div class="field is-grouped">
                 <div class="control">
-                    <button class="button" id="saveIntro" disabled onclick="Game.load(); alert('Si cela ne fonctionne pas, faites-le directement en jeu.')">Charger une sauvegarde</button>
+                    <button class="button" id="saveIntro" disabled
+                        onclick="Game.load(); alert('Si cela ne fonctionne pas, faites-le directement en jeu.')">Charger
+                        une sauvegarde</button>
                 </div>
             </div>
         </form>
@@ -158,12 +171,14 @@
                     <button id="inventory" class="button is-warning action1" onclick="Actions.random()">Dé</button>
                 </div>
                 <div class="control">
-                    <button id="action" class="button is-primary action3" onclick="Actions.toolBox()" disabled>Agir</button>
+                    <button id="action" class="button is-primary action3" onclick="Actions.toolBox()"
+                        disabled>Agir</button>
                 </div>
             </div>
             <div class="buttons">
                 <div class="control">
-                    <button id="roomSelect" class="button action2" onclick="Actions.changeRoom()" disabled>Changer de pièce (HALL)</button>
+                    <button id="roomSelect" class="button action2" onclick="Actions.changeRoom()" disabled>Changer de
+                        pièce (HALL)</button>
                 </div>
             </div>
         </div>
