@@ -52,7 +52,7 @@ var miBasic = {
 
     _splitLine: (line, sep = ':') => {
         let parts = line.substring(1).split(sep);
-        let command = parts[0].toLowerCase();
+        let command = parts[0];
         return [parts, command];
     },
 
@@ -108,7 +108,7 @@ var miBasic = {
                 await miBasic._lock(true);
                 let [parts, command] = miBasic._splitLine(line);
 
-                switch (command) {
+                switch (command.toLowerCase()) {
                     case '':
                         let options = [];
                         let type = parts[1];

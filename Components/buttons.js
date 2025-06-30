@@ -32,7 +32,7 @@ var Actions = {
         txt += " cases max.\nVous devez déplacer ";
         txt += randint(0, 1) ? "M. Le Directeur" : "le Surveillant";
         txt += " d'une case vers ";
-        switch (randint(0, 6)) {
+        switch (randint(0, 7)) {
             case 0: txt += "la direction de votre choix"; break;
             case 1: txt += "le Nord (haut)"; break;
             case 2: txt += "l'Est (droite)"; break;
@@ -40,6 +40,7 @@ var Actions = {
             case 4: txt += "l'Ouest (gauche)"; break;
             case 5: txt += "le HALL"; break;
             case 6: txt += "E4"; break;
+            case 7: txt += "F2"; break;
         }
         txt += ".";
         alert(txt);
@@ -170,6 +171,7 @@ var Actions = {
             });
         } catch (e) {
             console.log('Location error for search: ', e);
+            console.log('ERROK: TE_undef=>obj160; ');
         }
         MSelect.create();
         MSelect.select = (sid, stxt) => {
@@ -181,7 +183,7 @@ var Actions = {
 
             Game.getObject(sid);
             Modal.switch('chat');
-            MChat.addText(miDb.TXT_GET[1] + stxt);
+            MChat.addText(miDb.TXT_GET_FIND_USE[1] + stxt);
         };
     },
 

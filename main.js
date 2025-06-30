@@ -174,14 +174,18 @@ function initMiBasicFunc() {
         if (typeof objs != 'array') objs = [objs];
         // objs.forEach(obj => {
         for (const obj of objs) {
-            await MChat.addText(miDb.TXT_GET[0] + findInArr(miDb.lib, miDb.LOC_OBJS[0], miDb.LOC_OBJS[1], item => item[0] == obj)[1][1], undefined, 10);
+            await MChat.addText(miDb.TXT_GET_FIND_USE[0] + findInArr(miDb.lib, miDb.LOC_OBJS[0], miDb.LOC_OBJS[1], item => item[0] == obj)[1][1], undefined, 10);
             Game.getObject(obj);
             // });
         }
     };
-    miBasic.useObject = async (obj) => {
-        console.log('Use object:', obj);
-        Game.useObject(obj);
+    miBasic.useObject = async (objs) => {
+        console.log('Use object:', objs);
+        if (typeof objs != 'array') objs = [objs];
+        for (const obj of objs) {
+            Game.useObject(obj);
+            await MChat.addText(miDb.TXT_GET_FIND_USE[2] + findInArr(miDb.lib, miDb.LOC_OBJS[0], miDb.LOC_OBJS[1], item => item[0] == obj)[1][1], undefined, 10);
+        }
     };
     miBasic.lock = async (locking) => { Modal.isLocked = locking; };
 }

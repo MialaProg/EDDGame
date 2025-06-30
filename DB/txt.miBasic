@@ -69,12 +69,14 @@ R2:O22.2
 --------
 :O19
 Ces noisettes sont un peu pourries…
-Moi je les mangerai pas.
+*Avis de l'expert (Doudou Noisette):
+"Moi je les mangerai pas."
 #:ON
 R1:O19.2
 #ENDON
 :O19.2
-*Le piège vous laisse donc passer.
+*Le piège détecte la présence d'une noisette.
+*Il vous laisse donc passer.
 #USE:O19
 #OPEN:R1
 #STOP
@@ -649,7 +651,7 @@ O18:R14opx18
 On t'aide à grimper et on s'en va !
 #USE:O18
 :R14op
-Vous atteignez la porte.
+*Vous atteignez la porte.
 #open:R14
 #stop
 ------------------
@@ -665,7 +667,6 @@ Tu veux qu'on t'aide à monter ?
 D'accord !
 *Vous grimpez sur les deux sœurs et décrochez le nez du Sphinx.
 #get:O27
-#js-Game.db.P18.isHidden=true;
 #stop
 ------------------
 :O17
@@ -729,6 +730,7 @@ Puisque c'est ça je te suis !
 :P18 
 On va te suivre partout !
 #get:O18
+#js-Game.db.P18.isHidden = true;
 #stop
 ---------------
 :O21

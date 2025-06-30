@@ -15,7 +15,7 @@
 #START_ROOM
 010
 #END_ROOM
-30
+40
 -> The end room as the L99.
 #ROOMS_DEFAULT
 C1;C2;D1;R1;R2;R3;A1;A2;TR;WC;Hall
@@ -33,8 +33,8 @@ Tu ne peux rien utiliser actuellement.;Il n'y a personne...;Tu ne trouvera  rien
 *Vous utilisez: 
 #SELECT_TXT_ON
 *Vous utilisez cet objet sur: 
-#TXT_GET
-*Tu obtiens: ;*Tu trouves: 
+#TXT_GET_FIND_USE
+*Tu obtiens: ;*Tu trouves: ;*Tu dois défausser: 
 #TIMER
 12;130;100;80;65;50
 #TIME_ALERT
