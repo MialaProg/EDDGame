@@ -94,6 +94,7 @@ C'est un outil pour déverrouiller les portes bloquées.
 #:ON
 R3:O23.2
 L14:O23.L14
+R7:R7xO23
 #ENDON
 :O23.2
 *Vous débloquez la porte avec le pied de biche.
@@ -115,7 +116,7 @@ Tu peux nous laisser passer ?:PR4.2
 :PR4.2
 D'accord mais à une condition au choix:
 soit je te fais peur,
-soit tu me donne à manger.
+soit tu me donnes à manger.
 #:OBJ
 O16:PR4.6
 O7:PR4xO7
@@ -148,7 +149,7 @@ O4:UR5xO4
 ****
 :O4
 #:ON
-C'esst une clé.
+C'est une clé.
 R5:UR5xO4
 #ENDON
 ****
@@ -188,7 +189,7 @@ J'ai faim ! Donne-moi de la nourriture !
 #:REP
 Je.. Je suis ami avec Galette...:DMGal
 Je.. Tiens..:DMCh
-0:DMfuite
+Euh…:DMfuite
 #
 :DMfuite
 GRRRR !
@@ -210,6 +211,7 @@ Tu en as?
 :DMCh
 #:OBJ 
 O16:R8xO16
+0:DMfuite
 #
 :R8xO16
 Merchi !
@@ -223,7 +225,7 @@ Salut !
 Comment ça va ?
 #:REP
 Bien et toi ?:QNB
-Pas trop bien et toi ?:QNM
+Pas trop bien, et toi ?:QNM
 #
 :QNB
 Ca va, si ce n'est que j'ai faim.
@@ -338,7 +340,7 @@ ci !
 ---------------
 :PR12
 Ouïlle !
-Mon platre à la patte s'est cassé !
+Mon plâtre à la patte s'est cassé !
 Aide-moi !
 #:OBJ
 O11:R12Op
@@ -432,7 +434,7 @@ Dis, je t'en ai déjà donné un !
 :EFOKxO2
 #USE:O2
 :EFOK
-Tient !
+Tiens !
 #GET:O1
 #set:EFOK:
 #STOP
@@ -688,11 +690,15 @@ L11:O17xL11
 :R15u
 #:REP
 J..J'ai quelque chose pour vous...:R15o
-(Fuire):stop
+(Fuir):R15F
 #
+:R15F
+*Vous prenez la fuite.
+#stop
 :R15o
 #:OBJ
 O27:R15op
+0:R15F
 #
 :O27
 C'est un nez.
@@ -706,7 +712,7 @@ R15:R15op
 #STOP
 ---------------------
 :P17
-Tu me donnes une salade ? Parce que je peux meme pas te tuer !
+Tu me donnes une salade ? Parce que je peux même pas te tuer !
 #:OBJ 
 O25:P17xO25
 #
@@ -811,3 +817,28 @@ L15:O30xL15
 :O30xL15
 #get:#js-Game.db.L15.O30
 #stop
+—---------------
+:O1
+*C'est un bon d'achat “-100% sur un article” pour le Smobiala, le magasin partenaire de l'EDD.
+*C'est le père d'Efélant qui en est le patron
+#:on
+L92:O1xL92
+#
+:O1xL92
+#if:#js-Game.db.L92.O1:O23:gO23
+#if:#js-Game.db.L92.O1:O30:gO30
+*Le père d'Efélant:
+Désolé, aucun produit n'est concerné par cette promo.
+Mais comme vous êtes un bon ami de mon fils, voilà un peu d'argent pour vous.
+#get:O21
+:useO1
+#use:O1
+#stop
+:gO23
+#get:O23
+#goto:useO1
+:gO30
+#get:O30
+#goto:useO1
+
+
