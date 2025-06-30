@@ -711,7 +711,7 @@ var Game = {
         })
 
         const allRooms = [...Game.roomsPriority].concat(
-            Array.from({ length: Game.rooms[0] }, (_, i) => ("0" + i))
+            Array.from({ length: Game.rooms[0].length }, (_, i) => ("0" + i))
         );
         shuffleArray(allRooms).forEach((roomINT) => {
             // for (let i = 0; i < 4; i++) {
@@ -754,8 +754,8 @@ var Game = {
             });
 
             // Check for perso 
-            const locObj = Game.db[locUID];
-            if (!locObj) return; // continue;
+            let locObj = Game.db[locUID];
+            if (!locObj) locObj = Game.db[locUID] = {};
             if (!locObj['P']) {
                 getARandomItem(GameAvaiblePersos, (perso) => {
                     if (!randint(0, 3)) return; // 25% chance to skip useless perso
