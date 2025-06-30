@@ -17,11 +17,11 @@ R15;Celui dont on ne doit pas prononcer le nom;-;*;27>open
 R16;Tagada et Storish;0;3,6,7,9,15,16,17,18,8;20>open
 #R17
 #R18
-L85;C1: Classe;0
-L86;C2: Classe;0
-L87;C3: Classe;0
-L88;D1: Dortoir;0
-L89;D2: Dortoir;0
+L87;C1: Classe;0
+L88;C2: Classe;0
+#L87;C3: Classe;0
+L89;D1: Dortoir;0
+#L89;D2: Dortoir;0
 L90;R1: Réfectoire;0
 L91;R2: Aire de pique-nique;0
 L92;R3: Magasin;0;-;1|21|0>23|30
