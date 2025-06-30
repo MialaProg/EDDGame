@@ -1,22 +1,24 @@
 var Game = {
 
     rooms: [
-        Array.from({ length: 13 }, (_, i) => ({ L: 85 + i })),
-        Array(6).fill().map(() => ({})),
-        Array(6).fill().map(() => ({})),
-        Array(6).fill().map(() => ({}))
+        Array.from({ length: 11 }, (_, i) => ({ L: 87 + i })),
+        Array(5).fill().map(() => ({})),
+        Array(5).fill().map(() => ({})),
+        Array(5).fill().map(() => ({})),
+        Array(5).fill().map(() => ({}))
     ],
 
     roomsPriority: [
-        30, 20, 21, 31, 10, 22, 32, 11, 33, 12, 34, 35, 24, 25, 15, 23, 14, 13
+        40, 30, 41, 20, 31, 42, 32, 21, 22, 43, 33, 23, 44, 34, 24, 10, 11
     ],
 
-    uselessRooms: [21, 22, 23, 24],
+    uselessRooms: [],
 
     doors: {
-        10: [1, 10], 11: [1], 12: [1], 13: [1, 10], 14: [1], 15: [10],
-        20: [10], 21: [10], 22: [10], 23: [1], 24: [], 25: [10],
-        30: [1], 31: [1], 32: [1], 33: [1], 34: [1], 35: []
+        10: [], 11: [],
+        20: [1, 10], 21: [1, 10], 22: [1], 23: [1, 10], 24: [10],
+        30: [1, 10], 31: [], 32: [1, 10], 33: [], 34: [10],
+        40: [1], 41: [1], 42: [1], 43: [1], 44: []
     },
 
     // When loc req = *, not implemented everywhere
@@ -294,7 +296,7 @@ var Game = {
             let objsNF = poss[1].split('|');
             poss[0].split('|').forEach((reqs) => { // x&y ; z
                 const inDb = Game.db[obj[0]];
-                if (inDb && inDb[reqs]) return Game.logs.push('ORF-already:'+reqs); // Verify object giver isn't already used
+                if (inDb && inDb[reqs]) return Game.logs.push('ORF-already:' + reqs); // Verify object giver isn't already used
                 objReqFormatted[reqs] = [];
                 objsNF.forEach((objs) => {
                     objReqFormatted[reqs].push(objs);
@@ -613,7 +615,7 @@ var Game = {
 
                 const doorRelative = roomDoors[j];
                 // Search if door already set
-                try {if (room.R[doorRelative]) continue;}
+                try { if (room.R[doorRelative]) continue; }
                 catch (e) { /* No door set yet */ }
 
                 const oroomINT = roomINT + doorRelative;

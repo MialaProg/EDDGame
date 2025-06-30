@@ -20,7 +20,7 @@
 #ROOMS_DEFAULT
 C1;C2;D1;R1;R2;R3;A1;A2;TR;WC;Hall
 #ROOMS_UNLOCKED
-13
+10;11;13;14
 #ROOMS_LETTERS
 B;E;F;G
 #PRELOAD_IMG
@@ -36,6 +36,6 @@ Tu ne peux rien utiliser actuellement.;Il n'y a personne...;Tu ne trouvera  rien
 #TXT_GET
 *Tu obtiens: ;*Tu trouves: 
 #TIMER
-12;600;400;300;200;100
+12;130;100;80;65;50
 #TIME_ALERT
 Oh non ! Le temps est écoulé ! Les cours reprennent !/br/Malheureusement, vous ne pouvez etre absents et le personnel va pendant ce temps déjouer votre plan de vol.../br/Vous avez échouer, ou du moins il faudra remettre ça à plus tard...
