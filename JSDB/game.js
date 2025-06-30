@@ -710,89 +710,91 @@ var Game = {
             }
         })
 
-
-        for (let i = 0; i < 4; i++) {
-            for (let j = 0; j < 6; j++) {
-                const room = Game.getRoom([i, j]);
-                // Check for places
-                if (!room['L']) {
-                    Game.getARandomItemAndRestore(miDb.lib.slice(miDb.LOC_PLACES[0], miDb.LOC_PLACES[1]), (loc) => {
-                        if (!randint(0, 5) || loc[0][0] != 'L') return; // 16% chance to skip useless place
-                        let locID = parseInt(loc[0].slice(1));
-                        if (isNaN(locID) || Game.placesAdded.includes(locID)) {
-                            return;
-                        }
-                        Game.placesAdded.push(locID);
-                        room['L'] = locID;
-                        Game.logs.push('UlA- Add useless loc ' + locID + ' to room ' + i + j);
-                        return true;
-                    });
-                }
-                // Check for objects in place
-                if (!room['L']) continue;
-                const locUID = 'L' + room['L'];
-                const loc = findInArr(miDb.lib, miDb.LOC_PLACES[0], miDb.LOC_PLACES[1], item => item[0] == locUID);
-                const objs = Game.objectsReqFormat(loc);
-                Object.entries(objs).forEach(([req, objArr]) => {
-                    if (req[0] == '0') { // If no req
-                        objArr.forEach((objs) => {
-                            objs.forEach((obj) => {
-                                if (!randint(0, 2)) return; // 33% chance to skip useless object
-                                try {
-                                    const id = 'O' + obj;
-                                    if (!Game.db[id].isUsefull) {
-                                        Game.pushDbItem(loc[0], '0', id);
-                                        Game.logs.push('UlA- Add useless object ' + id + ' to ' + loc[0]);
-                                    }
-                                } catch (e) { }
-                            });
-                        });
-                    }
-                });
-
-                // Check for perso 
-                const locObj = Game.db[locUID];
-                if (!locObj) continue;
-                if (!locObj['P']) {
-                    getARandomItem(GameAvaiblePersos, (perso) => {
-                        if (!randint(0, 3)) return; // 25% chance to skip useless perso
-                        // Check places required
-                        let plr = perso[3].split(',');
-                        if (plr.includes(room['L']) || plr[0] == '*') {
-                            // Save and return
-                            Game.setDbItem(perso[0], 'L', room['L']);
-                            Game.pushDbItem(locUID, perso[0], 'P');
-                            Game.logs.push('Add useless perso ' + perso[0] + ' to ' + locUID);
-                            GameAvaiblePersos = GameAvaiblePersos.filter(p => p[0] !== perso[0]);
-                            return true;
-                        }
+        const allRooms = [...Game.roomsPriority];
+        shuffleArray(allRooms).forEach((roomINT) => {
+            // for (let i = 0; i < 4; i++) {
+            //     for (let j = 0; j < 6; j++) {
+            const room = Game.getRoom(roomINT);
+            // Check for places
+            if (!room['L']) {
+                Game.getARandomItemAndRestore(miDb.lib.slice(miDb.LOC_PLACES[0], miDb.LOC_PLACES[1]), (loc) => {
+                    if (!randint(0, 5) || loc[0][0] != 'L') return; // 16% chance to skip useless place
+                    let locID = parseInt(loc[0].slice(1));
+                    if (isNaN(locID) || Game.placesAdded.includes(locID)) {
                         return;
-                    });
-                }
-
-                // Check for object in perso
-                if (!locObj['P']) continue;
-                const persoUID = 'L' + locObj['P'];
-                const perso = findInArr(miDb.lib, miDb.LOC_PERSO[0], miDb.LOC_PERSO[1], item => item[0] == persoUID);
-                const objsP = Game.objectsReqFormat(perso);
-                Object.entries(objsP).forEach(([req, objArr]) => {
-                    if (req[0] == '0') { // If no req
-                        objArr.forEach((objs) => {
-                            objs.forEach((obj) => {
-                                if (!randint(0, 2)) return; // 33% chance to skip useless object
-                                try {
-                                    const id = 'O' + obj;
-                                    if (!Game.db[id].isUsefull) {
-                                        Game.pushDbItem(perso[0], '0', id);
-                                        Game.logs.push('UlA- Add useless object ' + id + ' to ' + perso[0]);
-                                    }
-                                } catch (e) { }
-                            });
-                        });
                     }
+                    Game.placesAdded.push(locID);
+                    room['L'] = locID;
+                    Game.logs.push('UlA- Add useless loc ' + locID + ' to room ' + i + j);
+                    return true;
                 });
             }
-        }
+            // Check for objects in place
+            if (!room['L']) return; // continue;
+            const locUID = 'L' + room['L'];
+            const loc = findInArr(miDb.lib, miDb.LOC_PLACES[0], miDb.LOC_PLACES[1], item => item[0] == locUID);
+            const objs = Game.objectsReqFormat(loc);
+            Object.entries(objs).forEach(([req, objArr]) => {
+                if (req[0] == '0') { // If no req
+                    objArr.forEach((objs) => {
+                        objs.forEach((obj) => {
+                            if (!randint(0, 2)) return; // 33% chance to skip useless object
+                            try {
+                                const id = 'O' + obj;
+                                if (!Game.db[id].isUsefull) {
+                                    Game.pushDbItem(loc[0], '0', id);
+                                    Game.logs.push('UlA- Add useless object ' + id + ' to ' + loc[0]);
+                                }
+                            } catch (e) { }
+                        });
+                    });
+                }
+            });
+
+            // Check for perso 
+            const locObj = Game.db[locUID];
+            if (!locObj) return; // continue;
+            if (!locObj['P']) {
+                getARandomItem(GameAvaiblePersos, (perso) => {
+                    if (!randint(0, 3)) return; // 25% chance to skip useless perso
+                    // Check places required
+                    let plr = perso[3].split(',');
+                    if (plr.includes(room['L']) || plr[0] == '*') {
+                        // Save and return
+                        Game.setDbItem(perso[0], 'L', room['L']);
+                        Game.pushDbItem(locUID, perso[0], 'P');
+                        Game.logs.push('Add useless perso ' + perso[0] + ' to ' + locUID);
+                        GameAvaiblePersos = GameAvaiblePersos.filter(p => p[0] !== perso[0]);
+                        return true;
+                    }
+                    return;
+                });
+            }
+
+            // Check for object in perso
+            if (!locObj['P']) return; // continue;
+            const persoUID = 'L' + locObj['P'];
+            const perso = findInArr(miDb.lib, miDb.LOC_PERSO[0], miDb.LOC_PERSO[1], item => item[0] == persoUID);
+            const objsP = Game.objectsReqFormat(perso);
+            Object.entries(objsP).forEach(([req, objArr]) => {
+                if (req[0] == '0') { // If no req
+                    objArr.forEach((objs) => {
+                        objs.forEach((obj) => {
+                            if (!randint(0, 2)) return; // 33% chance to skip useless object
+                            try {
+                                const id = 'O' + obj;
+                                if (!Game.db[id].isUsefull) {
+                                    Game.pushDbItem(perso[0], '0', id);
+                                    Game.logs.push('UlA- Add useless object ' + id + ' to ' + perso[0]);
+                                }
+                            } catch (e) { }
+                        });
+                    });
+                }
+            });
+            //     }
+            // }
+        });
 
     },
 
