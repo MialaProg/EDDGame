@@ -89,6 +89,7 @@ R1:O19.2
 ---------
 :UR3
 *La porte est bloquée...
+*Il y a pourtant marqué dessus "Ouverture facile"...
 #STOP
 -------
 :O23
@@ -595,7 +596,6 @@ Oops, j'ai déjà mangé la banane...
 Si t'as quoi qu'ce soit à cuisiner n'hésite pas !
 #STOP
 :P7.15
-#USE:O15
 #set:P7.15:
 Quelle cuisson ?
 #:REP
@@ -608,6 +608,7 @@ Bien cuite:P7Q
 Ah non moi je fais pas ça !
 #STOP
 :P7Q
+#USE:O15
 Et voilà !
 #GET:O16
 #STOP

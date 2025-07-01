@@ -48,7 +48,6 @@ var Game = {
 
     toBeRestored: ['db', 'placesToBeAdded', 'placesAdded', 'logPath', 'numPlacesAvaible', ''],
     History: [],
-    isGenerate: false,
 
     myItems: [],
 
@@ -643,7 +642,6 @@ var Game = {
         }
         Game.addPlacesRequired();
         Game.addUselessThings();
-        Game.isGenerate = true;
     },
 
     addPlacesRequired() {
