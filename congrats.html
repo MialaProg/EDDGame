@@ -3,415 +3,414 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Victoire - La Réserve de Nourriture</title>
+    <title>Réserve de Nourriture - Fin de Jeu</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
+
         body {
-            background: linear-gradient(135deg, #109b3e, #b21f1f, #1a2a6c);
-            font-family: 'Arial Rounded MT Bold', 'Segoe UI', sans-serif;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
             color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            padding: 20px;
         }
-        
-        .game-container {
-            position: relative;
-            width: 900px;
-            height: 600px;
-            background: #1c1c2d;
-            border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
-            overflow: hidden;
-            border: 4px solid #ffcc00;
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
         }
-        
-        .game-title {
-            position: absolute;
-            top: 30px;
-            width: 100%;
+
+        header {
             text-align: center;
-            font-size: 48px;
+            padding: 20px 0;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
+            background: linear-gradient(to right, #ffd700, #ffaa00, #ffd700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { background-position: -200px; }
+            100% { background-position: 200px; }
+        }
+
+        .results-container {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+            text-align: center;
+        }
+
+        .result-item {
+            display: inline-block;
+            margin: 0 20px;
+        }
+
+        .result-value {
+            font-size: 2.2rem;
             font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            text-shadow: 0 0 10px #ff6600, 0 0 20px #ff6600;
-            animation: title-pulse 2s infinite;
-            z-index: 100;
+            color: #ffcc00;
+            text-shadow: 0 0 10px rgba(255, 204, 0, 0.7);
         }
-        
-        @keyframes title-pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+
+        .result-label {
+            font-size: 1.2rem;
+            margin-top: 8px;
+            color: #ddd;
         }
-        
-        canvas {
+
+        .storage-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .shelf {
+            background: linear-gradient(to bottom, #8B4513, #5D2906, #8B4513);
+            border-radius: 12px;
+            padding: 20px;
+            width: 300px;
+            min-height: 250px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+            border: 8px solid #5D2906;
+        }
+
+        .shelf:before {
+            content: '';
             position: absolute;
+            top: -5px;
+            left: 0;
+            right: 0;
+            height: 15px;
+            background: linear-gradient(to bottom, #c19a6b, #8B4513);
+            border-radius: 5px;
+        }
+
+        .shelf-header {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #ffd700;
+            font-size: 1.4rem;
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
+        }
+
+        .food-items {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .food-item {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            animation: float 4s infinite ease-in-out;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            position: relative;
+            transition: transform 0.3s;
+        }
+
+        .food-item:hover {
+            transform: scale(1.1) rotate(5deg);
+            z-index: 10;
+        }
+
+        .apple { background: linear-gradient(135deg, #ff4d4d, #cc0000); }
+        .carrot { background: linear-gradient(135deg, #ff9933, #cc6600); }
+        .bread { background: linear-gradient(135deg, #e6c9a8, #d2a679); }
+        .cheese { background: linear-gradient(135deg, #ffd700, #ffa500); }
+        .fish { background: linear-gradient(135deg, #4da6ff, #0066cc); }
+        .grape { background: linear-gradient(135deg, #9933ff, #6600cc); }
+        .watermelon { background: linear-gradient(135deg, #66cc66, #339933); }
+        .egg { background: linear-gradient(135deg, #f0f0f0, #d9d9d9); }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .celebration {
+            text-align: center;
+            padding: 30px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 15px;
+            margin: 40px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .celebration:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(to right, transparent, #ffcc00, transparent);
+            animation: scan 3s infinite linear;
+        }
+
+        @keyframes scan {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .celebration h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #ffcc00;
+        }
+
+        .celebration p {
+            font-size: 1.3rem;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #ffcc00;
+            top: -10px;
+            animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(105vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        .stars {
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: 1;
+            pointer-events: none;
+            z-index: -1;
         }
-        
-        .victory-message {
+
+        .star {
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, 100%);
-            background: rgba(0, 0, 0, 0.8);
-            padding: 30px 50px;
-            border-radius: 15px;
+            width: 3px;
+            height: 3px;
+            background: #fff;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 1; }
+        }
+
+        .footer-note {
             text-align: center;
-            border: 3px solid #ffcc00;
-            z-index: 50;
-            box-shadow: 0 0 30px rgba(255, 204, 0, 0.5);
-            opacity: 0;
-            transition: all 1.5s ease-out;
+            margin-top: 40px;
+            padding: 20px;
+            color: #ccc;
+            font-size: 1.1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
-        
-        .victory-message.show {
-            transform: translate(-50%, -50%);
-            opacity: 1;
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.2rem; }
+            .result-value { font-size: 1.8rem; }
+            .shelf { width: 100%; max-width: 350px; }
+            .food-item { width: 60px; height: 60px; font-size: 1.6rem; }
+            .celebration h2 { font-size: 2rem; }
+            .celebration p { font-size: 1.1rem; }
         }
-        
-        .victory-title {
-            font-size: 42px;
-            color: #ffcc00;
-            margin-bottom: 20px;
-            text-shadow: 0 0 10px rgba(255, 204, 0, 0.7);
-        }
-        
-        .score {
-            font-size: 28px;
-            margin: 20px 0;
-            color: #4caf50;
-        }
-        
-        .message {
-            font-size: 24px;
-            line-height: 1.6;
-            max-width: 500px;
-            margin: 20px auto;
-        }
-        
-        .restart-btn {
-            background: linear-gradient(to bottom, #ffcc00, #ff6600);
-            color: #1c1c2d;
-            border: none;
-            padding: 15px 40px;
-            font-size: 22px;
-            font-weight: bold;
-            border-radius: 50px;
-            margin-top: 25px;
-            cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
-        
-        .restart-btn:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-        }
-        
-        .food-icons {
-            position: absolute;
-            bottom: 20px;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            z-index: 10;
-        }
-        
-        .food-icon {
-            font-size: 40px;
-            animation: float 4s infinite ease-in-out;
-        }
-        
-        .food-icon:nth-child(2) { animation-delay: 0.5s; }
-        .food-icon:nth-child(3) { animation-delay: 1s; }
-        .food-icon:nth-child(4) { animation-delay: 1.5s; }
-        .food-icon:nth-child(5) { animation-delay: 2s; }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
-        }
-        
-        .food-confetti {
-            position: absolute;
-            font-size: 24px;
-            z-index: 5;
-            animation: fall linear forwards;
-        }
-        
-        @keyframes fall {
-            to {
-                transform: translateY(600px) rotate(360deg);
-                opacity: 0;
-            }
-        }
-        
-        .welcome-message {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-            font-size: 32px;
-            color: #ffcc00;
-            text-shadow: 0 0 10px rgba(255, 204, 0, 0.7);
-            z-index: 25;
-            animation: welcome-pulse 2s infinite;
-        }
-        
-        @keyframes welcome-pulse {
-            0%, 100% { transform: translate(-50%, -50%) scale(1); }
-            50% { transform: translate(-50%, -50%) scale(1.05); }
+
+        @media (max-width: 480px) {
+            h1 { font-size: 1.8rem; }
+            .result-item { margin: 10px; }
+            .result-value { font-size: 1.5rem; }
+            .food-item { width: 50px; height: 50px; font-size: 1.4rem; }
+            .celebration h2 { font-size: 1.6rem; }
         }
     </style>
 </head>
 <body>
-    <div class="game-container">
-        <div class="game-title">Opération Réserve réussie !</div>
-        
-        <canvas id="gameCanvas"></canvas>
-        
-        <div class="welcome-message">Accès à la réserve de nourriture...</div>
-        
-        <div class="victory-message">
-            <h1 class="victory-title">Victoire !</h1>
-            <div class="message">
-                Félicitations ! Après un long périple, vous avez enfin atteint la réserve de nourriture.
+    <!-- Fond étoilé -->
+    <div class="stars" id="stars"></div>
+
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-trophy"></i> Réserve de Nourriture <i class="fas fa-trophy"></i></h1>
+            <p>Félicitations ! Vous avez atteint l'objectif final</p>
+        </header>
+
+        <div class="results-container">
+            <div class="result-item">
+                <div class="result-value" id="timeValue">30 min</div>
+                <div class="result-label">Temps écoulé</div>
             </div>
-            <div class="score"></div>
-            <div class="message">
-                Vous pouvez maintenant savourer votre victoire et profiter de la nourriture que vous avez collectée.<br>
-                Attention cependant aux punitions qui vous attendent...
+            <div class="result-item">
+                <div class="result-value" id="levelValue">Niveau 2</div>
+                <div class="result-label">Difficulté</div>
             </div>
-            <button class="restart-btn">Rejouer</button>
+            <div class="result-item">
+                <div class="result-value" id="rewardValue">500 pts</div>
+                <div class="result-label">Récompense</div>
+            </div>
         </div>
-        
-        <div class="food-icons">
-            <div class="food-icon">🍎</div>
-            <div class="food-icon">🍕</div>
-            <div class="food-icon">🍗</div>
-            <div class="food-icon">🍰</div>
-            <div class="food-icon">🍇</div>
+
+        <div class="storage-container">
+            <div class="shelf">
+                <div class="shelf-header">Fruits & Légumes</div>
+                <div class="food-items">
+                    <div class="food-item apple"><i class="fas fa-apple-alt"></i></div>
+                    <div class="food-item carrot"><i class="fas fa-carrot"></i></div>
+                    <div class="food-item watermelon"><i class="fas fa-watermelon"></i></div>
+                    <div class="food-item grape"><i class="fas fa-wine-bottle"></i></div>
+                    <div class="food-item apple"><i class="fas fa-apple-alt"></i></div>
+                    <div class="food-item carrot"><i class="fas fa-carrot"></i></div>
+                </div>
+            </div>
+
+            <div class="shelf">
+                <div class="shelf-header">Protéines</div>
+                <div class="food-items">
+                    <div class="food-item fish"><i class="fas fa-fish"></i></div>
+                    <div class="food-item egg"><i class="fas fa-egg"></i></div>
+                    <div class="food-item fish"><i class="fas fa-fish"></i></div>
+                    <div class="food-item egg"><i class="fas fa-egg"></i></div>
+                    <div class="food-item fish"><i class="fas fa-fish"></i></div>
+                </div>
+            </div>
+
+            <div class="shelf">
+                <div class="shelf-header">Autres Aliments</div>
+                <div class="food-items">
+                    <div class="food-item bread"><i class="fas fa-bread-slice"></i></div>
+                    <div class="food-item cheese"><i class="fas fa-cheese"></i></div>
+                    <div class="food-item bread"><i class="fas fa-bread-slice"></i></div>
+                    <div class="food-item cheese"><i class="fas fa-cheese"></i></div>
+                    <div class="food-item bread"><i class="fas fa-bread-slice"></i></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="celebration">
+            <h2>Mission Accomplie !</h2>
+            <p>Vous avez réussi à atteindre la réserve de nourriture et assuré la survie de votre communauté. Votre persévérance et votre stratégie ont porté leurs fruits. Profitez de cette victoire bien méritée !</p>
+            <p>Les réserves sont pleines, l'avenir est assuré. Continuez à explorer et relever de nouveaux défis !</p>
+        </div>
+
+        <div class="footer-note">
+            <p>Réalisez un meilleur temps ou augmentez le niveau de difficulté pour obtenir plus de points !</p>
         </div>
     </div>
 
     <script>
-        const canvas = document.getElementById('gameCanvas');
-        const ctx = canvas.getContext('2d');
-        
-        // Set canvas size
-        canvas.width = 900;
-        canvas.height = 600;
-        
-        // Draw background with shelves and food
-        function drawBackground() {
-            // Warehouse floor
-            ctx.fillStyle = '#444';
-            ctx.fillRect(0, 400, canvas.width, 200);
-            
-            // Draw grid pattern on floor
-            ctx.strokeStyle = '#555';
-            ctx.lineWidth = 2;
-            for (let x = 0; x < canvas.width; x += 50) {
-                ctx.beginPath();
-                ctx.moveTo(x, 400);
-                ctx.lineTo(x, canvas.height);
-                ctx.stroke();
-            }
-            for (let y = 400; y < canvas.height; y += 50) {
-                ctx.beginPath();
-                ctx.moveTo(0, y);
-                ctx.lineTo(canvas.width, y);
-                ctx.stroke();
-            }
-            
-            // Shelves
-            ctx.fillStyle = '#8B4513';
-            for (let i = 0; i < 4; i++) {
-                const x = 100 + i * 200;
-                // Shelf legs
-                ctx.fillRect(x, 250, 20, 150);
-                ctx.fillRect(x + 100, 250, 20, 150);
-                
-                // Shelf boards
-                ctx.fillRect(x - 10, 250, 140, 15);
-                ctx.fillRect(x - 10, 320, 140, 15);
-            }
-            
-            // Draw food items
-            drawFoodItems();
-        }
-        
-        function drawFoodItems() {
-            // Draw cans
-            for (let shelf = 0; shelf < 4; shelf++) {
-                for (let level = 0; level < 2; level++) {
-                    const y = level === 0 ? 220 : 290;
-                    const xStart = 110 + shelf * 200;
-                    
-                    for (let i = 0; i < 5; i++) {
-                        const x = xStart + i * 20;
-                        drawCan(x, y);
-                    }
-                }
-            }
-            
-            // Draw sacks
-            ctx.fillStyle = '#D2B48C';
-            for (let i = 0; i < 3; i++) {
-                const x = 700 + i * 60;
-                drawSack(x, 350);
-            }
-            
-            // Draw crates
-            ctx.fillStyle = '#964B00';
-            for (let i = 0; i < 2; i++) {
-                const x = 50 + i * 80;
-                drawCrate(x, 350);
-            }
-            
-            // Draw fruits
-            ctx.fillStyle = '#FF6347';
-            ctx.beginPath();
-            ctx.arc(800, 280, 20, 0, Math.PI * 2);
-            ctx.fill();
-            
-            ctx.fillStyle = '#32CD32';
-            ctx.beginPath();
-            ctx.arc(750, 270, 15, 0, Math.PI * 2);
-            ctx.fill();
-            
-            // Draw bread
-            ctx.fillStyle = '#D2B48C';
-            ctx.fillRect(650, 260, 40, 20);
-            ctx.beginPath();
-            ctx.ellipse(650, 270, 10, 10, 0, Math.PI/2, 3*Math.PI/2);
-            ctx.fill();
-            ctx.beginPath();
-            ctx.ellipse(690, 270, 10, 10, 0, -Math.PI/2, Math.PI/2);
-            ctx.fill();
-        }
-        
-        function drawCan(x, y) {
-            ctx.fillStyle = '#FF0000';
-            ctx.fillRect(x, y, 15, 25);
-            ctx.fillStyle = '#FFFFFF';
-            ctx.fillRect(x, y + 10, 15, 5);
-        }
-        
-        function drawSack(x, y) {
-            ctx.beginPath();
-            ctx.ellipse(x, y, 25, 35, 0, 0, Math.PI * 2);
-            ctx.fill();
-            
-            ctx.beginPath();
-            ctx.moveTo(x - 20, y - 10);
-            ctx.lineTo(x - 10, y - 25);
-            ctx.lineTo(x + 10, y - 25);
-            ctx.lineTo(x + 20, y - 10);
-            ctx.fill();
-        }
-        
-        function drawCrate(x, y) {
-            ctx.fillRect(x, y, 50, 40);
-            ctx.strokeStyle = '#000';
-            ctx.lineWidth = 2;
-            ctx.strokeRect(x, y, 50, 40);
-            
-            // Draw planks
-            ctx.beginPath();
-            ctx.moveTo(x + 15, y);
-            ctx.lineTo(x + 15, y + 40);
-            ctx.stroke();
-            
-            ctx.beginPath();
-            ctx.moveTo(x + 35, y);
-            ctx.lineTo(x + 35, y + 40);
-            ctx.stroke();
-            
-            ctx.beginPath();
-            ctx.moveTo(x, y + 15);
-            ctx.lineTo(x + 50, y + 15);
-            ctx.stroke();
-            
-            ctx.beginPath();
-            ctx.moveTo(x, y + 30);
-            ctx.lineTo(x + 50, y + 30);
-            ctx.stroke();
-        }
-        
-        // Food confetti
-        const foodEmojis = ['🍎', '🍕', '🍗', '🍰', '🍇', '🥦', '🍖', '🍟', '🍉', '🥖', '🧀', '🥚', '🥩', '🥐', '🥨', '🥞', '🧇', '🍖', '🍤', '🥟','🥝','🌰','☘','🍀'];
-        
-        function createFoodConfetti() {
-            const food = document.createElement('div');
-            food.className = 'food-confetti';
-            food.textContent = foodEmojis[Math.floor(Math.random() * foodEmojis.length)];
-            food.style.left = `${Math.random() * 100}%`;
-            food.style.fontSize = `${Math.random() * 20 + 20}px`;
-            food.style.opacity = Math.random() * 0.7 + 0.3;
-            food.style.animationDuration = `${Math.random() * 3 + 2}s`;
-            
-            document.querySelector('.game-container').appendChild(food);
-            
-            // Remove after animation completes
-            setTimeout(() => {
-                food.remove();
-            }, 5000);
-        }
-        
-        function animate() {
-            drawBackground();
-            
-            // Create new confetti
-            if (Math.random() < 0.5) {
-                createFoodConfetti();
-            }
-            
-            requestAnimationFrame(animate);
-        }
-        
-        // Initialize animation
-        drawBackground();
-        animate();
-        
-        // Show victory message after 4 seconds
-        setTimeout(() => {
-            document.querySelector('.victory-message').classList.add('show');
-            document.querySelector('.welcome-message').style.display = 'none';
-            
-            // Increase confetti after victory
-            setInterval(createFoodConfetti, 100);
-        }, 4000);
-        
-        // Add restart button functionality
-        document.querySelector('.restart-btn').addEventListener('click', () => {
-            window.location.href = "index.html"; // Redirect to the main game page
-        });
-
-        // Set idtem #score to the _GET: time
+        // Récupération des paramètres d'URL
         const urlParams = new URLSearchParams(window.location.search);
-        const score = urlParams.get('time');
-        if (score) {
-            document.querySelector('.score').textContent = `Temps écoulé : ${score} minutes`;
-        } else {
-            document.querySelector('.score').textContent = 'Temps écoulé : N/A';
+        const timeParam = urlParams.get('time');
+        const levelParam = urlParams.get('level');
+        
+        // Valeurs par défaut si les paramètres sont absents
+        const time = timeParam ? parseInt(timeParam) : 30;
+        const level = levelParam ? parseInt(levelParam) : 2;
+        
+        // Calcul de la récompense basée sur le temps et le niveau
+        const baseReward = 200;
+        const timeBonus = Math.max(0, 600 - time * 10); // Bonus pour temps rapide
+        const levelBonus = level * 100; // Bonus pour niveau élevé
+        const reward = baseReward + timeBonus + levelBonus;
+        
+        // Mise à jour des éléments avec les valeurs
+        document.getElementById('timeValue').textContent = `${time} min`;
+        document.getElementById('levelValue').textContent = `Niveau ${level}`;
+        document.getElementById('rewardValue').textContent = `${Math.round(reward)} pts`;
+        
+        // Création d'étoiles pour le fond
+        const starsContainer = document.getElementById('stars');
+        for (let i = 0; i < 150; i++) {
+            const star = document.createElement('div');
+            star.classList.add('star');
+            star.style.left = `${Math.random() * 100}%`;
+            star.style.top = `${Math.random() * 100}%`;
+            star.style.animationDelay = `${Math.random() * 5}s`;
+            star.style.opacity = Math.random();
+            star.style.width = `${Math.random() * 3 + 1}px`;
+            star.style.height = star.style.width;
+            starsContainer.appendChild(star);
         }
+        
+        // Création de confettis pour la célébration
+        function createConfetti() {
+            const colors = ['#ffcc00', '#ff3333', '#33cc33', '#3366ff', '#cc33ff'];
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+                confetti.style.left = `${Math.random() * 100}%`;
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.width = `${Math.random() * 10 + 5}px`;
+                confetti.style.height = `${Math.random() * 5 + 3}px`;
+                confetti.style.animationDuration = `${Math.random() * 3 + 2}s`;
+                document.body.appendChild(confetti);
+                
+                // Suppression après l'animation
+                setTimeout(() => {
+                    confetti.remove();
+                }, 5000);
+            }
+        }
+        
+        // Lancement des confettis au chargement et toutes les 10 secondes
+        createConfetti();
+        setInterval(createConfetti, 10000);
+        
+        // Animation des étagères au défilement
+        const shelves = document.querySelectorAll('.shelf');
+        
+        function animateShelves() {
+            shelves.forEach((shelf, index) => {
+                const rect = shelf.getBoundingClientRect();
+                const isVisible = rect.top < window.innerHeight && rect.bottom >= 0;
+                
+                if (isVisible && !shelf.dataset.animated) {
+                    shelf.style.animation = `float 4s ${index * 0.3}s ease-in-out`;
+                    shelf.dataset.animated = true;
+                }
+            });
+        }
+        
+        // Écouteur d'événement pour le défilement
+        window.addEventListener('scroll', animateShelves);
+        // Initialisation au chargement
+        window.addEventListener('load', animateShelves);
     </script>
 </body>
 </html>
