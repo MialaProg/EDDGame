@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Victoire - La Réserve de Nourriture</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #109b3e, #b21f1f, #1a2a6c);
+            font-family: 'Arial Rounded MT Bold', 'Segoe UI', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            color: #fff;
+        }
+        
+        .game-container {
+            position: relative;
+            width: 900px;
+            height: 600px;
+            background: #1c1c2d;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            border: 4px solid #ffcc00;
+        }
+        
+        .game-title {
+            position: absolute;
+            top: 30px;
+            width: 100%;
+            text-align: center;
+            font-size: 48px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 0 0 10px #ff6600, 0 0 20px #ff6600;
+            animation: title-pulse 2s infinite;
+            z-index: 100;
+        }
+        
+        @keyframes title-pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        
+        .victory-message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, 100%);
+            background: rgba(0, 0, 0, 0.8);
+            padding: 30px 50px;
+            border-radius: 15px;
+            text-align: center;
+            border: 3px solid #ffcc00;
+            z-index: 50;
+            box-shadow: 0 0 30px rgba(255, 204, 0, 0.5);
+            opacity: 0;
+            transition: all 1.5s ease-out;
+        }
+        
+        .victory-message.show {
+            transform: translate(-50%, -50%);
+            opacity: 1;
+        }
+        
+        .victory-title {
+            font-size: 42px;
+            color: #ffcc00;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(255, 204, 0, 0.7);
+        }
+        
+        .score {
+            font-size: 28px;
+            margin: 20px 0;
+            color: #4caf50;
+        }
+        
+        .message {
+            font-size: 24px;
+            line-height: 1.6;
+            max-width: 500px;
+            margin: 20px auto;
+        }
+        
+        .restart-btn {
+            background: linear-gradient(to bottom, #ffcc00, #ff6600);
+            color: #1c1c2d;
+            border: none;
+            padding: 15px 40px;
+            font-size: 22px;
+            font-weight: bold;
+            border-radius: 50px;
+            margin-top: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .restart-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+        
+        .food-icons {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            z-index: 10;
+        }
+        
+        .food-icon {
+            font-size: 40px;
+            animation: float 4s infinite ease-in-out;
+        }
+        
+        .food-icon:nth-child(2) { animation-delay: 0.5s; }
+        .food-icon:nth-child(3) { animation-delay: 1s; }
+        .food-icon:nth-child(4) { animation-delay: 1.5s; }
+        .food-icon:nth-child(5) { animation-delay: 2s; }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .food-confetti {
+            position: absolute;
+            font-size: 24px;
+            z-index: 5;
+            animation: fall linear forwards;
+        }
+        
+        @keyframes fall {
+            to {
+                transform: translateY(600px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        .welcome-message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            font-size: 32px;
+            color: #ffcc00;
+            text-shadow: 0 0 10px rgba(255, 204, 0, 0.7);
+            z-index: 25;
+            animation: welcome-pulse 2s infinite;
+        }
+        
+        @keyframes welcome-pulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.05); }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div class="game-title">Opération Réserve réussie !</div>
+        
+        <canvas id="gameCanvas"></canvas>
+        
+        <div class="welcome-message">Accès à la réserve de nourriture...</div>
+        
+        <div class="victory-message">
+            <h1 class="victory-title">Victoire !</h1>
+            <div class="message">
+                Félicitations ! Après un long périple, vous avez enfin atteint la réserve de nourriture.
+            </div>
+            <div class="score"></div>
+            <div class="message">
+                Vous pouvez maintenant savourer votre victoire et profiter de la nourriture que vous avez collectée.<br>
+                Attention cependant aux punitions qui vous attendent...
+            </div>
+            <button class="restart-btn">Rejouer</button>
+        </div>
+        
+        <div class="food-icons">
+            <div class="food-icon">🍎</div>
+            <div class="food-icon">🍕</div>
+            <div class="food-icon">🍗</div>
+            <div class="food-icon">🍰</div>
+            <div class="food-icon">🍇</div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Set canvas size
+        canvas.width = 900;
+        canvas.height = 600;
+        
+        // Draw background with shelves and food
+        function drawBackground() {
+            // Warehouse floor
+            ctx.fillStyle = '#444';
+            ctx.fillRect(0, 400, canvas.width, 200);
+            
+            // Draw grid pattern on floor
+            ctx.strokeStyle = '#555';
+            ctx.lineWidth = 2;
+            for (let x = 0; x < canvas.width; x += 50) {
+                ctx.beginPath();
+                ctx.moveTo(x, 400);
+                ctx.lineTo(x, canvas.height);
+                ctx.stroke();
+            }
+            for (let y = 400; y < canvas.height; y += 50) {
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(canvas.width, y);
+                ctx.stroke();
+            }
+            
+            // Shelves
+            ctx.fillStyle = '#8B4513';
+            for (let i = 0; i < 4; i++) {
+                const x = 100 + i * 200;
+                // Shelf legs
+                ctx.fillRect(x, 250, 20, 150);
+                ctx.fillRect(x + 100, 250, 20, 150);
+                
+                // Shelf boards
+                ctx.fillRect(x - 10, 250, 140, 15);
+                ctx.fillRect(x - 10, 320, 140, 15);
+            }
+            
+            // Draw food items
+            drawFoodItems();
+        }
+        
+        function drawFoodItems() {
+            // Draw cans
+            for (let shelf = 0; shelf < 4; shelf++) {
+                for (let level = 0; level < 2; level++) {
+                    const y = level === 0 ? 220 : 290;
+                    const xStart = 110 + shelf * 200;
+                    
+                    for (let i = 0; i < 5; i++) {
+                        const x = xStart + i * 20;
+                        drawCan(x, y);
+                    }
+                }
+            }
+            
+            // Draw sacks
+            ctx.fillStyle = '#D2B48C';
+            for (let i = 0; i < 3; i++) {
+                const x = 700 + i * 60;
+                drawSack(x, 350);
+            }
+            
+            // Draw crates
+            ctx.fillStyle = '#964B00';
+            for (let i = 0; i < 2; i++) {
+                const x = 50 + i * 80;
+                drawCrate(x, 350);
+            }
+            
+            // Draw fruits
+            ctx.fillStyle = '#FF6347';
+            ctx.beginPath();
+            ctx.arc(800, 280, 20, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.fillStyle = '#32CD32';
+            ctx.beginPath();
+            ctx.arc(750, 270, 15, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Draw bread
+            ctx.fillStyle = '#D2B48C';
+            ctx.fillRect(650, 260, 40, 20);
+            ctx.beginPath();
+            ctx.ellipse(650, 270, 10, 10, 0, Math.PI/2, 3*Math.PI/2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.ellipse(690, 270, 10, 10, 0, -Math.PI/2, Math.PI/2);
+            ctx.fill();
+        }
+        
+        function drawCan(x, y) {
+            ctx.fillStyle = '#FF0000';
+            ctx.fillRect(x, y, 15, 25);
+            ctx.fillStyle = '#FFFFFF';
+            ctx.fillRect(x, y + 10, 15, 5);
+        }
+        
+        function drawSack(x, y) {
+            ctx.beginPath();
+            ctx.ellipse(x, y, 25, 35, 0, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.beginPath();
+            ctx.moveTo(x - 20, y - 10);
+            ctx.lineTo(x - 10, y - 25);
+            ctx.lineTo(x + 10, y - 25);
+            ctx.lineTo(x + 20, y - 10);
+            ctx.fill();
+        }
+        
+        function drawCrate(x, y) {
+            ctx.fillRect(x, y, 50, 40);
+            ctx.strokeStyle = '#000';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(x, y, 50, 40);
+            
+            // Draw planks
+            ctx.beginPath();
+            ctx.moveTo(x + 15, y);
+            ctx.lineTo(x + 15, y + 40);
+            ctx.stroke();
+            
+            ctx.beginPath();
+            ctx.moveTo(x + 35, y);
+            ctx.lineTo(x + 35, y + 40);
+            ctx.stroke();
+            
+            ctx.beginPath();
+            ctx.moveTo(x, y + 15);
+            ctx.lineTo(x + 50, y + 15);
+            ctx.stroke();
+            
+            ctx.beginPath();
+            ctx.moveTo(x, y + 30);
+            ctx.lineTo(x + 50, y + 30);
+            ctx.stroke();
+        }
+        
+        // Food confetti
+        const foodEmojis = ['🍎', '🍕', '🍗', '🍰', '🍇', '🥦', '🍖', '🍟', '🍉', '🥖', '🧀', '🥚', '🥩', '🥐', '🥨', '🥞', '🧇', '🍖', '🍤', '🥟','🥝','🌰','☘','🍀'];
+        
+        function createFoodConfetti() {
+            const food = document.createElement('div');
+            food.className = 'food-confetti';
+            food.textContent = foodEmojis[Math.floor(Math.random() * foodEmojis.length)];
+            food.style.left = `${Math.random() * 100}%`;
+            food.style.fontSize = `${Math.random() * 20 + 20}px`;
+            food.style.opacity = Math.random() * 0.7 + 0.3;
+            food.style.animationDuration = `${Math.random() * 3 + 2}s`;
+            
+            document.querySelector('.game-container').appendChild(food);
+            
+            // Remove after animation completes
+            setTimeout(() => {
+                food.remove();
+            }, 5000);
+        }
+        
+        function animate() {
+            drawBackground();
+            
+            // Create new confetti
+            if (Math.random() < 0.5) {
+                createFoodConfetti();
+            }
+            
+            requestAnimationFrame(animate);
+        }
+        
+        // Initialize animation
+        drawBackground();
+        animate();
+        
+        // Show victory message after 4 seconds
+        setTimeout(() => {
+            document.querySelector('.victory-message').classList.add('show');
+            document.querySelector('.welcome-message').style.display = 'none';
+            
+            // Increase confetti after victory
+            setInterval(createFoodConfetti, 100);
+        }, 4000);
+        
+        // Add restart button functionality
+        document.querySelector('.restart-btn').addEventListener('click', () => {
+            window.location.href = "index.html"; // Redirect to the main game page
+        });
+
+        // Set idtem #score to the _GET: time
+        const urlParams = new URLSearchParams(window.location.search);
+        const score = urlParams.get('time');
+        if (score) {
+            document.querySelector('.score').textContent = `Temps écoulé : ${score} minutes`;
+        } else {
+            document.querySelector('.score').textContent = 'Temps écoulé : N/A';
+        }
+    </script>
+</body>
+</html>
