@@ -200,10 +200,15 @@ Je.. Tiens..:DMCh
 Euh…:DMfuite
 #
 :DMfuite
+#if:DMlove::DMbye
 GRRRR !
 *Vous partez en courant.
 #STOP
+:DMbye
+Si tu as de la nourriture, viens m'en donner !
+#stop
 :DMGal
+#set:DMlove
 Ahh... Mon amouur...
 Tu aurais un peu de nourriture ?
 Et je te laisse passer.
