@@ -84,6 +84,11 @@ R1:O19.2
 :UR1
 *C'est un piège conçu par Doudou Noisette.
 *Il y a marqué dessus: "Une noisette pour la paroisse"
+#:OBJ
+O19:O19.2
+0:R1.2
+#
+:R1.2
 *Le piège vous empêche de passer.
 #STOP
 ---------
