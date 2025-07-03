@@ -53,7 +53,7 @@ var Actions = {
             alert(miDb.TIME_ALERT[0].replace(/\/br\//g, '\n'));   
             return;
         }
-        Modal.changeTitle(`Il est ${miDb.TIMER[0]}h${Math.floor(Game.timer / miDb.TIMER[1] * 60)}min`);
+        Modal.changeTitle(`Il est ${miDb.TIMER[0]}h${Math.floor(Game.timer / miDb.TIMER[Game.level] * 60)}min`);
         MSelect.options = [...Game.unlockedPlaces];
         MSelect.empty = 'Aucune destination n\'est disponible.';
 
