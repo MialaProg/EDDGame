@@ -60,6 +60,23 @@ function wait(condition, interval = 100, timeout = 10 ** 7) {
     });
 }
 
+function openCongratsPage(time, level) {
+  // Valider les paramètres
+  if (typeof time === 'number' && typeof level === 'number') {
+    const url = `./congrats.html?time=${time}&level=${level}`;
+    const newTab = window.open(url, '_blank');
+    
+    // Vérifier si l'ouverture a été bloquée
+    if (!newTab || newTab.closed) {
+      alert('Veuillez autoriser les popups pour ce site');
+    }
+  } else {
+    console.error('Paramètres invalides');
+  }
+}
+
+
+
 var canvasObj, allJSLoaded;
 // Initialisation of the game.
 async function initMain() {
@@ -211,6 +228,7 @@ function showRoom(roomINT = Game.actualRoom) {
     const placeID = room['L'];
     let place;
     if (placeID) {
+        if (placeID='99') openCongratsPage(60, Game.level);
         Game.actualItems.push('L' + placeID);
         canvasObj.drawImage(50, 50 / 1.2, 40, 40 / 1.2, 'L' + placeID);
 
