@@ -808,10 +808,13 @@ var Game = {
         if ('0' != findInArr(miDb.lib, miDb.LOC_OBJS[0], miDb.LOC_OBJS[1], item => item[0] == obj)[1][2]) Game.db[obj].nb -= 1;
     },
 
+    _save: async () => {
+        return await compress(JSON.stringify(Game));
+    },
 
     // Sauvegarde (JSON + compression)
     save: async () => {
-        const blob = new Blob([await compress(JSON.stringify(Game))], { type: 'application/octet-stream' });
+        const blob = new Blob([await Game._save()], { type: 'application/octet-stream' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
@@ -820,6 +823,15 @@ var Game = {
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
+    },
+
+    _load: async (uploadedStr) => {
+        console.log('Wait uncompress');
+        let Gamebis = JSON.parse(await decompress(uploadedStr));
+        alert('Game loaded successfully!');
+        Object.assign(Game, Gamebis);
+        console.log('Game ready');
+        showRoom(Game.actualRoom);
     },
 
     // Chargement (décompression + JSON)
@@ -836,16 +848,31 @@ var Game = {
             console.log('Wait reader')
             reader.onload = async (event) => {
                 uploadedStr = event.target.result;
-                console.log('Wait uncompress');
-                let Gamebis = JSON.parse(await decompress(uploadedStr));
-                alert('Game loaded successfully!');
-                Object.assign(Game, Gamebis);
-                console.log('Game ready');
-                showRoom(Game.actualRoom);
+                Game._load(uploadedStr);
             };
             reader.readAsText(file);
         };
         input.click();
+    },
+
+    autosave: async () => {
+        const save = await Game._save();
+        localStorage.setItem('EDDGameAutoSave', save);
+        console.log('Game autosaved');
+    },
+
+    getAutoSave: () => {
+        return localStorage.getItem('EDDGameAutoSave');
+    },
+
+    autoload: async () => {
+        const save = Game.getAutoSave();
+        if (!save) {
+            alert('8.404 - No autosave found.');
+            return;
+        }
+        console.log('Found autosave, loading...');
+        Game._load(save);
     }
 
 }

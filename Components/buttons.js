@@ -43,6 +43,7 @@ var Actions = {
             case 7: txt += "F2"; break;
         }
         txt += ".";
+        Game.autosave();
         alert(txt);
     },
 

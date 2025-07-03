@@ -130,8 +130,15 @@
             <div class="field is-grouped">
                 <div class="control">
                     <button class="button" id="saveIntro" disabled
-                        onclick="Game.load(); alert('Si cela ne fonctionne pas, faites-le directement en jeu.')">Charger
+                        onclick="Game.load();">Charger
                         une sauvegarde</button>
+                </div>
+            </div>
+            <div class="field is-grouped">
+                <div class="control">
+                    <button class="button" id="autosaveIntro" disabled
+                        onclick="Game.autoload();">Charger
+                        la sauvegarde automatique</button>
                 </div>
             </div>
         </form>
@@ -204,7 +211,8 @@
             </header>
             <section class="modal-card-body" id="gameModalContent">
                 <div id="gameModalMessages"></div>
-                <ul id="gameModalSelect" class="menu-list is-hidden"></ul>
+                <!-- <ul id="gameModalSelect" class="menu-list is-hidden"></ul> -->
+                <div id="gameModalSelect" class="grid"></div>
             </section>
             <footer class="modal-card-foot is-flex-wrap-wrap" id="gameModalAnswers"></footer>
         </div>

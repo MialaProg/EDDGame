@@ -62,14 +62,18 @@ var MSelect = {
             list.innerHTML = MSelect.empty;
         } else {
             MSelect.options.forEach(choice => {
-                const li = document.createElement('li');
-                li.innerHTML = `
-            <a class="choice-item is-rounded" 
-               onclick="MSelect._select('${choice.id}', \`${choice.text}\`)">
-                ${choice.text}
-            </a>
-        `;
-                list.appendChild(li);
+        //         const li = document.createElement('li');
+        //         li.innerHTML = `
+            // <a class="choice-item is-rounded" 
+            //    onclick="MSelect._select('${choice.id}', \`${choice.text}\`)">
+            //     ${choice.text}
+            // </a>
+        // `;
+                const cell = document.createElement('a');
+                cell.classList.add('cell', 'choice-item');
+                cell.onclick = () => MSelect._select(choice.id, choice.text);
+                cell.innerHTML = choice.text;
+                list.appendChild(cell);
             });
         }
         MSelect.selectTimer = 0;

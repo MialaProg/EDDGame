@@ -124,7 +124,8 @@ var PlayersJS = {
       PlayersJS.playBtnChecks[1] = !!playersNb
       PlayersJS.playBtn.innerText = 'Jouer (à ' + playersNb + ') !';
       PlayersJS.playBtn.disabled = PlayersJS.playBtnChecks.includes(false);
-      document.getElementById('saveIntro').disabled = PlayersJS.playBtn.disabled; // Require players for save
+      document.getElementById('saveIntro').disabled = PlayersJS.playBtn.disabled; // Require players to restore save
+      document.getElementById('autosaveIntro').disabled = PlayersJS.playBtn.disabled; // Require players to restore save
     });
   },
 
