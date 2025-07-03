@@ -77,7 +77,6 @@ var Actions = {
         MSelect.options = [
             { id: 'save', text: 'Sauvegarder' },
             { id: 'load', text: 'Charger' },
-            { id: 'thisIsTheEvil', text: '--------------' },
             { id: 'search', text: 'Chercher ici' }
         ];
         let push = (itemID) => {
