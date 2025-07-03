@@ -35,6 +35,7 @@ Tu ne peux rien utiliser actuellement.;Il n'y a personne...;Tu ne trouvera  rien
 *Vous utilisez cet objet sur: 
 #TXT_GET_FIND_USE
 *Tu obtiens: ;*Tu trouves: ;*Tu dois défausser: 
+(xH, max Game.timer selon lvl (1-5))
 #TIMER
 12;100;70;50;38;25
 #TIME_ALERT
