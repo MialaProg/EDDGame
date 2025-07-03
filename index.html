@@ -92,7 +92,7 @@
                 <label class="label" for="levelSelect">Niveau</label>
                 <div class="control">
                     <div class="select">
-                        <select id="levelSelect" name="levelSelect" onchange="level = parseInt(this.value, 10);">
+                        <select id="levelSelect" name="levelSelect" onchange="Game.level = parseInt(this.value, 10);">
                             <option value="1" selected>Facile</option>
                             <option value="2">Moyen</option>
                             <option value="3">Difficile</option>
@@ -109,7 +109,6 @@
                     Mode sans serpent
                 </label>
                 <script>var noSnakeMode;
-var level=1;
                     document.addEventListener('DOMContentLoaded', function () {
                         noSnakeMode = document.getElementById('noSnakeModeCheckbox').checked;
                     });
