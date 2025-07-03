@@ -228,7 +228,7 @@ function showRoom(roomINT = Game.actualRoom) {
     const placeID = room['L'];
     let place;
     if (placeID) {
-        if (placeID='99') openCongratsPage(Math.floor(Game.timer / miDb.TIMER[Game.level] * 60), Game.level);
+        if (placeID=='99') openCongratsPage(Math.floor(Game.timer / miDb.TIMER[Game.level] * 60), Game.level);
         Game.actualItems.push('L' + placeID);
         canvasObj.drawImage(50, 50 / 1.2, 40, 40 / 1.2, 'L' + placeID);
 
