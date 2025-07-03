@@ -141,14 +141,11 @@
             z-index: 10;
         }
 
-        .apple { background: linear-gradient(135deg, #ff4d4d, #cc0000); }
-        .carrot { background: linear-gradient(135deg, #ff9933, #cc6600); }
-        .bread { background: linear-gradient(135deg, #e6c9a8, #d2a679); }
-        .cheese { background: linear-gradient(135deg, #ffd700, #ffa500); }
-        .fish { background: linear-gradient(135deg, #4da6ff, #0066cc); }
-        .grape { background: linear-gradient(135deg, #9933ff, #6600cc); }
-        .watermelon { background: linear-gradient(135deg, #66cc66, #339933); }
-        .egg { background: linear-gradient(135deg, #f0f0f0, #d9d9d9); }
+        .grass { background: linear-gradient(135deg, #66cc66, #2d862d); }
+        .nut { background: linear-gradient(135deg, #d2a679, #8B4513); }
+        .plankton { background: linear-gradient(135deg, #4da6ff, #0066cc); }
+        .salad { background: linear-gradient(135deg, #99cc33, #669900); }
+        .medicine { background: linear-gradient(135deg, #ff6666, #cc0000); }
 
         @keyframes float {
             0%, 100% { transform: translateY(0); }
@@ -196,11 +193,12 @@
 
         .confetti {
             position: fixed;
-            width: 10px;
-            height: 10px;
-            background: #ffcc00;
+            font-size: 1.5rem;
             top: -10px;
             animation: fall linear forwards;
+            z-index: 100;
+            user-select: none;
+            pointer-events: none;
         }
 
         @keyframes fall {
@@ -288,44 +286,43 @@
 
         <div class="storage-container">
             <div class="shelf">
-                <div class="shelf-header">Fruits & Légumes</div>
+                <div class="shelf-header">Végétaux</div>
                 <div class="food-items">
-                    <div class="food-item apple"><i class="fas fa-apple-alt"></i></div>
-                    <div class="food-item carrot"><i class="fas fa-carrot"></i></div>
-                    <div class="food-item watermelon"><i class="fas fa-watermelon"></i></div>
-                    <div class="food-item grape"><i class="fas fa-wine-bottle"></i></div>
-                    <div class="food-item apple"><i class="fas fa-apple-alt"></i></div>
-                    <div class="food-item carrot"><i class="fas fa-carrot"></i></div>
+                    <div class="food-item grass">🌿</div>
+                    <div class="food-item salad">🥗</div>
+                    <div class="food-item grass">🌿</div>
+                    <div class="food-item salad">🥗</div>
+                    <div class="food-item grass">🌿</div>
                 </div>
             </div>
 
             <div class="shelf">
-                <div class="shelf-header">Protéines</div>
+                <div class="shelf-header">Noix & Protéines</div>
                 <div class="food-items">
-                    <div class="food-item fish"><i class="fas fa-fish"></i></div>
-                    <div class="food-item egg"><i class="fas fa-egg"></i></div>
-                    <div class="food-item fish"><i class="fas fa-fish"></i></div>
-                    <div class="food-item egg"><i class="fas fa-egg"></i></div>
-                    <div class="food-item fish"><i class="fas fa-fish"></i></div>
+                    <div class="food-item nut">🌰</div>
+                    <div class="food-item plankton">🦠</div>
+                    <div class="food-item nut">🌰</div>
+                    <div class="food-item plankton">🦠</div>
+                    <div class="food-item nut">🌰</div>
                 </div>
             </div>
 
             <div class="shelf">
-                <div class="shelf-header">Autres Aliments</div>
+                <div class="shelf-header">Médicaments</div>
                 <div class="food-items">
-                    <div class="food-item bread"><i class="fas fa-bread-slice"></i></div>
-                    <div class="food-item cheese"><i class="fas fa-cheese"></i></div>
-                    <div class="food-item bread"><i class="fas fa-bread-slice"></i></div>
-                    <div class="food-item cheese"><i class="fas fa-cheese"></i></div>
-                    <div class="food-item bread"><i class="fas fa-bread-slice"></i></div>
+                    <div class="food-item medicine">💊</div>
+                    <div class="food-item medicine">🧪</div>
+                    <div class="food-item medicine">💊</div>
+                    <div class="food-item medicine">🧪</div>
+                    <div class="food-item medicine">💊</div>
                 </div>
             </div>
         </div>
 
         <div class="celebration">
             <h2>Mission Accomplie !</h2>
-            <p>Vous avez réussi à atteindre la réserve de nourriture ! Votre persévérance et votre stratégie ont porté leurs fruits. Profitez de cette victoire bien méritée, mais restez sur vos gardes !</p>
-            <p>Attention à la punition probable suite à ce vole...</p>
+            <p>Vous avez réussi à atteindre la réserve de nourriture. Votre persévérance et votre stratégie ont porté leurs fruits. Profitez de cette victoire bien méritée !</p>
+            <p>(Attention cependant aux punitions...)</p>
         </div>
 
         <div class="footer-note">
@@ -368,18 +365,23 @@
             starsContainer.appendChild(star);
         }
         
+        // Emojis pour les confettis (aliments du jeu)
+        const foodEmojis = ['🌿', '🥗', '🌰', '🦠', '💊', '🧪', '🍃', '🥬'];
+        
         // Création de confettis pour la célébration
         function createConfetti() {
-            const colors = ['#ffcc00', '#ff3333', '#33cc33', '#3366ff', '#cc33ff'];
-            for (let i = 0; i < 100; i++) {
+            for (let i = 0; i < 50; i++) {
                 const confetti = document.createElement('div');
                 confetti.classList.add('confetti');
                 confetti.style.left = `${Math.random() * 100}%`;
-                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                confetti.style.width = `${Math.random() * 10 + 5}px`;
-                confetti.style.height = `${Math.random() * 5 + 3}px`;
+                confetti.textContent = foodEmojis[Math.floor(Math.random() * foodEmojis.length)];
+                confetti.style.fontSize = `${Math.random() * 20 + 15}px`;
                 confetti.style.animationDuration = `${Math.random() * 3 + 2}s`;
+                confetti.style.animationDelay = `${Math.random() * 2}s`;
                 document.body.appendChild(confetti);
+                
+                // Rotation aléatoire initiale
+                confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
                 
                 // Suppression après l'animation
                 setTimeout(() => {
