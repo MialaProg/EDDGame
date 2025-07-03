@@ -70,7 +70,7 @@ var MSelect = {
             // </a>
         // `;
                 const cell = document.createElement('a');
-                cell.classList.add('cell', 'choice-item');
+                cell.classList.add('cell','py-4','px-4','has-background-primary','has-text-primary-invert','has-radius-normal','is-size-5');
                 cell.onclick = () => MSelect._select(choice.id, choice.text);
                 cell.innerHTML = choice.text;
                 list.appendChild(cell);
