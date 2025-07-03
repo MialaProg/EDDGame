@@ -81,7 +81,7 @@ var MChat = {
     last: undefined,
     ans: undefined,
 
-    addText: async (text, from = 'npc', timeWait = 70) => {
+    addText: async (text, from = 'npc', timeWait = 50) => {
         const isItalic = text.trim().startsWith('*');
         if (isItalic) text = text.substring(1);
         const len = text.length;
