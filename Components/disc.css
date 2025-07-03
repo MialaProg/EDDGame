@@ -23,6 +23,11 @@
 
 /* .npc-message {} */
 
+.menu-list li {
+    margin-bottom: 3px;
+    margin-top: 3px;
+}
+
 .user-message {
     /* #dc7632; */
     --bulma-message-h: 24;
