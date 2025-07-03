@@ -762,7 +762,7 @@ var Game = {
                     if (plr.includes(room['L']) || plr[0] == '*') {
                         // Save and return
                         Game.setDbItem(perso[0], 'L', room['L']);
-                        Game.pushDbItem(locUID, perso[0], 'P');
+                        Game.pushDbItem(locUID, 'P',perso[0]);
                         Game.logs.push('Add useless perso ' + perso[0] + ' to ' + locUID);
                         GameAvaiblePersos = GameAvaiblePersos.filter(p => p[0] !== perso[0]);
                         return true;
