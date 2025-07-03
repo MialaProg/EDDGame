@@ -36,6 +36,6 @@ Tu ne peux rien utiliser actuellement.;Il n'y a personne...;Tu ne trouvera  rien
 #TXT_GET_FIND_USE
 *Tu obtiens: ;*Tu trouves: ;*Tu dois défausser: 
 #TIMER
-12;130;100;80;65;50
+12;100;70;50;38;25
 #TIME_ALERT
 Oh non ! Le temps est écoulé ! Les cours reprennent !/br/Malheureusement, vous ne pouvez etre absents et le personnel va pendant ce temps déjouer votre plan de vol.../br/Vous avez échouer, ou du moins il faudra remettre ça à plus tard...
