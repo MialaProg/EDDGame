@@ -35,7 +35,7 @@
     <script src="JSDB/game.js"></script>
     <script src="JSDB/imgs.js"></script>
 
-    
+
 </head>
 
 <body>
@@ -116,15 +116,13 @@
 
             <div class="field is-grouped">
                 <div class="control">
-                    <button class="button" id="saveIntro" disabled
-                        onclick="Game.load();">Charger
+                    <button class="button" id="saveIntro" disabled onclick="Game.load();">Charger
                         une sauvegarde</button>
                 </div>
             </div>
             <div class="field is-grouped">
                 <div class="control">
-                    <button class="button" id="autosaveIntro" disabled
-                        onclick="Game.autoload();">Charger
+                    <button class="button" id="autosaveIntro" disabled onclick="Game.autoload();">Charger
                         la sauvegarde automatique</button>
                 </div>
             </div>
@@ -205,5 +203,78 @@
         </div>
     </div>
 
-  <script src="Components/reg-sw.js"></script>
+    <script>
+        // Fonction pour collecter les URLs des assets
+        function collectAssetsUrls() {
+            const urls = new Set();
+
+            // Ajouter les URLs des images
+            document.querySelectorAll('img').forEach(img => {
+                if (img.src) {
+                    urls.add(new URL(img.src).href); // Utilise URL pour obtenir l'URL absolue
+                }
+            });
+
+            // Ajouter les URLs des scripts externes (sauf le Service Worker lui-même)
+            document.querySelectorAll('script[src]').forEach(script => {
+                if (script.src && !script.src.includes('sw.js')) {
+                    urls.add(new URL(script.src).href);
+                }
+            });
+
+            // Ajouter les URLs des feuilles de style externes
+            document.querySelectorAll('link[rel="stylesheet"][href]').forEach(link => {
+                if (link.href) {
+                    urls.add(new URL(link.href).href);
+                }
+            });
+
+            // Ajoutez d'autres types d'assets si nécessaire (ex: fonts, vidéos)
+
+            return Array.from(urls);
+        }
+
+        // Vérifie si les Service Workers sont supportés par le navigateur
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(registration => {
+                        console.log('Service Worker enregistré avec succès :', registration);
+
+                        // Une fois le Service Worker enregistré, envoyez-lui les URLs des assets
+                        if (registration.active) {
+                            const assetsToCache = collectAssetsUrls();
+                            registration.active.postMessage({
+                                type: 'CACHE_ASSETS',
+                                urls: assetsToCache
+                            });
+                            console.log('URLs des assets envoyées au Service Worker :', assetsToCache);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Échec de l\'enregistrement du Service Worker :', error);
+                    });
+            });
+        } else {
+            console.warn('Votre navigateur ne supporte pas les Service Workers.');
+        }
+
+        // Met à jour le statut de la connexion en temps réel
+        function updateOnlineStatus() {
+            if (navigator.onLine) {
+                console.log('Vous êtes en ligne.');
+                console.log('status-message status-online');
+            } else {
+                console.log('Vous êtes hors ligne. Le contenu est servi depuis le cache.');
+                console.log('status-message status-offline');
+            }
+        }
+
+        // Écoute les changements d'état de la connexion
+        window.addEventListener('online', updateOnlineStatus);
+        window.addEventListener('offline', updateOnlineStatus);
+
+        // Appelle la fonction au chargement initial de la page
+        updateOnlineStatus();
+    </script>
 </body>
