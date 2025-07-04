@@ -37,17 +37,15 @@
 
     <!-- Service Worker -->
     <link rel="manifest" href="gameLib/EDDGame.webmanifest">
-    <script>
-        /*
-          if ('serviceWorker' in navigator) {
-              navigator.serviceWorker.register('gameLib/sw.js')
-                  .then(registration => {
-                      console.log('ServiceWorker registration successful with scope: ', registration.scope);
-                  })
-                  .catch(error => {
-                      console.log('ServiceWorker registration failed: ', error);
-                  });
-          }*/
+<script>
+        // Enregistrement du Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('gameLib/sw.js')
+                    .then(reg => console.log('✅ Service Worker enregistré', reg))
+                    .catch(err => console.log('❌ Échec Service Worker', err));
+            });
+        }
     </script>
 </head>
 
