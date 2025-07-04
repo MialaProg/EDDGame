@@ -12,7 +12,7 @@ if ('serviceWorker' in navigator) {
         // Enregistre le SW avec la liste des assets
         navigator.serviceWorker.register('./sw.js', {
             updateViaCache: 'none',
-            scope: '/'
+            scope: './'
         }).then(registration => {
             console.log('SW enregistré');
             
