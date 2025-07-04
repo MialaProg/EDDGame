@@ -1,3 +1,7 @@
+
+// See ./SW.js
+
+
 // Import Workbox depuis CDN
 importScripts('https://cdnjs.cloudflare.com/ajax/libs/workbox-sw/7.0.0/workbox-sw.min.js');
 
