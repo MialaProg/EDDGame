@@ -9,9 +9,10 @@ var PlayersJS = {
   actualIdx: 0,
   change: [()=>{
     // timer += 1;
-    PlayersJS.actualIdx += 1;
-    if (PlayersJS.actualIdx >= playersNb) PlayersJS.actualIdx = 0;
+    
     actualPlayer = players[PlayersJS.actualIdx];
+PlayersJS.actualIdx += 1;
+    if (PlayersJS.actualIdx >= playersNb) PlayersJS.actualIdx = 0;
   }],
 
   init: () => {
