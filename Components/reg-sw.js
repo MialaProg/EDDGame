@@ -10,7 +10,7 @@ if ('serviceWorker' in navigator) {
         ];
         
         // Enregistre le SW avec la liste des assets
-        navigator.serviceWorker.register('/sw.js', {
+        navigator.serviceWorker.register('./Components/sw.js', {
             updateViaCache: 'none',
             scope: '/'
         }).then(registration => {
