@@ -35,18 +35,7 @@
     <script src="JSDB/game.js"></script>
     <script src="JSDB/imgs.js"></script>
 
-    <!-- Service Worker -->
-    <link rel="manifest" href="Components/EDDGame.webmanifest">
-<script>
-        // Enregistrement du Service Worker
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('Components/sw.js')
-                    .then(reg => console.log('✅ Service Worker enregistré', reg))
-                    .catch(err => console.log('❌ Échec Service Worker', err));
-            });
-        }
-    </script>
+    
 </head>
 
 <body>
@@ -215,4 +204,6 @@
             <footer class="modal-card-foot is-flex-wrap-wrap" id="gameModalAnswers"></footer>
         </div>
     </div>
+
+  <script src="Components/reg-sw.js"></script>
 </body>
