@@ -36,12 +36,12 @@
     <script src="JSDB/imgs.js"></script>
 
     <!-- Service Worker -->
-    <link rel="manifest" href="gameLib/EDDGame.webmanifest">
+    <link rel="manifest" href="Components/EDDGame.webmanifest">
 <script>
         // Enregistrement du Service Worker
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('gameLib/sw.js')
+                navigator.serviceWorker.register('Components/sw.js')
                     .then(reg => console.log('✅ Service Worker enregistré', reg))
                     .catch(err => console.log('❌ Échec Service Worker', err));
             });
