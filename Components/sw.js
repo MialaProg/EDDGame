@@ -1,57 +1,40 @@
-// Import Workbox depuis CDN (seule importation nécessaire)
+// Import Workbox depuis CDN
 importScripts('https://cdnjs.cloudflare.com/ajax/libs/workbox-sw/7.0.0/workbox-sw.min.js');
 
 // Configuration
-workbox.setConfig({ debug: true }); // Désactiver en production
+workbox.setConfig({ debug: true });
 
-// Stratégie Network First pour TOUS les contenus
+// Cache initial des assets critiques (sans utiliser document)
+const PRECACHE_URLS = [
+    '/index.html',
+    // Ajoutez ici manuellement les URLs critiques si nécessaire
+];
+
+// Pré-cache des assets critiques
+workbox.precaching.precacheAndRoute(PRECACHE_URLS);
+
+// Stratégie Network First pour TOUTES les requêtes
 const networkFirstHandler = new workbox.strategies.NetworkFirst({
     cacheName: 'network-first-cache',
     plugins: [
-        new workbox.cacheableResponse.CacheableResponsePlugin({
-            statuses: [0, 200] // Inclut les réponses opaque (cross-origin)
-        }),
+        new workbox.cacheableResponse.CacheableResponsePlugin({ statuses: [0, 200] }),
         new workbox.expiration.ExpirationPlugin({
-            maxEntries: 200, // Limite à 200 entrées maximum
-            maxAgeSeconds: 100 * 366 * 24 * 60 * 60 // 100+ ans
+            maxEntries: 200, // Limite à x entrées
+            maxAgeSeconds: 99*366 * 24 * 60 * 60
         })
     ]
 });
 
-// Capture automatique de tous les assets (pages, scripts, images, etc.)
+// Capture toutes les requêtes
 workbox.routing.registerRoute(
-    ({ request }) => 
-        request.destination === 'document' || 
-        request.destination === 'script' ||
-        request.destination === 'style' ||
-        request.destination === 'image' ||
-        request.destination === 'font',
+    ({ url }) => 
+        url.origin === self.location.origin ||
+        url.href.startsWith('https://cdn.exemple.com'), // Pour les CDNs externes
     networkFirstHandler
 );
 
-// Capture des navigations (pages)
-workbox.routing.registerRoute(
-    ({ request }) => request.mode === 'navigate',
-    networkFirstHandler
-);
-
-// Cache automatique des assets critiques présents dans le HTML
-self.addEventListener('install', (event) => {
-    event.waitUntil(
-        caches.open('precache').then(cache => {
-            return cache.addAll([
-                '/index.html',
-                // Ajoute automatiquement tous les assets du document
-                ...Array.from(document.querySelectorAll('link[rel="stylesheet"], script[src], img[src]'))
-                    .map(el => el.href || el.src)
-                    .filter(url => url.startsWith('http'))
-            ]);
-        })
-    );
-});
-
-// Nettoyage des anciens caches
-self.addEventListener('activate', (event) => {
+// Gestion de l'activation
+self.addEventListener('activate', event => {
     event.waitUntil(
         caches.keys().then(cacheNames => {
             return Promise.all(
@@ -60,4 +43,20 @@ self.addEventListener('activate', (event) => {
             );
         })
     );
+});
+
+// Skip waiting pour les nouvelles versions
+self.addEventListener('install', event => {
+    self.skipWaiting();
+});
+
+// Réception des assets critiques du client
+self.addEventListener('message', event => {
+    if (event.data.type === 'CRITICAL_ASSETS') {
+        event.waitUntil(
+            caches.open(workbox.core.cacheNames.precache).then(cache => {
+                return cache.addAll(event.data.assets);
+            })
+        );
+    }
 });
