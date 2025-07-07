@@ -1,3 +1,4 @@
+// V1.0 EDDG
 
 var miDb = {
     initLib: async () => {

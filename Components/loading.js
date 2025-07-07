@@ -1,4 +1,4 @@
-
+// V1.0 EDDG
 
 var Loading = {
     init: () => {
