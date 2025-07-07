@@ -1,3 +1,6 @@
+// MV1.0 EDDG
+
+
 var pageMode = 'pregame';
 
 
