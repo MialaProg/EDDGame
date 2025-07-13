@@ -703,7 +703,7 @@ var Game = {
     addUselessThings: () => {
         var GameAvaiblePersos = [];
         miDb.lib.slice(miDb.LOC_PERSO[0], miDb.LOC_PERSO[1]).forEach(perso => {
-            if (perso[0][0] == 'P' && !noError('Game.db[perso[0]].isUsefull')) {
+            if (perso[0][0] == 'P' && !noError(`Game.db[${JSON.stringify(perso[0])}].isUsefull`)) {
                 GameAvaiblePersos.push(perso);
             }
         })
@@ -850,7 +850,7 @@ var Game = {
             console.log('Wait reader')
             reader.onload = async (event) => {
                 uploadedStr = event.target.result;
-                Game._load(uploadedStr);
+                await Game._load(uploadedStr);
             };
             reader.readAsText(file);
         };

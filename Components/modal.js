@@ -13,7 +13,7 @@ var Modal = {
             Modal.getHTMLE().classList.remove('is-active');
             miBasic.running = false;
         }
-        else alert("Impossible de fermer le popup pour le moment.");
+        else alert("Impossible de fermer le popup pour le moment.\n\nSi vous etes coinçé ici, essayer de recharger la page, de sélectionner vos joueur et d'appuyer sur 'Charger la sauvegarde auto' à la place de jouer.");
     },
 
     init: () => {

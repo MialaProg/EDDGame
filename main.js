@@ -191,6 +191,10 @@ function initMiBasicFunc() {
         showRoom();
     };
     miBasic.getObject = async (objs) => {
+        if (!objs){
+            await MChat.addText(miDb.TXT_GET_FIND_USE[3], undefined, 10);   
+            return;
+        }
         if (typeof objs != 'array') objs = [objs];
         // objs.forEach(obj => {
         for (const obj of objs) {

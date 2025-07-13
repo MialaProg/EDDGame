@@ -90,8 +90,12 @@ Ex: #if:#var-WAZO::#js-'E'+(5*7) (If var 'WAZO', go to 'E35')
 Pr G.oRF, on retire les spots dj pris, mais parfois obj type 0 => pas grave juste reloc => ness reflx apprf
 
 # Changelog
-- Actual online version: V1.00.1
-- Verified stable version: V1.00.0
+- Actual online version: V1.00.2
+- Verified stable version: (Nothing to see here for now)
+## V1.00.2 - 25/07/13
+- Equilibrage
+- Double alert to remember the two steps
+- Bugfixes (#18 to #21)
 ## V1.00.1 - 25/07/03
 - New images
 - New MSelect visuals

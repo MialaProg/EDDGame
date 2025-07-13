@@ -19,11 +19,8 @@ if (workbox) {
         runtime: 'runtime'
     });
 
-    // Liste des URLs à pré-cacher initialement (peut être vide si tout est envoyé par postMessage)
-    // Pour cet exemple, nous gardons les URLs critiques ici.
+    // Liste des URLs à pré-cacher initialement (ne pas inclure les pages HTML pour permettre leur mise à jour via NetworkFirst)
     workbox.precaching.precacheAndRoute([
-        { url: './', revision: '1' }, // La page d'index
-        { url: './index.html', revision: '1' }, // La page d'index (au cas où l'URL exacte serait demandée)
         { url: './sw.js', revision: '1' }, // Le Service Worker lui-même
         // Note: Les assets comme les images et le CDN Tailwind seront gérés par le message posté ou par NetworkFirst
     ]);

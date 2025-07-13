@@ -31,8 +31,8 @@
     <script src="Components/modal.js"></script>
     <script src="Components/players.js"></script>
     <script src="Readers/miDbReader.js"></script>
-    <script src="Readers/miBasicReader.js"></script>
-    <script src="JSDB/game.js"></script>
+    <script src="Readers/miBasicReader.js?v=1.2"></script>
+    <script src="JSDB/game.js?v=1.2"></script>
     <script src="JSDB/imgs.js"></script>
 
 
@@ -80,12 +80,12 @@
                 <div class="control">
                     <div class="select">
                         <select id="levelSelect" name="levelSelect" onchange="Game.level = parseInt(this.value, 10);">
-                            <option value="1">Infini</option>
-                            <option value="2" selected>Facile</option>
-                            <option value="3">Moyen</option>
-                            <option value="4">Difficile</option>
-                            <option value="5">Extreme</option>
-                            <option value="6">Impossible</option>
+                            <option value="1" selected>Facile</option>
+                            <option value="2">Moyen</option>
+                            <option value="3">Difficile</option>
+                            <option value="4">Extreme</option>
+                            <option value="5">Impossible</option>
+                            <option value="6">Infini</option>
                         </select>
                     </div>
                 </div>
@@ -113,21 +113,21 @@
                     });
                 </script>
             </div>
-            <br><br>
-
-            <div class="field is-grouped">
-                <div class="control">
-                    <button class="button" id="saveIntro" disabled onclick="Game.load();">Charger
-                        une sauvegarde</button>
-                </div>
-            </div>
-            <div class="field is-grouped">
-                <div class="control">
-                    <button class="button" id="autosaveIntro" disabled onclick="Game.autoload();">Charger
-                        la sauvegarde automatique</button>
-                </div>
-            </div>
         </form>
+        <br><br>
+
+        <div class="field is-grouped">
+            <div class="control">
+                <button class="button" id="saveIntro" disabled onclick="Game.load();">Charger
+                    une sauvegarde</button>
+            </div>
+        </div>
+        <div class="field is-grouped">
+            <div class="control">
+                <button class="button" id="autosaveIntro" disabled onclick="Game.autoload();">Charger
+                    la sauvegarde automatique</button>
+            </div>
+        </div>
     </div>
 
     <div class="block content is-hidden" id="loadinggame-interface">
@@ -208,6 +208,10 @@
         // Fonction pour collecter les URLs des assets
         function collectAssetsUrls() {
             const urls = new Set();
+
+            for (url of ['./', './index.html']) {
+                urls.add(new URL(url, location.href).href); // Utilise URL pour obtenir l'URL absolue
+            }
 
             // Ajouter les URLs des images
             document.querySelectorAll('img').forEach(img => {

@@ -33,10 +33,11 @@ Tu ne peux rien utiliser actuellement.;Il n'y a personne...;Tu ne trouvera  rien
 *Vous utilisez: 
 #SELECT_TXT_ON
 *Vous utilisez cet objet sur: 
+// You get; you find; you use; you drop nothing
 #TXT_GET_FIND_USE
-*Tu obtiens: ;*Tu trouves: ;*Tu dois défausser: 
+*Tu obtiens: ;*Tu trouves: ;*Tu dois défausser: ;*Vous n'obtenez malheureusement rien.
 (xH, max Game.timer selon lvl (1-5))
 #TIMER
-12;99999999;160;125;85;60;30
+12;160;125;85;60;30;99999999
 #TIME_ALERT
 Oh non ! Le temps est écoulé ! Les cours reprennent !/br/Malheureusement, vous ne pouvez être absents et le personnel va pendant ce temps déjouer votre plan de vol.../br/Vous avez échoué, ou du moins il faudra remettre ça à plus tard...

@@ -29,10 +29,13 @@ var Actions = {
         txt += "( Tour de " + PlayersJS.getName() + " )\n";
         txt += "Vous pouvez bouger de ";
         txt += (randint(0, 2) + randint(0, 3));
-        txt += " cases max.\nVous devez déplacer ";
+        txt += " cases max.";
+        const playerMove = txt;
+        txt = "Vous devez déplacer ";
         txt += randint(0, 1) ? "M. Le Directeur" : "le Surveillant";
         txt += " d'une case vers ";
-        switch (randint(0, 7)) {
+        const dir = randint(0, 7);
+        switch (dir) {
             case 0: txt += "la direction de votre choix"; break;
             case 1: txt += "le Nord (haut)"; break;
             case 2: txt += "l'Est (droite)"; break;
@@ -43,8 +46,13 @@ var Actions = {
             case 7: txt += "F2"; break;
         }
         txt += ".";
+        if (dir) txt += "\n\nSi plusieurs choix s'offrent à vous, choisissez celui qui vous rapproche le plus ou vous éloigne le moins de G1 à vol d'oiseau.";
         Game.autosave();
-        alert(txt);
+        if (devFast) alert(playerMove+"\n\n"+txt);
+        else {
+            alert(playerMove);
+            alert(txt);
+        }
     },
 
     cheatContinue: false, // Chut XD
