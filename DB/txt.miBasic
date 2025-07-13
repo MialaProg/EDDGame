@@ -563,7 +563,7 @@ Co..:P4r
 Tu...:P4r
 #
 :P4r
-Je peux pas j'suis occcupé.
+Je peux pas j'suis occupé.
 #STOP
 ------------
 :P5
@@ -746,10 +746,12 @@ On va te suivre partout !
 ---------------
 :O21
 *Où utilisez-vous vos crédits-Mi ?
+*Avertissement: les crédits-Mi peuvent être utilisés à plusieurs endroits.
 #:ON
 L1:O21xL1
 L6:O21xL6
 L8:O21xL8
+L92:O21xL92
 #
 :no21
 Vous ne pouvez rien acheter.
@@ -839,8 +841,8 @@ L15:O30xL15
 L92:O1xL92
 #
 :O1xL92
-#if:#js-Game.db.L92.O1:O23:gO23
-#if:#js-Game.db.L92.O1:O30:gO30
+#if:#js-Game.db.L92.O1.includes('O23')::gO23
+#if:#js-Game.db.L92.O1.includes('O30')::gO30
 *Le père d'Efélant:
 Désolé, aucun produit n'est concerné par cette promo.
 Mais comme vous êtes un bon ami de mon fils, voilà un peu d'argent pour vous.
@@ -854,5 +856,10 @@ Mais comme vous êtes un bon ami de mon fils, voilà un peu d'argent pour vous.
 :gO30
 #get:O30
 #goto:useO1
-
+:O21xL92
+#if:#js-Game.db.L92.O21.length === 2::O21xL92.2
+#if:#js-Game.db.L92.O21.includes('O23')::O21xL92.23
+#if:#js-Game.db.L92.O21.includes('O30')::O21xL92.30
+*Aucuns articles ne vous interressent.
+#STOP
 
