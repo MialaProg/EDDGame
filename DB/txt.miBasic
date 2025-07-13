@@ -862,4 +862,7 @@ Mais comme vous êtes un bon ami de mon fils, voilà un peu d'argent pour vous.
 #if:#js-Game.db.L92.O21.includes('O30')::O21xL92.30
 *Aucuns articles ne vous interressent.
 #STOP
+:O21xL92.2
+Que souhaitez-vous acheter ici ?
+#rep
 
