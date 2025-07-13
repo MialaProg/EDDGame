@@ -37,6 +37,6 @@ Tu ne peux rien utiliser actuellement.;Il n'y a personne...;Tu ne trouvera  rien
 *Tu obtiens: ;*Tu trouves: ;*Tu dois défausser: 
 (xH, max Game.timer selon lvl (1-5))
 #TIMER
-12;150;110;80;60;30
+12;160;125;85;60;30
 #TIME_ALERT
 Oh non ! Le temps est écoulé ! Les cours reprennent !/br/Malheureusement, vous ne pouvez être absents et le personnel va pendant ce temps déjouer votre plan de vol.../br/Vous avez échoué, ou du moins il faudra remettre ça à plus tard...
