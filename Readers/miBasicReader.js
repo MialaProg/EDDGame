@@ -57,8 +57,8 @@ var miBasic = {
     },
 
     _getVal: (code) => {
-        code = code.toString().trim();
-        if (code.startsWith('#')) {
+        if (code) code = code.toString().trim();
+        if (code && code.startsWith('#')) {
             let [parts, cmd] = miBasic._splitLine(code, '-');
             switch (cmd) {
                 case 'var':
@@ -139,7 +139,7 @@ var miBasic = {
                         break;
                     case 'set':
                         let val = miBasic._getVal(parts[2]);
-                        if (val == '') val = true; // Default to true if empty
+                        if (!val || val == '') val = true; // Default to true if empty
                         miBasic.vars[parts[1]] = val;
                         break;
                     case 'if':
