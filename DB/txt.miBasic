@@ -856,6 +856,7 @@ Mais comme vous êtes un bon ami de mon fils, voilà un peu d'argent pour vous.
 :gO30
 #get:O30
 #goto:useO1
+------------
 :O21xL92
 #if:#js-Game.db.L92.O21.length === 2::O21xL92.2
 #if:#js-Game.db.L92.O21.includes('O23')::O21xL92.23
@@ -865,4 +866,29 @@ Mais comme vous êtes un bon ami de mon fils, voilà un peu d'argent pour vous.
 :O21xL92.2
 Que souhaitez-vous acheter ici ?
 #rep
-
+Un pied de biche:O21xL92.23
+Une épuisette:O21xL92.30
+#
+:O21xL92.23
+Êtes-vous sûr d'acheter un pied de biche ?
+#obj
+O21:O21to23
+0:L92stop
+#
+:O21to23
+#use:O21
+#get:O23
+#stop
+:O21xL92.30
+Êtes-vous sûr d'acheter une épuisette ?
+#obj
+O21:O21to30
+0:L92stop
+#
+:O21to30
+#use:O21
+#get:O30
+#stop
+:L92stop
+*La transaction est annulée.
+#stop
