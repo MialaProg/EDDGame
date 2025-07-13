@@ -809,6 +809,7 @@ var Game = {
     },
 
     _save: async () => {
+        Game.miBasicVars = noError('miBasic.vars');
         return await compress(JSON.stringify(Game));
     },
 
@@ -828,6 +829,7 @@ var Game = {
     _load: async (uploadedStr) => {
         console.log('Wait uncompress');
         let Gamebis = JSON.parse(await decompress(uploadedStr));
+        if (Game.miBasicVars) miBasic.vars = Gamebis.miBasicVars; // Restore miBasic.vars if it exists
         alert('Game loaded successfully!');
         Object.assign(Game, Gamebis);
         console.log('Game ready');
