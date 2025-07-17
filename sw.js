@@ -24,7 +24,7 @@ if (workbox) {
     workbox.precaching.precacheAndRoute([
         { url: './index.html', revision: version },
         { url: './', revision: version },
-        { url: './sw.js', revision: version }, // Le Service Worker lui-même
+        //{ url: './sw.js', revision: version }, // Le Service Worker lui-même
         { url: 'https://storage.googleapis.com/workbox-cdn/releases/6.1.5/workbox-sw.js', revision: '6.1.5' }
         // Note: Les assets comme les images et le CDN Tailwind seront gérés par le message posté ou par NetworkFirst
     ]);
