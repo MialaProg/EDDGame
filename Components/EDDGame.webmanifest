@@ -4,13 +4,13 @@
   "description": "Venez essayer de voler la réserve !",
   "icons": [
     {
-      "src": "./Images/icon.png",
+      "src": "../Images/icon.png",
       "sizes": "410x410",
       "type": "image/png"
     }
 
   ],
-  "start_url": "./index.html",
+  "start_url": "../index.html",
   "theme_color": "#FF0000",
   "lang": "fr-fr",
   "display": "standalone"
