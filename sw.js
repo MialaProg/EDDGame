@@ -2,6 +2,7 @@
 // sw.js (Service Worker)
 // Importe les bibliothèques Workbox à partir du CDN
 importScripts('https://storage.googleapis.com/workbox-cdn/releases/6.1.5/workbox-sw.js');
+const version = '2';
 
 // Vérifie si Workbox est disponible
 if (workbox) {
@@ -14,14 +15,17 @@ if (workbox) {
     // Cela permet de gérer différentes versions de cache si nécessaire
     workbox.core.setCacheNameDetails({
         prefix: 'EDDG',
-        suffix: 'v1',
+        suffix: 'v' + version,
         precache: 'precache',
         runtime: 'runtime'
     });
 
     // Liste des URLs à pré-cacher initialement (ne pas inclure les pages HTML pour permettre leur mise à jour via NetworkFirst)
     workbox.precaching.precacheAndRoute([
-        { url: './sw.js', revision: '1' }, // Le Service Worker lui-même
+        { url: './index.html', revision: version },
+        { url: './', revision: version },
+        { url: './sw.js', revision: version }, // Le Service Worker lui-même
+        { url: 'https://storage.googleapis.com/workbox-cdn/releases/6.1.5/workbox-sw.js', revision: '6.1.5' }
         // Note: Les assets comme les images et le CDN Tailwind seront gérés par le message posté ou par NetworkFirst
     ]);
 
