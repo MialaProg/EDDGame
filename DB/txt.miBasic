@@ -69,14 +69,12 @@ R2:O22.2
 --------
 :O19
 Ces noisettes sont un peu pourries…
-*Avis de l'expert (Doudou Noisette):
-"Moi je les mangerai pas."
+Moi je les mangerai pas.
 #:ON
 R1:O19.2
 #ENDON
 :O19.2
-*Le piège détecte la présence d'une noisette.
-*Il vous laisse donc passer.
+*Le piège vous laisse donc passer.
 #USE:O19
 #OPEN:R1
 #STOP
@@ -84,17 +82,11 @@ R1:O19.2
 :UR1
 *C'est un piège conçu par Doudou Noisette.
 *Il y a marqué dessus: "Une noisette pour la paroisse"
-#:OBJ
-O19:O19.2
-0:R1.2
-#
-:R1.2
 *Le piège vous empêche de passer.
 #STOP
 ---------
 :UR3
 *La porte est bloquée...
-*Il y a pourtant marqué dessus "Ouverture facile"...
 #STOP
 -------
 :O23
@@ -200,15 +192,10 @@ Je.. Tiens..:DMCh
 Euh…:DMfuite
 #
 :DMfuite
-#if:DMlove::DMbye
 GRRRR !
 *Vous partez en courant.
 #STOP
-:DMbye
-Si tu as de la nourriture, viens m'en donner !
-#stop
 :DMGal
-#set:DMlove
 Ahh... Mon amouur...
 Tu aurais un peu de nourriture ?
 Et je te laisse passer.
@@ -401,7 +388,7 @@ Un bon d'achat.:EFBA
 #STOP
 :EF_0
 Oops !
-Je crois qu'on en a plus au magasin de Papa.
+Il y en a plus...
 #STOP
 *
 :EFDA
@@ -476,7 +463,7 @@ ssseya aayaa ssss seyythaa ssssaytha  saahthay ayaeeh aayaa hathehh à esseytha 
 #STOP
 (Pour compter plusieurs actions.)
 :P3
-*Le gang de Pieuvres à l'unisson:
+*Le gang de Pieuvre à l'unisson:
 Salut !
 *Plouf-Kalamaki:
 Tu veux quoi ?
@@ -563,7 +550,7 @@ Co..:P4r
 Tu...:P4r
 #
 :P4r
-Je peux pas j'suis occupé.
+Je peux pas j'suis occcupé.
 #STOP
 ------------
 :P5
@@ -606,6 +593,7 @@ Oops, j'ai déjà mangé la banane...
 Si t'as quoi qu'ce soit à cuisiner n'hésite pas !
 #STOP
 :P7.15
+#USE:O15
 #set:P7.15:
 Quelle cuisson ?
 #:REP
@@ -618,7 +606,6 @@ Bien cuite:P7Q
 Ah non moi je fais pas ça !
 #STOP
 :P7Q
-#USE:O15
 Et voilà !
 #GET:O16
 #STOP
@@ -662,7 +649,7 @@ O18:R14opx18
 On t'aide à grimper et on s'en va !
 #USE:O18
 :R14op
-*Vous atteignez la porte.
+Vous atteignez la porte.
 #open:R14
 #stop
 ------------------
@@ -678,6 +665,7 @@ Tu veux qu'on t'aide à monter ?
 D'accord !
 *Vous grimpez sur les deux sœurs et décrochez le nez du Sphinx.
 #get:O27
+#js-Game.db.P18.isHidden=true;
 #stop
 ------------------
 :O17
@@ -741,18 +729,14 @@ Puisque c'est ça je te suis !
 :P18 
 On va te suivre partout !
 #get:O18
-#js-Game.db.P18.isHidden = true;
 #stop
 ---------------
 :O21
 *Où utilisez-vous vos crédits-Mi ?
-*Avertissement: les crédits-Mi peuvent être utilisés à plusieurs endroits.
 #:ON
 L1:O21xL1
 L6:O21xL6
 L8:O21xL8
-L92:O21xL92
-R2:PR2OPEN
 #
 :no21
 Vous ne pouvez rien acheter.
@@ -774,7 +758,6 @@ Désolé, nous ne vendons ici que des piles.
 ***
 :O21xL6
 Que souhaitez-vous acheter ?
-*Avertissement: les crédits-Mi peuvent être utilisés à plusieurs endroits.
 #:REP
 Une banane:L6Bn
 De la viande:L6Vi
@@ -842,8 +825,8 @@ L15:O30xL15
 L92:O1xL92
 #
 :O1xL92
-#if:#js-Game.db.L92.O1.includes('O23')::gO23
-#if:#js-Game.db.L92.O1.includes('O30')::gO30
+#if:#js-Game.db.L92.O1:O23:gO23
+#if:#js-Game.db.L92.O1:O30:gO30
 *Le père d'Efélant:
 Désolé, aucun produit n'est concerné par cette promo.
 Mais comme vous êtes un bon ami de mon fils, voilà un peu d'argent pour vous.
@@ -857,39 +840,5 @@ Mais comme vous êtes un bon ami de mon fils, voilà un peu d'argent pour vous.
 :gO30
 #get:O30
 #goto:useO1
-------------
-:O21xL92
-#if:#js-Game.db.L92.O21.length === 2::O21xL92.2
-#if:#js-Game.db.L92.O21.includes('O23')::O21xL92.23
-#if:#js-Game.db.L92.O21.includes('O30')::O21xL92.30
-*Aucuns articles ne vous interressent.
-#STOP
-:O21xL92.2
-Que souhaitez-vous acheter ici ?
-#rep
-Un pied de biche:O21xL92.23
-Une épuisette:O21xL92.30
-#
-:O21xL92.23
-Êtes-vous sûr d'acheter un pied de biche ?
-#obj
-O21:O21to23
-0:L92stop
-#
-:O21to23
-#use:O21
-#get:O23
-#stop
-:O21xL92.30
-Êtes-vous sûr d'acheter une épuisette ?
-#obj
-O21:O21to30
-0:L92stop
-#
-:O21to30
-#use:O21
-#get:O30
-#stop
-:L92stop
-*La transaction est annulée.
-#stop
+
+
