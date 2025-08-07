@@ -871,7 +871,7 @@ Un pied de biche:O21xL92.23
 Une épuisette:O21xL92.30
 #
 :O21xL92.23
-Êtes-vous sûr d'acheter un pied de biche ?
+*Êtes-vous sûr d'acheter un pied de biche ?
 #obj
 O21:O21to23
 0:L92stop
@@ -881,7 +881,7 @@ O21:O21to23
 #get:O23
 #stop
 :O21xL92.30
-Êtes-vous sûr d'acheter une épuisette ?
+*Êtes-vous sûr d'acheter une épuisette ?
 #obj
 O21:O21to30
 0:L92stop
