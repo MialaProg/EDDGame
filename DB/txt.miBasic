@@ -22,7 +22,6 @@ C'est votre cours de plongée.
 :UR6+O10
 *Grâce à vos cours de plongée, vous parvenez à atteindre la porte.
 *Vous l'ouvrez.
-#USE:O10
 #OPEN:R6
 #STOP
 :+O10xL4
@@ -51,7 +50,7 @@ Bon ben tant pis.
 #STOP
 :PR2OPEN
 Bon... D'accord...
-*Polisson vous fait un câlin et vous laisse ainsi passer.
+*Polisson te fait un câlin et te laisse ainsi passer.
 #USE:O21
 #OPEN:R2
 #STOP
@@ -76,7 +75,7 @@ R1:O19.2
 #ENDON
 :O19.2
 *Le piège détecte la présence d'une noisette.
-*Il vous laisse donc passer.
+*Il te laisse donc passer.
 #USE:O19
 #OPEN:R1
 #STOP
@@ -110,7 +109,7 @@ R7:R7xO23
 #STOP
 ***
 :O23.L14
-Vous cambriolez la banque.
+*Tu cambrioles la banque.
 #get:O21
 #get:O21
 #get:O21
@@ -168,7 +167,7 @@ R5:UR5xO4
 #STOP
 -------------
 :UR7
-*Des runes étranges sont inscrites sur cette porte verrouillée
+Des runes étranges sont inscrites sur cette porte verrouillée
 #:OBJ
 O23:R7xO23
 O3:R7xO3
@@ -232,6 +231,8 @@ Merchi !
 #OPEN:R8
 #STOP
 -------------
+WAZO
+----------
 :PR9
 Salut !
 #IF:#var-QNQ::QNQ
@@ -271,7 +272,7 @@ Miam ! Merchi !
 :QNMiam
 Miaaam ! Merchi bjeauqchou !
 :QNOpen
-*Quinou vous laisse passer.
+*Quinou te laisse passer.
 #OPEN:R9
 #STOP
 -------------
@@ -454,7 +455,7 @@ Tiens !
 --------------
 :P2
 Seethaaa ssss hathehh hathehh ayaeeh , hatheeey seethaaa haa ssseya  ssaah ayaeeh  haaaaaah ayaeeh esseytha  hatheeey haa seyythaa ssseya  ?
-ssseya esseytha  saahthay ssss esseytha seeeeeh  haa aaah aaah hasseey ssss seyythaa ssaah hasseey ssss  hathehh ssss  hassay ayaeeh esseytha hasseey hass seethaaa ssss 
+ssseya esseytha saahthay ssss esseytha seeeeeh  haa aaah aaah hasseey ssss seyythaa ssaah hasseey ssss  hathehh ssss  hassay ayaeeh esseytha hasseey hass seethaaa ssss 
 hathehh haa seyythaa ehhh esseytha ssss  ?
 :P2R
 #:REP
@@ -676,7 +677,7 @@ L11:O18xL11
 :O18xL11
 Tu veux qu'on t'aide à monter ?
 D'accord !
-*Vous grimpez sur les deux sœurs et décrochez le nez du Sphinx.
+*Tu grimpes sur les deux sœurs et décroches le nez du Sphinx.
 #get:O27
 #stop
 ------------------
@@ -744,6 +745,8 @@ On va te suivre partout !
 #js-Game.db.P18.isHidden = true;
 #stop
 ---------------
+WAZO HERE
+--------------
 :O21
 *Où utilisez-vous vos crédits-Mi ?
 *Avertissement: les crédits-Mi peuvent être utilisés à plusieurs endroits.
