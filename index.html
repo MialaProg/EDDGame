@@ -38,6 +38,14 @@
 <link rel="manifest" href="Components/EDDGame.webmanifest">
 
 
+<script>window.addEventListener('beforeunload', function (e) {
+  // Annuler l'événement comme indiqué par la spécification standard
+  e.preventDefault();
+  // Chrome nécessite que la valeur de retour soit définie
+  e.returnValue = '';
+});
+</script>
+
 </head>
 
 <body>
