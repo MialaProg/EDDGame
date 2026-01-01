@@ -2,7 +2,7 @@
 // sw.js (Service Worker)
 // Importe les bibliothèques Workbox à partir du CDN
 importScripts('https://storage.googleapis.com/workbox-cdn/releases/6.1.5/workbox-sw.js');
-const version = '2';
+const version = '3';
 
 // Vérifie si Workbox est disponible
 if (workbox) {
